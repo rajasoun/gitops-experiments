@@ -16,13 +16,10 @@ To follow the guide, you need the following:
 ## Setup Flux with Github
 
 ```sh
-WORKPSACE_PATH="$HOME/workspace/gitops"
-GIT_REPO_PATH="$HOME/workspace/gitops/gitops-istio"
-[ ! -d  $GIT_REPO_PATH ] && git clone https://github.com/rajasoun/gitops-istio $WORKPSACE_PATH || cd $GIT_REPO_PATH
 git checkout step-0.bootstrap
-./assist.sh setup 
-./assist.sh test
-./assist.sh status 
+gitops/assist.sh setup 
+gitops/assist.sh test
+gitops/assist.sh status 
 ```
 
 
