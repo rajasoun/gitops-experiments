@@ -2,7 +2,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name:  flagger-system
-  namespace:  flagger-system
+  namespace:  flux-system
 spec:
   interval: 10m0s
   path: ./gitops/infrastructure/base/flagger/system
