@@ -8,35 +8,35 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 function check(){
     [ ! -f .env ] && iaac/env/env.sh setup
-    iaac/prerequisites/prerequisite.sh check 
-    iaac/devops-tools/k9s/customize.sh check
-    iaac/env/env.sh check
-    iaac/kubernetes/k3d/k3d.sh check
+    $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh check 
+    $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh check
+    $GIT_BASE_PATH/local-dev/iaac/env/env.sh check
+    $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/k3d.sh check
 }
 
 function setup(){   
-    iaac/prerequisites/prerequisite.sh setup 
-    iaac/devops-tools/k9s/customize.sh setup
-    iaac/env/env.sh setup
-    iaac/kubernetes/k3d/k3d.sh setup
+    $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh setup 
+    $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh setup
+    $GIT_BASE_PATH/local-dev/iaac/env/env.sh setup
+    $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/k3d.sh setup
 }
 
 function teardown(){
-    iaac/kubernetes/k3d/k3d.sh teardown
-    iaac/env/env.sh teardown
-    iaac/devops-tools/k9s/customize.sh teardown
-    #iaac/prerequisites/prerequisite.sh teardown
+    $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/k3d.sh teardown
+    $GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown
+    $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh teardown
+    #$GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh teardown
 }
 
 function test(){
-    iaac/prerequisites/prerequisite.sh test
-    iaac/kubernetes/k3d/k3d.sh test
-    iaac/devops-tools/k9s/customize.sh test
+    $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh test
+    $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/k3d.sh test
+    $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh test
 }
 
 function status(){    
-    iaac/prerequisites/prerequisite.sh status
-    iaac/kubernetes/k3d/k3d.sh status
+    $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh status
+    $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/k3d.sh status
     pretty_print "${GREEN}${UNDERLINE}POD Status By Namespace\n${NC}" 
     pretty_print "${YELLOW}Executing -> kubectl get pods -A --sort-by='.metadata.namespace'\n${NC}" 
     kubectl get pods -A --sort-by='.metadata.namespace'

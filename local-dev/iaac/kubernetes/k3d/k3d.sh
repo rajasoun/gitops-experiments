@@ -17,7 +17,7 @@ function is_k3d_cluster_exists(){
 }
 
 function create_cluster(){
-    try k3d cluster create --registry-config <(cat iaac/kubernetes/k3d/config/registries.yaml | envsubst) --config  <(cat iaac/kubernetes/k3d/config/k3d-config.yaml | envsubst)
+    try k3d cluster create --registry-config <(cat $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/config/registries.yaml | envsubst) --config  <(cat $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/config/k3d-config.yaml | envsubst)
     export KUBECONFIG=$(k3d kubeconfig write $CLUSTER_NAME)
     echo "KUBECONFIG=${KUBECONFIG}"
     pretty_print "${GREEN}k3d cluster created successfully\n${NC}"

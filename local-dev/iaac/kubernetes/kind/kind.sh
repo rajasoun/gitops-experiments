@@ -17,7 +17,7 @@ function is_kind_cluster_exists(){
 }
 
 function create_cluster(){
-    try kind create cluster --name $CLUSTER_NAME  --wait 5m --config="iaac/kubernetes/kind/config/kind.yaml" 
+    try kind create cluster --name $CLUSTER_NAME  --wait 5m --config="$GIT_BASE_PATH/local-dev/iaac/kubernetes/kind/config/kind.yaml" 
     export KUBECONFIG="$(kind get kubeconfig --name=${CLUSTER_NAME})"
     pretty_print "${GREEN}kind cluster created successfully\n${NC}"
     # List Running Containers
