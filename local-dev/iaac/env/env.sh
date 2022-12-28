@@ -6,18 +6,6 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 GITHUB_BASE_URL="github.com"
 ENV_FILE=".env"
 
-# check
-function check(){
-    echo -e "\n"
-    gh auth status --hostname "$GITHUB_BASE_URL" 
-    if [ $? -eq 0 ]; then
-        pass "Github Auth"
-    else
-        fail "Github Auth"
-    fi
-}
-
-
 # setup
 function setup(){
     gh auth login --hostname $GITHUB_BASE_URL --git-protocol https --web
@@ -35,10 +23,16 @@ function teardown(){
 
 function status(){
     gh auth status --hostname "$GITHUB_BASE_URL" 
+    if [ $? -eq 0 ]; then
+        pass "Github Auth"
+    else
+        fail "Github Auth"
+    fi
 }
 
 function test(){
     export $(grep -v "^#\|^$" $ENV_FILE| envsubst | xargs)
+    echo -e "\n"
     gh auth login --hostname "$GITHUB_BASE_URL"  --with-token <(echo "$GITHUB_TOKEN")
     status
 }

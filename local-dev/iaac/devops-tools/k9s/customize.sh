@@ -8,28 +8,10 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 MAC_K9S_HOME="$HOME/Library/Application Support/k9s"
 
-function check(){
-    echo -e "\n"
-    # check if plugin.xml exists in k9s home
-    if [ -f "$MAC_K9S_HOME/plugin.yml" ]; then
-        pass "INFO - k9s plugin is installed"
-    else
-        fail "INFO - k9s plugin is not installed"
-    fi
-    # check if logoless is enabled in k9s config
-    if [ -f "$MAC_K9S_HOME/config.yml" ]; then
-        if yq e '.k9s.logoless' $MAC_K9S_HOME/config.yml | grep -q true; then
-            pass "INFO - k9s Logo is enabled"
-        else
-            fail "INFO - k9s Logo is disabled"
-        fi
-    fi
-}
-
 function setup(){
     # copy plugin.xml to k9s home if not exists
     if [ ! -f "$MAC_K9S_HOME/plugin.yml" ]; then
-        cp iaac/devops-tools/k9s/plugin.yml $MAC_K9S_HOME
+        cp $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/plugin.yml $MAC_K9S_HOME
         echo -e "INFO - k9s plugin copied to $MAC_K9S_HOME"
     fi
     if [ -f "$MAC_K9S_HOME/config.yml" ]; then
@@ -50,11 +32,21 @@ function teardown(){
 }
 
 function test(){
-    find  iaac/devops-tools/k9s -type f -name '*.yml' -print0 | while IFS= read -r -d $'\0' file;
-    do
-        echo "INFO - Validating $file"
-        yq e 'true' "$file" > /dev/null
-    done
+    echo -e "\n"
+    # check if plugin.xml exists in k9s home
+    if [ -f "$MAC_K9S_HOME/plugin.yml" ]; then
+        pass "INFO - k9s plugin is installed"
+    else
+        fail "INFO - k9s plugin is not installed"
+    fi
+    # check if logoless is enabled in k9s config
+    if [ -f "$MAC_K9S_HOME/config.yml" ]; then
+        if yq e '.k9s.logoless' $MAC_K9S_HOME/config.yml | grep -q true; then
+            pass "INFO - k9s Logo is enabled"
+        else
+            fail "INFO - k9s Logo is disabled"
+        fi
+    fi
 }
 
 function status(){   
