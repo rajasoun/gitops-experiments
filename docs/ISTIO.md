@@ -36,3 +36,11 @@ Reference: [Istio Helm Chart](https://istio.io/latest/docs/setup/install/helm/)
     istio-ingressgateway-5c8b4f4c4c-7z2jg   1/1     Running   0          2m
     istiod-7f9b9f4d9c-6x7x7                 1/1     Running   0          2m
     ```
+
+3. Watch for the Helm releases being installed:
+
+    ```bash
+    watch flux get helmreleases --all-namespaces
+    ```
+
+
