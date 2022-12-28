@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./gitops/istio/system
+  path: ./gitops/infrastructure/base/istio/system
   prune: true
   wait: true
   sourceRef:
@@ -25,7 +25,7 @@ spec:
   dependsOn:
     - name: istio-system
   interval: 10m0s
-  path: ./gitops/istio/gateway
+  path: ./gitops/infrastructure/base/istio/gateway
   prune: true
   wait: true
   sourceRef:
