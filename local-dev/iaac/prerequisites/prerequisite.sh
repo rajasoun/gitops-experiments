@@ -9,7 +9,6 @@ function setup(){
     is_mac
     check_for_docker_desktop
     brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile
-    install_tools
     source "${SCRIPT_LIB_DIR}/tools.sh"
     echo -e "${GREEN}Pre Requisites setup DONE!!!${NC}"
 }
