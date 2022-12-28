@@ -47,6 +47,11 @@ function test(){
             fail "INFO - k9s Logo is disabled"
         fi
     fi
+    find  $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s -type f -name '*.yml' -print0 | while IFS= read -r -d $'\0' file;
+    do
+        echo "INFO - Validating $file"
+        yq e 'true' "$file" > /dev/null
+    done
 }
 
 function status(){   
