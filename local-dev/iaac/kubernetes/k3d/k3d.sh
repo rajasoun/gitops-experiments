@@ -73,7 +73,7 @@ function test(){
         pretty_print "${ORANGE}k3d cluster does not exists. Skipping...\n${NC}"
         return 1
     fi
-    iaac/test/validate.sh
+    $GIT_BASE_PATH/local-dev/iaac/test/validate.sh
 }
 
 function status(){

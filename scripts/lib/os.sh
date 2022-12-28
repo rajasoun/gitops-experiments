@@ -76,7 +76,8 @@ function echoStderr(){
 
 # check if command installed via brew 
 function check_brew_packages() {
-    PACKAGE_LIST=($(grep -v "^#\|^$" iaac/prerequisites/local/Brewfile | awk '{print $2}' |  tr -d '"'))
+    GIT_BASE_PATH=$(git rev-parse --show-toplevel)
+    PACKAGE_LIST=($(grep -v "^#\|^$" $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile | awk '{print $2}' |  tr -d '"'))
     LABEL=$1
     echo -e "\n🧪 Testing $LABEL"
     brew list --version $PACKAGE_LIST[@]

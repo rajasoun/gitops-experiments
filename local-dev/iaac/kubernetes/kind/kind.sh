@@ -56,7 +56,7 @@ function test(){
         pretty_print "${ORANGE}kind cluster does not exists. Skipping...\n${NC}"
         return 1
     fi
-    try local/test/validate.sh
+    try $GIT_BASE_PATH/local-dev/iaac/test/validate.sh
 }
 
 function status(){

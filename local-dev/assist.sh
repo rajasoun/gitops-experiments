@@ -7,7 +7,7 @@ GIT_BASE_PATH=$(git rev-parse --show-toplevel)
 SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 function check(){
-    [ ! -f .env ] && iaac/env/env.sh setup
+    [ ! -f .env ] && $GIT_BASE_PATH/local-dev/iaac/env/env.sh setup
     $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh check 
     $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh check
     $GIT_BASE_PATH/local-dev/iaac/env/env.sh check
