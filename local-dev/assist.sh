@@ -4,7 +4,7 @@ set -eo pipefail
 IFS=$'\n\t'
 
 GIT_BASE_PATH=$(git rev-parse --show-toplevel)
-SCRIPT_LIB_DIR="$GIT_BASE_PATH/iaac/lib"
+SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 function check(){
     [ ! -f .env ] && iaac/env/env.sh setup

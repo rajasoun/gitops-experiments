@@ -3,25 +3,37 @@
 Guide to gain hands-on experience with GitOps using k3d Kubernetes cluster 
 We will use k3d for Kubernetes
 
-## Setup
 
-1. Fork this repository and clone it:
-    ```sh
-    git clone https://github.com/rajasoun/gitops-local-dev
-    cd gitops-local-dev
-    ```
-2. Run `./assist.sh setup` to install prerequisites tools, k3d cluster and populate .env file
+## About assist.sh
 
-Script will do the following:
-1. Prepare .env file and populate it with required values. Invoke `iaac/env/env.sh setup`
-2. Install required devops-tools using homebrew. Invoke `iaac/prerequisites/prerequisite.sh setup`
-3. Kubernetes cluster using [k3d](https://k3d.io). Invoke `iaac/k3d/k3d.sh setup`
+### setup
 
-## Test and Status 
+`./assist.sh setup` installs prerequisites tools, k3d cluster and populate .env file. It does the following:
+1. Build .env file and populate it with required values, using `iaac/env/env.sh setup`
+1. Installs required devops-tools using homebrew, using `iaac/prerequisites/prerequisite.sh setup`
+1. Builds Kubernetes cluster using [k3d](https://k3d.io), using `iaac/k3d/k3d.sh setup`
+1. Perform customization to the k9s, using `iaac/devops-tools/k9s/customize.sh setup`
 
-1. Run `./assist.sh test` to test the cluster
-2. Run `./assist.sh status` to check the status of the cluster
+### test
 
-## Teardown
+`./assist.sh test` tests the correctness of the cluster. It does the following:
+1. Test prerequisite, using `iaac/prerequisites/prerequisite.sh test`
+1. Test Kubernetes cluster using, `iaac/kubernetes/k3d/k3d.sh test`
+1. Test k9s customization using `iaac/devops-tools/k9s/customize.sh test`
 
-1. Run `./assist.sh teardown` to teardown the cluster
+### status
+
+`./assist.sh status` checks the status of the local dev environment. It does the following:
+1. Prints status of prerequisite, using `iaac/prerequisites/prerequisite.sh status`
+1. Prints status of  Kubernetes cluster, using `iaac/kubernetes/k3d/k3d.sh status`
+
+### teardown
+
+`./assist.sh teardown` teardown the entire local dev environment. It does the following:
+1. Teardown Kubernetes cluster, using `iaac/kubernetes/k3d/k3d.sh teardown`
+1. Teardown .env file, using `iaac/env/env.sh teardown`
+1. Teardown k9s customization, using `iaac/devops-tools/k9s/customize.sh teardown`
+1. Teardown prerequisite, using `iaac/prerequisites/prerequisite.sh teardown`.
+
+> Note: This will delete the entire cluster and all the data. Use with caution. `iaac/prerequisites/prerequisite.sh teardown` is commented out by default. Uncomment it if you want to remove the prerequisite tools.
+

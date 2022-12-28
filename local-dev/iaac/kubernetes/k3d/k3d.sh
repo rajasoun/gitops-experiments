@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 GIT_BASE_PATH=$(git rev-parse --show-toplevel)
-SCRIPT_LIB_DIR="$GIT_BASE_PATH/iaac/lib"
+SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 export $(grep -v "^#\|^$" .env | envsubst | xargs)
 export CLUSTER_NAME=${CLUSTER_NAME:-"dev"}
