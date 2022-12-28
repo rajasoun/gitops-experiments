@@ -61,7 +61,7 @@ spec:
   http:
   - match:
     - uri:
-        exact: /weave-dashboard
+        exact: weave-dashboard.dev.local.gd
     route:
     - destination:
         host: weave-gitops

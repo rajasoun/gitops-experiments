@@ -7,4 +7,4 @@ spec:
   egress:
     - hosts:
         - "istio-system/*"
-        - "*/weave-dashboard"
+        - "weave-dashboard/*"
