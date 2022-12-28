@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: weave-gitops
-  namespace: flux-system
+  namespace: weave-dashboard
 spec:
   type: oci
   interval: 60m0s
@@ -13,7 +13,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: weave-gitops
-  namespace: flux-system
+  namespace: weave-dashboard
 spec:
   interval: 60m
   chart:
@@ -52,7 +52,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: weave-gitops
-  namespace: flux-system
+  namespace: weave-dashboard
 spec:
   hosts:
   - "*"
