@@ -155,3 +155,7 @@ function pass(){
 function fail(){
     pretty_print "\t${RED}❌ $1 ${NC}"
 }
+
+function line_separator(){
+    pretty_print "\n${YELLOW}-------------------------------------------------------------------------------------------------------------------${NC}\n"
+}

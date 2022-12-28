@@ -32,19 +32,18 @@ function teardown(){
 }
 
 function test(){
-    echo -e "\n"
     # check if plugin.xml exists in k9s home
     if [ -f "$MAC_K9S_HOME/plugin.yml" ]; then
-        pass "INFO - k9s plugin is installed"
+        pass "INFO - k9s plugin is installed\n"
     else
-        fail "INFO - k9s plugin is not installed"
+        fail "INFO - k9s plugin is not installed\n"
     fi
     # check if logoless is enabled in k9s config
     if [ -f "$MAC_K9S_HOME/config.yml" ]; then
         if yq e '.k9s.logoless' $MAC_K9S_HOME/config.yml | grep -q true; then
-            pass "INFO - k9s Logo is enabled"
+            pass "INFO - k9s Logo is enabled\n"
         else
-            fail "INFO - k9s Logo is disabled"
+            fail "INFO - k9s Logo is disabled\n"
         fi
     fi
     find  $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s -type f -name '*.yml' -print0 | while IFS= read -r -d $'\0' file;

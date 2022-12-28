@@ -15,8 +15,7 @@ function setup(){
 
 # test
 function test(){
-    echo -e "\n"
-    result=$(brew bundle --file iaac/prerequisites/local/Brewfile check)
+    result=$(brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile check)
     # grep result for dependencies are satisfied
     if [[ $result == *"dependencies are satisfied."* ]]; then
         pass "Pre Requisites for devops-tools"

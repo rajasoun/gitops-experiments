@@ -29,9 +29,15 @@ function teardown(){
 }
 
 function test(){
+    pretty_print "${BOLD}${UNDERLINE}Pre Requisites Tests\n${NC}"
     $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh test
-    $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/k3d.sh test
+    line_separator
+    pretty_print "${BOLD}${UNDERLINE}k9s customizaions Tests\n${NC}"
     $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh test
+    line_separator
+    pretty_print "${BOLD}${UNDERLINE}k3d Tests\n${NC}"
+    $GIT_BASE_PATH/local-dev/iaac/kubernetes/k3d/k3d.sh test
+    line_separator
 }
 
 function status(){    
