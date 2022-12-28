@@ -55,7 +55,7 @@ function post_check(){
   # check istio-system namespace is created
   [ $(kubectl get namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system namespace not created" && return 1 || pass "istio-system namespace created\n"
   # check helm release is deployed
-  [ $(flux get helmreleases --all-namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system helm release not deployed" && return 1 || pass "istio-system helm release deployed\n"
+  [ $(flux get helmreleases --all-namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system helm releases not deployed" && return 1 || pass "istio-system helm releases deployed\n"
   return 0
 }
 
@@ -89,8 +89,15 @@ function test(){
 }
 
 function status(){    
-    pretty_print "${YELLOW}Executing -> kubectl get pods -A --sort-by='.metadata.namespace'\n${NC}" 
-    kubectl get pods -A --sort-by='.metadata.namespace'
+    pretty_print "${YELLOW}Executing -> flux get helmreleases --all-namespaces\n${NC}"
+    flux get helmreleases --all-namespaces
+    line_separator
+    pretty_print "${YELLOW}Executing -> kubectl get svc -n istio-system \n${NC}"
+    kubectl get svc -n istio-system 
+    line_separator
+    pretty_print "${YELLOW}Executing -> kubectl get pods -n istio-system \n${NC}"
+    kubectl get pods -n istio-system
+    line_separator
 }
 
 source "${SCRIPT_LIB_DIR}/main.sh" $@
