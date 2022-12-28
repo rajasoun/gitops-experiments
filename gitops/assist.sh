@@ -82,7 +82,7 @@ function test(){
 
 function status(){    
     pretty_print "${YELLOW}Executing -> kubectl get pods -A --sort-by='.metadata.namespace'\n${NC}" 
-    kubectl get pods --namespace=flux-system --sort-by='.metadata.namespace'
+    kubectl get pods -A --sort-by='.metadata.namespace'
 }
 
 source "${SCRIPT_LIB_DIR}/main.sh" $@
