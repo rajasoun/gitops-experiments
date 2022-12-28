@@ -8,7 +8,7 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 function setup(){
     is_mac
     check_for_docker_desktop
-    brew bundle --file iaac/prerequisites/local/Brewfile
+    brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile
     install_tools
     source "${SCRIPT_LIB_DIR}/tools.sh"
     echo -e "${GREEN}Pre Requisites setup DONE!!!${NC}"
@@ -29,12 +29,12 @@ function test(){
 # status
 function status(){
     pretty_print "${GREEN}${UNDERLINE}Pre Requisites Tools \n${NC}"
-    brew bundle --file iaac/prerequisites/local/Brewfile list
+    brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile list
 }
 
 # teardown
 function teardown(){
-    brew bundle --file iaac/prerequisites/global/Brewfile --cleanup
+    brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile --cleanup
     brew cleanup
     rm -fr bin/*
     echo -e "${GREEN}Pre Requisites Teardown Sucessfull!!!${NC}"
