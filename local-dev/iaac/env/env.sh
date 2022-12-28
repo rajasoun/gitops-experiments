@@ -4,7 +4,7 @@ GIT_BASE_PATH=$(git rev-parse --show-toplevel)
 SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 GITHUB_BASE_URL="github.com"
-ENV_FILE=".env"
+ENV_FILE="$GIT_BASE_PATH/.env"
 
 # setup
 function setup(){
@@ -13,7 +13,7 @@ function setup(){
     export GITHUB_REPO=$(gh repo view --json name -q ".name")
     export GITHUB_BRANCH=$(git rev-parse --abbrev-ref HEAD)
     export GITHUB_TOKEN=$(gh auth token)
-    cat .env.sample | envsubst > $ENV_FILE
+    cat "$ENV_FILE.sample"| envsubst > "$ENV_FILE"
 }
 
 # teardown

@@ -8,17 +8,15 @@ source "${SCRIPT_LIB_DIR}/k8s.sh"
 opt="$1"
 choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
 case $choice in
-    check)time_it check $@;;
     setup)time_it setup $@;;
-    teardown)time_it teardown $@;;
     test)time_it test $@;;
     status)status $@;;
+    teardown)time_it teardown $@;;
     *)
     echo "${RED}Usage: $0 < setup | teardown | test | status >${NC}"
 cat <<-EOF
 Commands:
 ---------
-check         -> Check
 setup         -> Setup  
 teardown      -> Teardown 
 test          -> Test 
