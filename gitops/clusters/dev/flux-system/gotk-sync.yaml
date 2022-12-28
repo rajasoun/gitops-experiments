@@ -8,7 +8,7 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: step-0.bootstrap
+    branch: step-1.istio
   secretRef:
     name: flux-system
   url: ssh://git@github.com/rajasoun/gitops-experiments
