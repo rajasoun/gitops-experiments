@@ -141,10 +141,10 @@ function init_lb_env(){
     fi
 }
 
-function load_env () {
+function load_env() {
   # Load environment variables from .env file
   set -a
-  [ -f .env ] && . .env
+  [ -f $GIT_BASE_PATH/.env ] && . $GIT_BASE_PATH/.env
   set +a
 }
 
