@@ -27,7 +27,7 @@ Mermaid CI/CD pipeline diagram
 
 ```mermaid
 graph TB
-    subgraph Continous Integration    
+    subgraph ContinousIntegration    
         A[Developer] --> B[Git Push]
         B --> C[Unit Tests]
         C --> D[Code Quality]
@@ -35,7 +35,7 @@ graph TB
         E --> F[Secrets]
         F --> G[Build & Release]
     end
-    subgraph Continous Delivery
+    subgraph ContinousDelivery
         G[Build & Release] --> H[Deploy - Test]
         H --> I[Smoke Tests]
         I --> J[UI Tests]
@@ -56,6 +56,7 @@ You can have CI software create the container image representing your applicatio
 
 Afterward, a Git workflow such as a pull request can change the Kubernetes manifests illustrating the deployment of your apps and start a CD sync loop.
 
+
 ![Git Ops Cookbook](https://developers.redhat.com/sites/default/files/gocb_0102.png)
 
 ## GitOps loop
@@ -67,7 +68,15 @@ Is composed of four main actions
 3. **Detect drift:** Detect any change from what is described in Git and what is present in the cluster.
 4. **Take action:** Perform an action that reflects what is on Git (rollback or three-way diff). Git is the source of truth, and any change is performed via a Git workflow.
 
-![GitOps Loop](https://developers.redhat.com/sites/default/files/gocb_0103.png)
+```mermaid
+graph TB
+    subgraph GitOpsLoop
+        A((Deploy)) --> B((Monitor))
+        B --> C((Detect Drift))
+        C --> D((Take Action))
+        D --> A
+    end
+```
 
 ## GitOps loop with Kubernetes
 
@@ -75,6 +84,7 @@ In Kubernetes, application deployment using the GitOps approach makes use of at 
 
 1. app source code, and 
 1. Kubernetes manifests describing the app’s deployment (Deployment, Service, etc.).
+
 
 ![GitOps Loop with Kubernetes](https://developers.redhat.com/sites/default/files/gocb_0104.png)
 
