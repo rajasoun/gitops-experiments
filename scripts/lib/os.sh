@@ -170,3 +170,12 @@ function install_istioctl(){
         try  curl -sL https://istio.io/downloadIstioctl | sh -
     fi
 }
+
+# print Gateway URL 
+function print_gateway_url(){
+    export GATEWAY_HOST=$(kubectl -n istio-system get service istio-gateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    export GATEWAY_PORT=$(kubectl -n istio-system get service istio-gateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+    export SECURE_GATEWAY_PORT=$(kubectl -n istio-system get service istio-gateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
+    export GATEWAY_URL=$GATEWAY_HOST:$GATEWAY_PORT
+    pretty_print "${GREEN}Gateway URL : http://$GATEWAY_HOST:$GATEWAY_PORT${NC}\n"
+}

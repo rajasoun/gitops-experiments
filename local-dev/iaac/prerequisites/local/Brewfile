@@ -30,3 +30,7 @@ brew "tektoncd-cli"
 # Load Test
 brew "k6"  
 
+# network tools
+brew "nmap"
+
+
