@@ -48,7 +48,9 @@ Istio **Data plane** components are made of Envoy Proxies. These are layer 7 pro
 1. Observability
 
 
+## Comparision with other Service Meshes
 
+![istio-vs-others](https://miro.medium.com/max/1400/1*C-w_7dhU9A7BnuFIB8EQsg.webp)
 
 
 
