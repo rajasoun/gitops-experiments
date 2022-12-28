@@ -56,6 +56,10 @@ function post_check(){
   [ $(kubectl get namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system namespace not created" && return 1 || pass "istio-system namespace created\n"
   # check helm release is deployed
   [ $(flux get helmreleases --all-namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system helm releases not deployed" && return 1 || pass "istio-system helm releases deployed\n"
+  install_istioctl
+  export PATH=$HOME/.istioctl/bin:$PATH
+  istioctl x precheck 
+  istioctl analyze
   return 0
 }
 

@@ -159,3 +159,14 @@ function fail(){
 function line_separator(){
     pretty_print "\n${YELLOW}-------------------------------------------------------------------------------------------------------------------${NC}\n"
 }
+
+# check istioctl is installed
+function install_istioctl(){
+    # check istioctl is installed
+    if [ -d $HOME/.istioctl ];then
+        pretty_print "${YELLOW}istioctl is already installed. Skipping...${NC}\n"
+    else 
+        pretty_print "${YELLOW}installing istioctl.${NC}\n"
+        try  curl -sL https://istio.io/downloadIstioctl | sh -
+    fi
+}
