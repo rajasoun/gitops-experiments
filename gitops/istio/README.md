@@ -6,17 +6,6 @@ The Helm charts used in this guide are the same underlying charts used when inst
 
 > Istio Installation with Helm  is currently considered [alpha](https://istio.io/latest/docs/releases/feature-stages/).
 
-## Prerequisites
-
-1. [gitops-local-dev](https://github.com/rajasoun/gitops-local-dev) repository cloned to your local machine in the directory `$HOME/workspace/gitops/gitops-local-dev`
-2. Kubernetes cluster with version >= 1.16
-3. devops-tools installed
-4. Run the following command to check the Prerequisites:
-
-    ```bash 
-    ./assist check
-    ```
-
 ## Install Istio via Helm
 
 Reference: [Istio Helm Chart](https://istio.io/latest/docs/setup/install/helm/)
