@@ -64,6 +64,7 @@ function setup(){
 }
 
 function teardown(){
+  flux uninstall --namespace=istio-system
   flux uninstall --namespace=flux-system
   $GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown
 }
