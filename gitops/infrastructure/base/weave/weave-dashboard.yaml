@@ -61,10 +61,10 @@ spec:
   http:
   - match:
     - uri:
-        exact: weave-dashboard.dev.local.gd
+        exact: "/weave-dashboard"
     route:
     - destination:
-        host: weave-gitops
+        host: weave-gitops.weave-dashboard.svc.cluster.local
         port:
           number: 9001
 ---
