@@ -52,6 +52,10 @@ function post_check(){
   [ ! $(kubectl get --raw '/readyz?verbose' | grep -c "ok") -eq 24 ] && fail "kubernetes cluster is unhealthy" && return 1 || pass "kubernetes cluster is healthy\n"
   # check istio-system kustomization is deployed
   [ $(flux get kustomizations --all-namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system kustomization not deployed" && return 1 || pass "istio-system kustomization deployed\n"
+  # check istio-system namespace is created
+  [ $(kubectl get namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system namespace not created" && return 1 || pass "istio-system namespace created\n"
+  # check helm release is deployed
+  [ $(flux get helmreleases --all-namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system helm release not deployed" && return 1 || pass "istio-system helm release deployed\n"
   return 0
 }
 
