@@ -1,0 +1,32 @@
+# Local Dev
+brew "kind"
+brew "k3d"
+
+# Kubernetes tools
+brew "kubectl"
+brew "helm"
+brew "kustomize"
+brew "kubeconform"
+brew "k9s"            
+brew "kubectx"         
+brew "stern"          
+brew "watch"
+
+# Parsers
+brew "cue"
+
+# OCI tools
+brew "oras"
+brew "crane"
+brew "cosign"
+
+# Flux
+tap "fluxcd/tap"
+brew "fluxcd/tap/flux"   
+
+# tekton 
+brew "tektoncd-cli"
+
+# Load Test
+brew "k6"  
+

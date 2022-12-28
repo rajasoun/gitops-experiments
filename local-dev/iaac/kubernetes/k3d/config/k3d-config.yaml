@@ -1,0 +1,54 @@
+# k3d configuration file
+
+apiVersion: k3d.io/v1alpha4 
+kind: Simple 
+metadata:
+  name: $CLUSTER_NAME # name that you want to give to your cluster (will still be prefixed with `k3d-`)
+
+servers: 1  # one server node for the control plane.
+agents: 2   # two nodes to run containers 
+
+kubeAPI: 
+  host: "$CLUSTER_NAME.local.gd"   # important for the `server` setting in the kubeconfig Refer: https://local.gd/
+  hostIP: "127.0.0.1"       # where the Kubernetes API will be listening on
+  hostPort: "6443"          # where the Kubernetes API listening port will be mapped to on your host system
+image: rancher/k3s:latest
+
+ports:
+  - port: 80:80   # forward requests from port 8080 to 80 in the k8 cluster. Load balancer (Docker Port)
+    nodeFilters:
+      - loadbalancer
+
+  - port: 443:443 # forward requests from port 9443 to 443 in the k8 cluster. Load balancer (Docker Port) - HTTPS
+    nodeFilters:
+      - loadbalancer
+
+registries:   # define how registries should be created or used
+  create:     # creates a default registry to be used with the cluster; same as `--registry-create registry.localhost`
+    name: "registry.$CLUSTER_NAME.local"
+    host: "0.0.0.0"
+    hostPort: "5001"
+
+options:
+  k3d: # k3d runtime settings
+    wait: true      # wait for cluster to be usable before returining; same as `--wait` (default: true)
+    timeout: "60s"  # wait timeout before aborting; same as `--timeout 60s`
+    disableLoadbalancer: false  # same as `--no-lb`
+    disableImageVolume: false   # same as `--no-image-volume`
+    disableRollback: false      # same as `--no-Rollback`
+    loadbalancer:
+      configOverrides:
+        - settings.workerConnections=2048
+  k3s:
+    extraArgs:
+      - arg: --disable=traefik
+        nodeFilters:
+          - server:*
+  kubeconfig:
+    updateDefaultKubeconfig: true # add new cluster to your default Kubeconfig; 
+    switchCurrentContext: true    # also set current-context to the new cluster's context; 
+
+  
+
+
+

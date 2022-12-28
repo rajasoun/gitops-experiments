@@ -1,0 +1,6 @@
+# Reference: https://k3d.io/v5.4.6/faq/faq/#dockerhub-pull-rate-limit
+configs:
+  "docker.io":
+    auth:
+      username: "$DOCKER_USERNAME"
+      password: "$DOCKER_PASSWORD"

@@ -1,0 +1,39 @@
+# AWS
+brew "awscli"
+
+# Programming
+brew "zsh"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "python@3.11"
+brew "go"
+brew "node"
+brew "terraform"
+
+# k8s
+brew "kubectl"
+brew "helm"
+
+# tls
+brew "ca-certificates"
+brew "openssl"
+
+
+
+# Tools
+brew "coreutils"
+brew "gh"
+brew "jq"
+brew "yq"
+brew "netcat"
+brew "httpie"
+brew "wget"
+brew "fetch"
+brew "teller"
+
+# casks
+cask "aws-vault"
+cask "iterm2"
+cask "burp-suite"
+cask "google-cloud-sdk"
+cask "visual-studio-code"
