@@ -56,7 +56,10 @@ function post_check(){
 }
 
 function setup(){
-  $GIT_BASE_PATH/local-dev/iaac/env/env.sh setup
+  if [ ! -d $GIT_BASE_PATH/.env ]; then
+    $GIT_BASE_PATH/local-dev/iaac/env/env.sh setup
+  fi
+  load_env
   flux_bootstrap
 }
 
