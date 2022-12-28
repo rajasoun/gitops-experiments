@@ -11,7 +11,8 @@ tell application "iTerm"
     
     # Split pane
     tell current session of current window
-        split vertically with default profile
+        # split vertically with default profile
+        split horizontally with default profile
         split horizontally with default profile
     end tell
     
