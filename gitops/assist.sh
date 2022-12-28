@@ -58,8 +58,10 @@ function post_check(){
   [ $(flux get helmreleases --all-namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system helm releases not deployed" && return 1 || pass "istio-system helm releases deployed\n"
   install_istioctl
   export PATH=$HOME/.istioctl/bin:$PATH
-  istioctl x precheck 
-  istioctl analyze
+  #istioctl x precheck 
+  kubectl label namespace default istio-injection=enabled
+  # check istioctl analyze
+  [ $(istioctl analyze | grep -c "No validation issues found") -eq 0 ] && pass "istioctl analyze passed\n" && return 1 || fail "istioctl analyze failed\n"
   return 0
 }
 
