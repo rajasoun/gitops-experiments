@@ -28,8 +28,12 @@ function teardown(){
 }
 
 function test(){
+  pretty_print "${BOLD}${UNDERLINE}GitHub Token Tests\n${NC}"
   $GIT_BASE_PATH/local-dev/iaac/env/env.sh test
+  line_separator
+  pretty_print "${BOLD}${UNDERLINE}Flux Bootstrap Tests\n${NC}"
   $GIT_BASE_PATH/local-dev/iaac/test/validate.sh
+  line_separator
 }
 
 function status(){    
