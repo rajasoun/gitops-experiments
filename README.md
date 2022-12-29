@@ -32,3 +32,7 @@ Guide to gain hands-on experience with GitOps using k3d Kubernetes cluster
     ```sh
     local-dev/assist.sh status
     ```
+
+## Gitops 
+
+**Refer to [Gitops](gitops/README.md) for more details**
