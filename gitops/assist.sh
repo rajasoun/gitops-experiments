@@ -76,7 +76,8 @@ function setup(){
 function teardown(){
   flux uninstall --namespace=istio-system
   flux uninstall --namespace=flux-system
-  flux uninstall --namespace=weave-dashboard
+  flux uninstall --namespace=cert-manager
+  flux uninstall --namespace=ingress-nginx
   $GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown
 }
 
