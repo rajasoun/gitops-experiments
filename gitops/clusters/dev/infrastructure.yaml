@@ -4,8 +4,6 @@ kind: Kustomization
 metadata:
   name: infra-controllers
   namespace: flux-system
-  labels:
-    toolkit.fluxcd.io/tenant: sre-team
 spec:
   interval: 1h
   retryInterval: 1m
@@ -22,8 +20,6 @@ kind: Kustomization
 metadata:
   name: infra-configs
   namespace: flux-system
-  labels:
-    toolkit.fluxcd.io/tenant: sre-team
 spec:
   dependsOn:
     - name: infra-controllers
