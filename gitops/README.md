@@ -43,7 +43,10 @@ kubectl get gitrepositories -n flux-system
     ```sh
     gitops/validators/weave-dashboard.sh test
     ```
-2. 
+2. Test Nginx Ingress Controller is running with httpd 
+    ```sh
+    gitops/validators/httpd.sh test
+    ```
 
 
 # For Reference 
