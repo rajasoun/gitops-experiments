@@ -21,7 +21,7 @@ tell application "iTerm"
     tell current session of current window
         # split vertically with default profile
         split horizontally with default profile
-        # split horizontally with default profile
+        split horizontally with default profile
     end tell
     
     # Exec commands
@@ -29,6 +29,9 @@ tell application "iTerm"
         write text "watch flux get kustomizations"
     end tell
     tell second session of current tab of current window
+        write text "watch flux get helmreleases --all-namespaces"
+    end tell
+    tell third session of current tab of current window
         write text "flux logs --all-namespaces --follow --tail=10"
     end tell
 
