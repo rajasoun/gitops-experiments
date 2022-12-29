@@ -47,7 +47,10 @@ kubectl get gitrepositories -n flux-system
     ```sh
     gitops/validators/httpd.sh test
     ```
-
+3. Test app podinfo is running
+    ```sh
+    gitops/validators/podinfo.sh test
+    ```
 
 # For Reference 
 
