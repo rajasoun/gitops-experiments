@@ -47,5 +47,16 @@ spec:
       # https://docs.gitops.weave.works/docs/configuration/securing-access-to-the-dashboard/#login-via-a-cluster-user-account
       # bcrypt hash for password "flux"
       passwordHash: "$2a$10$P/tHQ1DNFXdvX0zRGA8LPeSOyb0JXq9rP3fZ4W8HGTpLV7qHDlWhe"
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      hosts:
+        - host: weave-gitops.dev.local.gd
+          paths:
+            - path: /
+              pathType: Prefix
 ---
 
