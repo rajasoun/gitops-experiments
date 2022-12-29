@@ -8,7 +8,7 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: step-2.infrastructure
+    branch: step-3.apps.podinfo
   secretRef:
     name: flux-system
   url: ssh://git@github.com/rajasoun/gitops-experiments
