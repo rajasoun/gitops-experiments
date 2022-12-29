@@ -34,6 +34,8 @@ flux logs --all-namespaces --follow --tail=10
 kubectl get gitrepositories -n flux-system
 ```
 
+> Note: You can also use `scripts/iterm2/watch.sh` to watch the logs and flux status. 
+
 # For Reference 
 
 Below section explains the steps that is wrapped in assist.sh script
