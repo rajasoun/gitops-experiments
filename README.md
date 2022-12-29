@@ -164,9 +164,9 @@ Create new local cluster for staging.
 If you want to add a cluster to your fleet, first clone your repo locally:
 Create a dir inside `clusters` with your cluster name:
 
-```sh
-mkdir -p gitops/clusters/staging
-```
+    ```sh
+    mkdir -p gitops/clusters/staging
+    ```
 
 Copy the sync manifests from staging:
 
@@ -194,3 +194,39 @@ Set the kubectl context and path to your dev cluster and bootstrap Flux using
     gitops/assist.sh setup
     ```
 
+## Identical environments
+
+If you want to spin up an identical environment, you can bootstrap a cluster
+e.g. `dev-clone` and reuse the `dev` definitions.
+
+Bootstrap the `dev-clone` cluster:
+
+    ```sh
+    git checkout -b dev-clone step-3.apps.podinfo
+    sed -i '' -E   's/CLUSTER_NAME=dev/CLUSTER_NAME=dev-clone/' .env
+    local-dev/assist.sh setup
+    gitops/assist.sh setup
+    ```
+
+Pull the changes locally:
+    ```sh
+    git pull --rebase
+    git push 
+    ```
+
+Create a `kustomization.yaml` inside the `clusters/dev-clone` dir
+
+> Note that besides the `flux-system` kustomize overlay, we also include
+the `infrastructure` and `apps` manifests from the dev dir.
+
+Push the changes to the ranch:
+
+```sh
+git add -A && git commit -m "add dev clone" && git push
+```
+
+Tell Flux to deploy the production workloads on the `production-clone` cluster:
+
+```sh
+flux reconcile kustomization flux-system --context=dev-clone --with-source 
+```
