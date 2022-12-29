@@ -20,6 +20,8 @@ kind: HelmRelease
 metadata:
   name: cert-manager
   namespace: cert-manager
+  labels:
+    toolkit.fluxcd.io/tenant: sre-team
 spec:
   interval: 30m
   chart:
