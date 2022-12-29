@@ -52,19 +52,19 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: weave-gitops
-  namespace: weave-dashboard
+  namespace: infrastructure
 spec:
   hosts:
   - "*"
   gateways:
-  - weave-gateway
+  - infrastructure-gateway
   http:
   - match:
     - uri:
         exact: "/weave-dashboard"
     route:
     - destination:
-        host: weave-gitops.weave-dashboard.svc.cluster.local
+        host: weave-gitops.infrastructure.svc.cluster.local
         port:
           number: 9001
 ---

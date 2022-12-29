@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./gitops/infrastructure/base/weave/system
+  path: ./gitops/infrastructure/base/system
   prune: true
   wait: true
 ---
@@ -24,7 +24,7 @@ spec:
   dependsOn:
     - name: istio-system
   interval: 10m0s
-  path: ./gitops/infrastructure/base/weave/gateway
+  path: ./gitops/infrastructure/base/gateway
   prune: true
   wait: true
   sourceRef:
