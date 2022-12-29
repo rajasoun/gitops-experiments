@@ -36,6 +36,16 @@ kubectl get gitrepositories -n flux-system
 
 > Note: You can also use `scripts/iterm2/watch.sh` to watch the logs and flux status. 
 
+
+## Test Infrastructure
+
+1. Test weave dashboard is running
+    ```sh
+    gitops/validators/weave-dashboard.sh test
+    ```
+2. 
+
+
 # For Reference 
 
 Below section explains the steps that is wrapped in assist.sh script
