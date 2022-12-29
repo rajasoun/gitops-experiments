@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: weave-gitops
-  namespace: weave-dashboard
+  namespace: flux-system
 spec:
   type: oci
   interval: 60m0s
@@ -13,7 +13,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: weave-gitops
-  namespace: weave-dashboard
+  namespace: flux-system
 spec:
   interval: 60m
   chart:
@@ -48,23 +48,4 @@ spec:
       # bcrypt hash for password "flux"
       passwordHash: "$2a$10$P/tHQ1DNFXdvX0zRGA8LPeSOyb0JXq9rP3fZ4W8HGTpLV7qHDlWhe"
 ---
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: weave-gitops
-  namespace: infrastructure
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - infrastructure-gateway
-  http:
-  - match:
-    - uri:
-        exact: "/weave-dashboard"
-    route:
-    - destination:
-        host: weave-gitops.infrastructure.svc.cluster.local
-        port:
-          number: 9001
----
+
