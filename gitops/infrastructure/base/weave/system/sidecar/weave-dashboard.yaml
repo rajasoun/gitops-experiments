@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Sidecar
 metadata:
-  name: infra-weave-dashboard-sidecar
+  name: weave-dashboard-sidecar
   namespace: weave-dashboard
 spec:
   egress:
