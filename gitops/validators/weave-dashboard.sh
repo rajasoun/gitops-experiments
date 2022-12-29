@@ -18,7 +18,7 @@ function test(){
   pretty_print "${YELLOW}Starting Port Forward${NC}\n"
   pid=$(start_port_forward)
   pretty_print "${YELLOW}Test Weave Dashboard${NC}\n"
-  curl -s 'http://dev.local.gd:9001/oauth2/userinfo' -H 'Cookie: id_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY3MjI5NjkwNSwibmJmIjoxNjcyMjkzMzA1LCJpYXQiOjE2NzIyOTMzMDV9.7otq97andmpFMIZutScLzT48libHLYcZ7MG08EjGQyQ' 
+  http 'http://dev.local.gd:9001/'
   echo -e "\n"
   if [ $? -eq 0 ]; then
     pass "Weave Dashboard test passed\n"
