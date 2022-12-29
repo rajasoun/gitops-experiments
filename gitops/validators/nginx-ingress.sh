@@ -9,16 +9,15 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 # test
 function test(){
-    kubectl apply -f $GIT_BASE_PATH/gitops/validators/resources/http-echo.yaml
-    # wait for pod to be ready
-    kubectl wait --for=condition=ready pod -l app=http-echo --timeout=60s
-    http 'http://dev.local.gd/echo'
+    kubectl apply -f "$GIT_BASE_PATH/gitops/validators/resources/helloworld.yaml"
+    kubectl wait --for=condition=available --timeout=30s deployment/nginx-ingress-demo
+    http 'http://dev.local.gd/helloworld'
     if [ $? -eq 0 ]; then
-        pass "Nginx Ingress test passed\n"
+        pass "/helloworld Ingress test passed\n"
     else
-        fail "Nginx Ingress test failed\n"
+        fail "/helloworld Ingress test failed\n"
     fi
-    kubectl delete -f $GIT_BASE_PATH/gitops/validators/resources/http-echo.yaml
+    kubectl delete -f "$GIT_BASE_PATH/gitops/validators/resources/helloworld.yaml"
 }
 
 source "${SCRIPT_LIB_DIR}/main.sh" $@
