@@ -57,7 +57,7 @@ spec:
   hosts:
   - "*"
   gateways:
-  - public-gateway
+  - weave-gateway
   http:
   - match:
     - uri:

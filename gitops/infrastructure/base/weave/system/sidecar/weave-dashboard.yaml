@@ -1,11 +1,10 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Sidecar
 metadata:
-  name: default
+  name: infra-weave-dashboard-sidecar
   namespace: weave-dashboard
 spec:
   egress:
     - hosts:
-        - "./*"
         - "istio-system/*"
         - "weave-dashboard/*"
