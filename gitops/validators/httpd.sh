@@ -16,7 +16,6 @@ function start_port_forward() {
 function test(){
   kubectl apply -f "$GIT_BASE_PATH/gitops/validators/resources/httpd.yaml"
   kubectl wait --for=condition=available --timeout=30s deployment/httpd  -n infrastrcuture-demo
-  kubectl wait --for=condition=available --timeout=30s svc/httpd  -n infrastrcuture-demo
   pretty_print "${BOLD}${UNDERLINE}Testing httpd via Nginx Ingress${NC}\n"
   pretty_print "${YELLOW}Starting Port Forward${NC}\n"
   pid=$(start_port_forward)
