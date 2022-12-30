@@ -28,40 +28,73 @@
 # - kustomize v4.5
 # - kubeconform v0.5.0
 
+GIT_BASE_PATH=$(git rev-parse --show-toplevel)
+SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
+source "$SCRIPT_LIB_DIR/os.sh"
+
 set -o errexit
 
-echo "INFO - Downloading Flux OpenAPI schemas"
-mkdir -p /tmp/flux-crd-schemas/master-standalone-strict
-curl -sL https://github.com/fluxcd/flux2/releases/latest/download/crd-schemas.tar.gz | tar zxf - -C /tmp/flux-crd-schemas/master-standalone-strict
+# Download the Flux OpenAPI schemas
+function download_flux_schemas() {
+  pretty_print "\t${YELLOW}INFO - Downloading Flux OpenAPI schemas\n${NC}"
+  mkdir -p /tmp/flux-crd-schemas/master-standalone-strict
+  curl -sL https://github.com/fluxcd/flux2/releases/latest/download/crd-schemas.tar.gz | tar zxf - -C /tmp/flux-crd-schemas/master-standalone-strict 
+  line_separator
+}
 
-find . -type f -name '*.yaml' -print0 | while IFS= read -r -d $'\0' file;
-  do
-    echo "INFO - Validating $file"
-    yq e 'true' "$file" > /dev/null
-done
+# validate the Flux custom resources
+function validate_flux_crds() {
+  pretty_print "\t${YELLOW}INFO - Validating Flux custom resources\n${NC}"
+  find . -type f -name '*.yaml' -print0 | while IFS= read -r -d $'\0' file;
+    do
+      pretty_print "\tINFO - Validating $file\n"
+      yq e 'true' "$file" > /dev/null || result=1
+  done
+  line_separator
+}
 
-kubeconform_config=("-strict" "-ignore-missing-schemas" "-schema-location" "default" "-schema-location" "/tmp/flux-crd-schemas" "-verbose")
+# kubeconform validate Kubernetes manifests against the OpenAPI schemas
+function validate_kubeconform() {
+  kubeconform_config=("-strict" "-ignore-missing-schemas" "-schema-location" "default" "-schema-location" "/tmp/flux-crd-schemas" "-verbose")
+  pretty_print "\t${YELLOW}INFO - Validating clusters using kubeconform\n${NC}"
+  find ./gitops/clusters -maxdepth 2 -type f -name '*.yaml' -print0 | while IFS= read -r -d $'\0' file;
+    do
+      kubeconform "${kubeconform_config[@]}" "${file}"
+      if [[ ${PIPESTATUS[0]} != 0 ]]; then
+        exit 1
+      fi
+  done
+  line_separator
+}
 
-echo "INFO - Validating clusters"
-find ./gitops/clusters -maxdepth 2 -type f -name '*.yaml' -print0 | while IFS= read -r -d $'\0' file;
-  do
-    kubeconform "${kubeconform_config[@]}" "${file}"
-    if [[ ${PIPESTATUS[0]} != 0 ]]; then
-      exit 1
-    fi
-done
+# validate the kustomize overlays
+function validate_kustomize_overlays() {
+  # mirror kustomize-controller build options
+  kustomize_flags=("--load-restrictor=LoadRestrictionsNone")
+  kustomize_config="kustomization.yaml"
+  pretty_print "\t${YELLOW}INFO - Validating kustomize overlays\n${NC}"
+  find . -type f -name $kustomize_config -print0 | while IFS= read -r -d $'\0' file;
+    do
+      pretty_print "\t${YELLOW}INFO - Validating kustomization ${file/%$kustomize_config}\n${NC}"
+      kustomize build "${file/%$kustomize_config}" "${kustomize_flags[@]}" | kubeconform "${kubeconform_config[@]}"
+      if [[ ${PIPESTATUS[0]} != 0 ]]; then
+        exit 1
+      fi
+  done
+  line_separator
+}
 
-# mirror kustomize-controller build options
-kustomize_flags=("--load-restrictor=LoadRestrictionsNone")
-kustomize_config="kustomization.yaml"
+# main
+function main() {
+  download_flux_schemas
+  validate_flux_crds
+  validate_kubeconform
+  validate_kustomize_overlays
+}
 
-echo "INFO - Validating kustomize overlays"
-find . -type f -name $kustomize_config -print0 | while IFS= read -r -d $'\0' file;
-  do
-    echo "INFO - Validating kustomization ${file/%$kustomize_config}"
-    kustomize build "${file/%$kustomize_config}" "${kustomize_flags[@]}" | \
-      kubeconform "${kubeconform_config[@]}"
-    if [[ ${PIPESTATUS[0]} != 0 ]]; then
-      exit 1
-    fi
-done
+main $@
+
+
+
+
+

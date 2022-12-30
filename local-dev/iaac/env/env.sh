@@ -31,10 +31,12 @@ function status(){
 }
 
 function test(){
+    local result=0
     export $(grep -v "^#\|^$" $ENV_FILE| envsubst | xargs)
     echo -e "\n"
-    gh auth login --hostname "$GITHUB_BASE_URL"  --with-token <(echo "$GITHUB_TOKEN")
-    status
+    gh auth login --hostname "$GITHUB_BASE_URL"  --with-token <(echo "$GITHUB_TOKEN") || result=1
+    status || result=1
+    return $result
 }
 
 source "${SCRIPT_LIB_DIR}/main.sh" $@

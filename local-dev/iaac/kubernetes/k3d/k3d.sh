@@ -69,11 +69,13 @@ function teardown(){
 }
 
 function test(){
+    local result=0
     if [[ $(is_k3d_cluster_exists) == "false" ]]; then
         pretty_print "${ORANGE}k3d cluster does not exists. Skipping...\n${NC}"
-        return 1
+        result=1
     fi
-    $GIT_BASE_PATH/local-dev/iaac/test/validate.sh
+    $GIT_BASE_PATH/local-dev/iaac/test/validate.sh || result=1
+    return $result
 }
 
 function status(){

@@ -44,12 +44,17 @@ function teardown(){
 
 # test vscode extensions
 function test(){
+    local result=0
     extensions=$(cat $GIT_BASE_PATH/local-dev/iaac/devops-tools/ide/extensions.txt)
     for extension in $extensions; do
         if [ $(is_installed $extension) == "true" ]; then
-            pretty_print "${GREEN}INFO - $extension$ Installed${NC}\n"
+            pretty_print "${GREEN}INFO - $extension Installed${NC}\n"
+        else 
+            pretty_print "${RED}ERROR - $extension Not Installed${NC}\n"
+            result=1
         fi
     done
+    return $result
 }
 
 # status vscode extensions
