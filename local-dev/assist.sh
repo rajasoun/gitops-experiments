@@ -44,14 +44,17 @@ function teardown(){
 
 function test(){
     pretty_print "${BOLD}${UNDERLINE}Pre Requisites Tests\n${NC}"
-    $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh test
+    $GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh test || { fail "Pre Requisites Tests"; return 1; }
     line_separator
     pretty_print "${BOLD}${UNDERLINE}k9s customizaions Tests\n${NC}"
-    $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh test
+    $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh test || { fail "k9s customizaions Tests"; return 1; }
+    line_separator
+    pretty_print "${BOLD}${UNDERLINE}k9s customizaions Tests\n${NC}"
+    $GIT_BASE_PATH/local-dev/iaac/devops-tools/ide/customize.sh test || { fail "IDE customizaions Tests"; return 1; }
     line_separator
     kubernetes_type=$(get_kubernetes_type)
     pretty_print "${BOLD}${UNDERLINE}Kubernetes Cluster [$kubernetes_type] Tests\n${NC}"
-    $GIT_BASE_PATH/local-dev/iaac/kubernetes/$kubernetes_type/$kubernetes_type.sh test
+    $GIT_BASE_PATH/local-dev/iaac/kubernetes/$kubernetes_type/$kubernetes_type.sh test || { fail "Kubernetes Cluster [$kubernetes_type] Tests"; return 1; }
     line_separator
 }
 

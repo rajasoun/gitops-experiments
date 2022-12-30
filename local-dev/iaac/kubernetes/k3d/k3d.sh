@@ -73,6 +73,7 @@ function test(){
     if [[ $(is_k3d_cluster_exists) == "false" ]]; then
         pretty_print "${ORANGE}k3d cluster does not exists. Skipping...\n${NC}"
         result=1
+        return $result
     fi
     $GIT_BASE_PATH/local-dev/iaac/test/validate.sh || result=1
     return $result
