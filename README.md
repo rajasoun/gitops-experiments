@@ -116,13 +116,16 @@ The clusters dir contains the Flux configuration:
 ./clusters/
 ├── dev
 │   ├── apps.yaml
-│   └── infrastructure.yaml
+│   ├── infrastructure.yaml
+│   └── istio.yaml
 ├── staging
 │   ├── apps.yaml
-│   └── infrastructure.yaml
+│   ├── infrastructure.yaml
+│   └── istio.yaml
 └── production
-    ├── apps.yaml
-    └── infrastructure.yaml
+│   ├── apps.yaml
+│   ├── infrastructure.yaml
+│   └── istio.yaml
 ```
 
 In **clusters/staging/** dir we have the Flux Kustomization definitions.
@@ -157,7 +160,9 @@ To configure OIDC with Dex and GitHub please see this [guide](https://docs.gitop
 
 Create new local cluster for staging.
     ```sh
-    sed -i '' -E   's/CLUSTER_NAME=dev/CLUSTER_NAME=staging/' .env
+    local-dev/iaac/kubernetes/k3d/k3d.sh teardown
+    ENV=staging
+    sed -i '' -E   "s/CLUSTER_NAME=dev/CLUSTER_NAME=$ENV/" .env
     local-dev/assist.sh setup
     ```
 
