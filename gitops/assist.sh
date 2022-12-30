@@ -74,11 +74,14 @@ function setup(){
 }
 
 function teardown(){
-  flux uninstall --namespace=istio-system
-  flux uninstall --namespace=flux-system
-  flux uninstall --namespace=cert-manager
-  flux uninstall --namespace=ingress-nginx
-  $GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown
+  namespaces=("istio-system" "flux-system" "cert-manager" "ingress-nginx")
+  for namespace in "${namespaces[@]}"; do
+    pretty_print "${YELLOW}Executing -> flux uninstall --namespace=$namespace --silent\n${NC}"
+    flux uninstall --namespace=$namespace --silent
+    line_separator
+  done
+  # $GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown 
+  # line_separator
 }
 
 function test(){
