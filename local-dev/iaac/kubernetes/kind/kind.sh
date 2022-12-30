@@ -28,13 +28,6 @@ function create_cluster(){
     pretty_print "${GREEN}kind Installation Sucessfull${NC}"
 }
 
-function check(){
-    if [[ $(is_kind_cluster_exists) == "true" ]]; then
-        pretty_print "${YELLOW}kind cluster exists. \n${NC}"
-        kubectl get --raw='/readyz?verbose'
-    fi
-}
-
 function setup(){
     if [[ $(is_kind_cluster_exists) == "true" ]]; then
         pretty_print "${YELLOW}kind cluster already exists. Skipping...\n${NC}"
@@ -54,9 +47,11 @@ function teardown(){
 function test(){
     if [[ $(is_kind_cluster_exists) == "false" ]]; then
         pretty_print "${ORANGE}kind cluster does not exists. Skipping...\n${NC}"
-        return 1
+    else 
+        pretty_print "${YELLOW}kind cluster exists. \n${NC}"
+        kubectl get --raw='/readyz?verbose'
+        try $GIT_BASE_PATH/local-dev/iaac/test/validate.sh
     fi
-    try $GIT_BASE_PATH/local-dev/iaac/test/validate.sh
 }
 
 function status(){

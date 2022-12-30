@@ -16,7 +16,7 @@ To follow the guide, you need the following:
 ## Setup Flux with Github
 
 ```sh
-git checkout step-0.bootstrap
+git checkout step-3.apps.podinfo
 gitops/assist.sh setup 
 gitops/assist.sh test
 gitops/assist.sh status 
