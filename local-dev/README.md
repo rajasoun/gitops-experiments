@@ -14,11 +14,19 @@ We will use k3d for Kubernetes
     [ ! -d  $GIT_REPO_PATH ] && git clone https://github.com/rajasoun/gitops-experiments $WORKPSACE_PATH 
     ```
 
-2. Setup local development environment
+2. Setup local development environment using k3d
 
     ```sh
     local-dev/assist.sh setup
     ```
+
+    For kind,
+    ```sh
+    local-dev/iaac/env/env.sh setup
+    sed -i '' -E   's/CLUSTER_TYPE=k3d/CLUSTER_NAME=kind/' .env
+    local-dev/assist.sh setup 
+    ```
+
 
 3. Test local development environment
 
