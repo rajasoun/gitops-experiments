@@ -24,6 +24,7 @@ We will use k3d for Kubernetes
     ```sh
     sed -i '' -E   's/KUBERNETES_TYPE=k3d/KUBERNETES_TYPE=kind/' .env.sample
     local-dev/assist.sh setup 
+    sed -i '' -E   's/KUBERNETES_TYPE=kind/KUBERNETES_TYPE=k3d/' .env.sample
     ```
 
 
