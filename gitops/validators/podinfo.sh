@@ -18,7 +18,8 @@ function test(){
   pretty_print "${YELLOW}Starting Port Forward${NC}\n"
   pid=$(start_port_forward)
   pretty_print "${YELLOW}Test podinfo${NC}\n"
-  http http://dev.local.gd:8080 Host:podinfo.dev
+  load_env
+  http http://dev.local.gd:8080 Host:podinfo.$CLUSTER_NAME
   echo -e "\n"
   if [ $? -eq 0 ]; then
     pass "podinfo test passed\n"
