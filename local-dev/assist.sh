@@ -37,8 +37,8 @@ function setup(){
 function teardown(){
     kubernetes_type=$(get_kubernetes_type)
     $GIT_BASE_PATH/local-dev/iaac/kubernetes/$kubernetes_type/$kubernetes_type.sh teardown
-    $GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown
     $GIT_BASE_PATH/local-dev/iaac/devops-tools/k9s/customize.sh teardown
+    #$GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown
     #$GIT_BASE_PATH/local-dev/iaac/prerequisites/prerequisite.sh teardown
 }
 
