@@ -46,18 +46,20 @@ function setup(){
 
 # test istio installation
 function test(){
+    local result=0
     export PATH=$HOME/.istioctl/bin:$PATH 
     source <(istioctl completion zsh)
     pretty_print "${BOLD}${UNDERLINE}istio Tests${NC}\n}"
     pretty_print "${YELLOW}Version Test\n${NC}"
-    istioctl version
+    istioctl version || { fail "istioctl version"; result=1; }
     line_separator
     pretty_print "${YELLOW}Executing -> istioctl analyze -A\n${NC}"
-    istioctl analyze -A
+    istioctl analyze -A || { fail "istioctl analyze -A"; result=1; }
     line_separator
     pretty_print "${YELLOW}Executing -> istioctl x precheck\n${NC}"
-    istioctl x precheck  
+    istioctl x precheck  || { fail "istioctl x precheck"; result=1; }
     line_separator
+    return $result
 }
 
 # status 

@@ -45,13 +45,16 @@ function teardown(){
 }
 
 function test(){
+    local result = 0
     if [[ $(is_kind_cluster_exists) == "false" ]]; then
         pretty_print "${ORANGE}kind cluster does not exists. Skipping...\n${NC}"
+        result=1
     else 
         pretty_print "${YELLOW}kind cluster exists. \n${NC}"
-        kubectl get --raw='/readyz?verbose'
-        try $GIT_BASE_PATH/local-dev/iaac/test/validate.sh
+        kubectl get --raw='/readyz?verbose' || result=1
+        try $GIT_BASE_PATH/local-dev/iaac/test/validate.sh || result=1
     fi
+    return $result
 }
 
 function status(){
