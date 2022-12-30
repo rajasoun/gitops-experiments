@@ -23,7 +23,7 @@ We will use k3d for Kubernetes
     For kind,
     ```sh
     local-dev/iaac/env/env.sh setup
-    sed -i '' -E   's/CLUSTER_TYPE=k3d/CLUSTER_NAME=kind/' .env
+    sed -i '' -E   's/KUBERNETES_TYPE=k3d/KUBERNETES_TYPE=kind/' .env
     local-dev/assist.sh setup 
     ```
 
