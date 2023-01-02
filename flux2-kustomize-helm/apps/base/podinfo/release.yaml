@@ -9,7 +9,7 @@ spec:
     spec:
       chart: podinfo
       sourceRef:
-        kind: HelmRepository
+        kind: GitRepository
         name: podinfo
   interval: 50m
   install:
