@@ -1,0 +1,9 @@
+piVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+images:
+  - name: ghcr.io/stefanprodan/podinfo
+    newName: ghcr.io/stefanprodan/podinfo
+    newTag: 6.3.0
+
