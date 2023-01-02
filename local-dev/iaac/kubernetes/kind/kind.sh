@@ -45,7 +45,7 @@ function teardown(){
 }
 
 function test(){
-    local result = 0
+    local result=0
     if [[ $(is_kind_cluster_exists) == "false" ]]; then
         pretty_print "${ORANGE}kind cluster does not exists. Skipping...\n${NC}"
         result=1
