@@ -4,14 +4,14 @@ metadata:
   name: podinfo
   namespace: podinfo
 spec:
-  releaseName: podinfo
+  interval: 5m
   chart:
     spec:
       chart: podinfo
       sourceRef:
-        kind: HelmRepository
+        kind: HelmRepository # HelmRepository or GitRepository
         name: podinfo
-  interval: 50m
+        namespace: flux-system
   install:
     remediation:
       retries: 3
