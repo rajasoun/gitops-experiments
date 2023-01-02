@@ -16,6 +16,12 @@ spec:
   selector:
     matchLabels:
       app: podinfo
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      labels:
+        app: podinfo
     spec:
       containers:
       - name: podinfo
@@ -29,6 +35,29 @@ spec:
         - ./podinfo
         - --port=9898
         - --level=info
+        env:
+        - name: PODINFO_BACKEND_URL
+          value: http://backend:9898/echo
+        - name: PODINFO_UI_COLOR
+          value: "#34577c"
+        livenessProbe:
+          exec:
+            command:
+            - podcli
+            - check
+            - http
+            - localhost:9898/healthz
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - podcli
+            - check
+            - http
+            - localhost:9898/readyz
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: 2000m
