@@ -29,14 +29,20 @@ function list_functions(){
     line_separator
 }
 
+# Watch - Invoke scripts/iterm2/watch.sh
+function watch(){
+    "$GIT_BASE_PATH/scripts/iterm2/watch.sh"
+}
+
 # Print Usage
 function print_usage(){
-    echo "${RED}Usage: $0 < run | list  >${NC}"
+    echo "${RED}Usage: $0 < run | list | watch >${NC}"
 cat <<-EOF
     Commands:
     ---------
     run           -> Run Function  
     list          -> List Functions in os.sh 
+    watch        -> Invoke scripts/iterm2/watch.sh
 EOF
 }
 
@@ -46,6 +52,7 @@ choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
 case $choice in
     run)execute_function $@;;
     list)list_functions $@;;
+    watch)watch $@;;
     *) # Invalid option
     print_usage;;
 esac

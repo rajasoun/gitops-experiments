@@ -46,7 +46,8 @@ tell application "iTerm"
     end tell
 
     tell current session of third tab of current window
-        write text "kubeshark tap --namespaces podinfo"
+        write text "kubeshark clean" 
+        write text "kubeshark tap -A --set headless=true"
     end tell
 
 end tell
