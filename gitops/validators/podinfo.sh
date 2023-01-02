@@ -26,7 +26,7 @@ function test(){
   else
     fail "podinfo test failed\n"
   fi
-  kill $pid
+  # kill $pid
   line_separator
 }
 
