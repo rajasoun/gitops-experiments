@@ -25,3 +25,4 @@ spec:
     ingress:
       enabled: true
       className: nginx
+---
