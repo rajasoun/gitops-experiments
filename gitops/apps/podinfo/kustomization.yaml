@@ -8,4 +8,5 @@ images:
 resources:
   - namespace.yaml
   - deployment.yaml
+  - istio-ingress-policy.yaml
 ---
