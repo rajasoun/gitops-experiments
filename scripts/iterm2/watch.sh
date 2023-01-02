@@ -38,10 +38,15 @@ tell application "iTerm"
     # create tab with current window
     tell current window
         create tab with default profile
+        create tab with default profile
     end tell
 
-    tell current session of current tab of current window
+    tell current session of second tab of current window
         write text "k9s"
+    end tell
+
+    tell current session of third tab of current window
+        write text "kubeshark tap --namespaces podinfo"
     end tell
 
 end tell

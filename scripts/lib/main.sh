@@ -3,7 +3,6 @@
 SCRIPT_LIB_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
 source "${SCRIPT_LIB_DIR}/os.sh"
-source "${SCRIPT_LIB_DIR}/k8s.sh"
 
 opt="$1"
 choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )

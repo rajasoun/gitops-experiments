@@ -30,65 +30,14 @@ function display_time {
     printf '%d seconds\n' $S
 }
 
-# Get IP Address of Mac
-function get_ip_mac(){
-    ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2)
-    echo "$ip"
-}
-
-# Get IP Address of Linux
-function get_ip_linux(){
-    ip=$(ip route get 8.8.8.8 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}')
-    echo "$ip"
-}
-
 # Pretty Print
 function pretty_print() {
   printf "%b" "$1"
 }
 
-# Check if Mac
-function is_mac(){
-    if [[ $OSTYPE == "darwin"* ]]; then
-        echo -e "${GREEN}Darwin OS Detected${NC}"
-    else
-        echo -e "${RED}Darwin OS is required to Run brew${NC}"
-        exit 1
-    fi
-}
-
-# Check if Docker Desktop is Running
-function check_for_docker_desktop(){
-    if [[ -n "$(docker info --format '{{.OperatingSystem}}' | grep 'Docker Desktop')" ]]; then
-        echo -e "${GREEN}\nDocker Desktop found....${NC}"
-    else
-        echo -e "${RED}\nWARNING! Docker Desktop not installed:${NC}"
-        echo -e "${YELLOW}  * Install docker desktop from <https://docs.docker.com/docker-for-mac/install/>\n${NC}"
-        exit 1
-    fi
-
-}
-
 # echo to std err
 function echoStderr(){
     echo "$@" 1>&2
-}
-
-# check if command installed via brew 
-function check_brew_packages() {
-    GIT_BASE_PATH=$(git rev-parse --show-toplevel)
-    PACKAGE_LIST=($(grep -v "^#\|^$" $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile | awk '{print $2}' |  tr -d '"'))
-    LABEL=$1
-    echo -e "\n🧪 Testing $LABEL"
-    brew list --version $PACKAGE_LIST[@]
-    if [  $?  ];then
-        echo -e "✅ $LABEL check passed.\n"
-        return 0
-    else
-        echoStderr "❌ $LABEL check failed.\n"
-        FAILED+=("$LABEL")
-        return 1
-    fi
 }
 
 # time the action
@@ -118,36 +67,6 @@ function install_tool(){
     pretty_print "${GREEN}$tool installation Done !!! ${NC}" 
 }
 
-
-function ip_reachable(){
-    ip=$1
-    if [[ -n "$(dig +short $ip)" ]]; then
-        echo "true"
-    else
-        echo "false"
-    fi
-}
-
-function init_lb_env(){
-    IP=$(kubectl --namespace istio-system get svc istio-ingressgateway  --output jsonpath="{.status.loadBalancer.ingress[0].ip}")
-    HOSTNAME=$(kubectl --namespace istio-system get svc istio-ingressgateway --output jsonpath="{.status.loadBalancer.ingress[0].hostname}")
-
-    if [[ $(ip_reachable $IP) == "false" ]]; then
-        pretty_print "${YELLOW}IP $IP is not reachable.Switching to Local from .env\n${NC}"
-        export $(grep -v "^#\|^$" .env | envsubst | xargs)
-        export INGRESS_HOST_IP=$(dig +short $INGRESS_HOSTNAME)
-        export BASE_HOST=$INGRESS_HOST_IP.nip.io
-        pretty_print "${GREEN} INGRESS_HOSTNAME : $INGRESS_HOSTNAME | BASE_HOST : $BASE_HOST \n${NC}"
-    fi
-}
-
-function load_env() {
-  # Load environment variables from .env file
-  set -a
-  [ -f $GIT_BASE_PATH/.env ] && . $GIT_BASE_PATH/.env
-  set +a
-}
-
 function pass(){
     pretty_print "\t${GREEN}✅ $1 ${NC}"
 }
@@ -171,6 +90,124 @@ function install_istioctl(){
     fi
 }
 
+########### Public Functions ###########
+
+# Check if Mac
+function is_mac(){ 
+    if [[ $OSTYPE == "darwin"* ]]; then
+        echo -e "${GREEN}Darwin OS Detected${NC}"
+    else
+        echo -e "${RED}Darwin OS is required to Run brew${NC}"
+        exit 1
+    fi
+}
+
+# Check if Docker Desktop is Running
+function check_for_docker_desktop(){
+    if [[ -n "$(docker info --format '{{.OperatingSystem}}' | grep 'Docker Desktop')" ]]; then
+        echo -e "${GREEN}\nDocker Desktop found....${NC}"
+    else
+        echo -e "${RED}\nWARNING! Docker Desktop not installed:${NC}"
+        echo -e "${YELLOW}  * Install docker desktop from <https://docs.docker.com/docker-for-mac/install/>\n${NC}"
+        exit 1
+    fi
+
+}
+
+# check if command installed via brew 
+function check_brew_packages() {
+    GIT_BASE_PATH=$(git rev-parse --show-toplevel)
+    PACKAGE_LIST=($(grep -v "^#\|^$" $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile | awk '{print $2}' |  tr -d '"'))
+    LABEL=$1
+    echo -e "\n🧪 Testing $LABEL"
+    brew list --version $PACKAGE_LIST[@]
+    if [  $?  ];then
+        echo -e "✅ $LABEL check passed.\n"
+        return 0
+    else
+        echoStderr "❌ $LABEL check failed.\n"
+        FAILED+=("$LABEL")
+        return 1
+    fi
+}
+
+# Get IP Address of Mac
+function get_ip_mac(){
+    ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2)
+    echo "$ip"
+}
+
+# Get IP Address of Linux
+function get_ip_linux(){
+    ip=$(ip route get 8.8.8.8 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}')
+    echo "$ip"
+}
+
+# Check IP is reachable
+function ip_reachable(){
+    ip=$1
+    if [[ -n "$(dig +short $ip)" ]]; then
+        echo "true"
+    else
+        echo "false"
+    fi
+}
+
+#  Initialize Load Balancer Env
+function init_lb_env(){
+    IP=$(kubectl --namespace istio-system get svc istio-ingressgateway  --output jsonpath="{.status.loadBalancer.ingress[0].ip}")
+    HOSTNAME=$(kubectl --namespace istio-system get svc istio-ingressgateway --output jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+
+    if [[ $(ip_reachable $IP) == "false" ]]; then
+        pretty_print "${YELLOW}IP $IP is not reachable.Switching to Local from .env\n${NC}"
+        export $(grep -v "^#\|^$" .env | envsubst | xargs)
+        export INGRESS_HOST_IP=$(dig +short $INGRESS_HOSTNAME)
+        export BASE_HOST=$INGRESS_HOST_IP.nip.io
+        pretty_print "${GREEN} INGRESS_HOSTNAME : $INGRESS_HOSTNAME | BASE_HOST : $BASE_HOST \n${NC}"
+    fi
+}
+
+# Load Environment Variables fronm .env file
+function load_env() {
+  # Load environment variables from .env file
+  set -a
+  [ -f $GIT_BASE_PATH/.env ] && . $GIT_BASE_PATH/.env
+  set +a
+}
+
+
+# List Ingress
+function list_ingress(){
+     HOST="$1"
+     echo -e "HOST PATH NAMESPACE SERVICE PORT INGRESS REWRITE"
+     echo -e "---- ---- --------- ------- ---- ------- -------"
+     kubectl get --all-namespaces ingress -o json | \
+        jq -r '.items[] | . as $parent | .spec.rules | select(length > 0) | .[] | select(.host==$ENV.HOST) | .host as $host | .http.paths[] | ( $host + " " + .path + " " + $parent.metadata.namespace + " " + .backend.service.name + " " + (.backend.service.port.number // .backend.service.port.name | tostring) + " " + $parent.metadata.name + " " + $parent.metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target")' | \
+        sort | column -s\  -t
+}
+
+# Watch Pods in a namespace
+function watch_pods_in_namespace(){
+    NAMESPACE="$1"
+    # kubectl get pods -n "$NAMESPACE" -w
+    watch kubectl -n"$NAMESPACE" get pods
+}
+
+# tail logs in a namespace
+function tail_logs_in_namespace(){
+    NAMESPACE="$1"
+    POD="$2"
+    CONTAINER="$3"
+    #kubectl -n "$NAMESPACE" logs -f "$POD" "$CONTAINER"
+    stern -n "$NAMESPACE" --exclude-container istio-proxy .
+}
+
+# wait till all pods are ready
+function wait_till_all_pods_are_ready(){
+    NAMESPACE="$1"
+    kubectl wait -n "$NAMESPACE" --for=condition=ready pods --all --timeout=120s
+}
+
 # print Gateway URL 
 function print_gateway_url(){
     export GATEWAY_HOST=$(kubectl -n istio-system get service istio-gateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
@@ -179,3 +216,26 @@ function print_gateway_url(){
     export GATEWAY_URL=$GATEWAY_HOST:$GATEWAY_PORT
     pretty_print "${GREEN}Gateway URL : http://$GATEWAY_HOST:$GATEWAY_PORT${NC}\n"
 }
+
+# list all the istio resources
+function list_istio_resources(){
+    pretty_print "${YELLOW}Listing all the Istio resources${NC}\n"
+    kubectl get all -n istio-system
+    line_separator
+    pretty_print "${YELLOW}Listing Istio Gateway${NC}\n"
+    kubectl get gateways.networking.istio.io -A
+    line_separator
+    pretty_print "${YELLOW}Listing Istio VirtualServices${NC}\n"
+    kubectl get virtualservices.networking.istio.io -A
+    line_separator
+}
+
+# # install istio if not installed
+# function install_istio_if_not(){
+#     # Check if istio is installed
+#     if ! kubectl get namespace istio-system > /dev/null 2>&1; then
+#         echo -e "${RED}Istio is not installed. Auto Installing istio before installing the app${NC}"
+#         scripts/service-mesh/istio.sh setup 
+#         export PATH=$HOME/.istioctl/bin:$PATH 
+#     fi
+# }
