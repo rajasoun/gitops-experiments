@@ -67,3 +67,4 @@ Flux is a tool that automatically ensures that the state of a cluster matches th
 ## For Flux End to End
 
 [Flux from End-to-End](https://fluxcd.io/flux/flux-e2e/)
+[Introduction to GitOps on EKS with Weaveworks](https://weaveworks-gitops.awsworkshop.io/)
