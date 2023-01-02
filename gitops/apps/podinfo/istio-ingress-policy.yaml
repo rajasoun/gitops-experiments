@@ -9,9 +9,9 @@ spec:
   http:
     - route:
         - destination:
-            host: frontend
+            host: podinfo
             port:
               number: 9898
   gateways:
-    - "istio-system/public-gateway"
+    - "istio-system/ingressgateway"
 ---
