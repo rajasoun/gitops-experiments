@@ -1,41 +1,51 @@
----
-# Helm repository
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: podinfo
   namespace: podinfo
 spec:
-  interval: 1m
+  interval: 5m
   url: https://stefanprodan.github.io/podinfo
 ---
-# Helm OCI repository
+
+# ---
+# # Helm repository
 # apiVersion: source.toolkit.fluxcd.io/v1beta2
 # kind: HelmRepository
 # metadata:
 #   name: podinfo
-#   namespace: default
+#   namespace: podinfo
 # spec:
-#   type: oci
-#   interval: 5m0s
-#   url: oci://ghcr.io/stefanprodan/charts
+#   interval: 1m
+#   url: https://stefanprodan.github.io/podinfo
 # ---
+# # Helm OCI repository
+# # apiVersion: source.toolkit.fluxcd.io/v1beta2
+# # kind: HelmRepository
+# # metadata:
+# #   name: podinfo
+# #   namespace: default
+# # spec:
+# #   type: oci
+# #   interval: 5m0s
+# #   url: oci://ghcr.io/stefanprodan/charts
+# # ---
 
-# Git repository 
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: GitRepository
-metadata:
-  name: podinfo
-  namespace: flux-system
-spec:
-  interval: 1m
-  url: https://github.com/stefanprodan/podinfo
-  ref:
-    branch: master
-  ignore: |
-    # exclude all
-    /*
-    # include charts directory
-    !/charts/ 
----
+# # Git repository 
+# apiVersion: source.toolkit.fluxcd.io/v1beta2
+# kind: GitRepository
+# metadata:
+#   name: podinfo
+#   namespace: flux-system
+# spec:
+#   interval: 1m
+#   url: https://github.com/stefanprodan/podinfo
+#   ref:
+#     branch: master
+#   ignore: |
+#     # exclude all
+#     /*
+#     # include charts directory
+#     !/charts/ 
+# ---
 
