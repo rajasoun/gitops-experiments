@@ -7,6 +7,7 @@ images:
     newTag: 6.3.0
 resources:
   - namespace.yaml
-  - deployment.yaml
+  - repository.yaml
+  - release.yaml
   - istio-ingress-policy.yaml
 ---
