@@ -2,22 +2,11 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: podinfo
-  namespace: podinfo
+  namespace: flux-system
 spec:
-  interval: 5m
+  interval: 1m
   url: https://stefanprodan.github.io/podinfo
 ---
-
-# ---
-# # Helm repository
-# apiVersion: source.toolkit.fluxcd.io/v1beta2
-# kind: HelmRepository
-# metadata:
-#   name: podinfo
-#   namespace: podinfo
-# spec:
-#   interval: 1m
-#   url: https://stefanprodan.github.io/podinfo
 # ---
 # # Helm OCI repository
 # # apiVersion: source.toolkit.fluxcd.io/v1beta2
