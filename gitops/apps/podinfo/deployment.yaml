@@ -16,12 +16,6 @@ spec:
   selector:
     matchLabels:
       app: podinfo
-  template:
-    metadata:
-      annotations:
-        prometheus.io/scrape: "true"
-      labels:
-        app: podinfo
     spec:
       containers:
       - name: podinfo
@@ -36,8 +30,6 @@ spec:
         - --port=9898
         - --level=info
         env:
-        - name: PODINFO_BACKEND_URL
-          value: http://backend:9898/echo
         - name: PODINFO_UI_COLOR
           value: "#34577c"
         livenessProbe:
