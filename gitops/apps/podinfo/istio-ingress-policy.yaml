@@ -9,7 +9,7 @@ spec:
   http:
     - route:
         - destination:
-            host: podinfo
+            host: frontend
             port:
               number: 9898
   gateways:
