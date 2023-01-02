@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./gitops/apps/dev
+  path: ./gitops/apps/stack
   prune: true
   wait: true
   timeout: 5m0s
