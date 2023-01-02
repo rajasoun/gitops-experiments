@@ -13,5 +13,5 @@ spec:
             port:
               number: 9898
   gateways:
-    - "istio-system/ingressgateway"
+    - "istio-system/public-gateway"
 ---
