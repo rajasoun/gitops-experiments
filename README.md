@@ -161,8 +161,7 @@ To configure OIDC with Dex and GitHub please see this [guide](https://docs.gitop
 Create new local cluster for staging.
     ```sh
     local-dev/iaac/kubernetes/k3d/k3d.sh teardown
-    ENV=staging
-    sed -i '' -E   "s/CLUSTER_NAME=dev/CLUSTER_NAME=$ENV/" .env
+    export ENV=staging
     local-dev/assist.sh setup
     ```
 
@@ -196,6 +195,7 @@ Push the changes to the main branch:
 Set the kubectl context and path to your dev cluster and bootstrap Flux using 
 
     ```sh
+    export ENV=staging
     gitops/assist.sh setup
     ```
 
