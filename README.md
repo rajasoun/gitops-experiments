@@ -26,7 +26,6 @@ The Git repository contains the following top directories inside **gitops** dire
 
 ```
 ├── apps
-│   ├── base
 │   ├── dev 
 │   ├── staging 
 │   └── production
@@ -48,19 +47,18 @@ The Git repository contains the following top directories inside **gitops** dire
 
 The apps configuration is structured into:
 
-- **apps/base/** dir contains namespaces and Helm release definitions
+- **apps/<pod_name>** dir contains namespaces and Helm release definitions for applications
 - **apps/dev/** dir contains the production Helm release values
 - **apps/staging/** dir contains the staging values
 - **apps/production/** dir contains the production values
 
 ```
 ./apps/
-├── base
-│   └── podinfo
-│       ├── kustomization.yaml
-│       ├── namespace.yaml
-│       ├── release.yaml
-│       └── repository.yaml
+├── podinfo
+│   ├── kustomization.yaml
+│   ├── namespace.yaml
+│   ├── release.yaml
+│   └── repository.yaml
 ├── dev
 │   ├── kustomization.yaml
 │   └── podinfo-patch.yaml
@@ -72,7 +70,7 @@ The apps configuration is structured into:
     └── podinfo-patch.yaml
 ```
 
-In **apps/base/podinfo/** dir we have a Flux `HelmRelease` with common values for both clusters.
+In **apps/podinfo/** dir we have a Flux `HelmRelease` with common values for both clusters.
 In **apps/staging/** and **apps/staging/** dirs lets have Kustomize patch with the dev specific values
 In **apps/production/** dir we have a Kustomize patch with the production specific values
 
