@@ -8,7 +8,7 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 function start_port_forward() {
   kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80 > /dev/null 2>&1 &
-  sleep 1
+  sleep 10
   server_pid=$!
   echo $server_pid
 }
@@ -20,10 +20,12 @@ function test(){
   pretty_print "${YELLOW}Starting Port Forward${NC}\n"
   pid=$(start_port_forward)
   pretty_print "${YELLOW}Test httpd Nginx Ingress${NC}\n"
-  http 'http://httpd.dev.local.gd:8080'
+  status_code=$(http --headers --check-status --ignore-stdin 'http://httpd.dev.local.gd:8080' | grep HTTP | cut -d ' ' -f 2)
   echo -e "\n"
-  if [ $? -eq 0 ]; then
+  # check http_code is 200
+  if [ $status_code == "200" ]; then
     pass "httpd Nginx Ingress test passed\n"
+    http 'http://httpd.dev.local.gd:8080'
   else
     fail "httpd Nginx Ingress test failed\n"
   fi
