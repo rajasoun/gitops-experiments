@@ -15,11 +15,11 @@ function start_port_forward() {
 
 function test(){
   pretty_print "${BOLD}${UNDERLINE}Testing Podinfo${NC}\n"
-  pretty_print "${YELLOW}Starting Port Forward${NC}\n"
-  pid=$(start_port_forward)
+  # pretty_print "${YELLOW}Starting Port Forward${NC}\n"
+  # pid=$(start_port_forward)
   pretty_print "${YELLOW}Test podinfo${NC}\n"
   load_env
-  http http://dev.local.gd:8080 Host:podinfo.$CLUSTER_NAME
+  http http://podinfo.local.gd
   echo -e "\n"
   if [ $? -eq 0 ]; then
     pass "podinfo test passed\n"
