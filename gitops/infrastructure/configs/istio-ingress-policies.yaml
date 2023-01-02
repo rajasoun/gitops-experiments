@@ -1,16 +1,33 @@
 ---
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: weave-gitops-ingress
+#   namespace: flux-system
+# spec:
+#   policyTypes:
+#     - Ingress
+#   ingress:
+#     - from:
+#         - namespaceSelector: {}
+#   podSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: weave-gitops
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
 metadata:
-  name: weave-gitops-ingress
+  name: weave-gitops
   namespace: flux-system
 spec:
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - namespaceSelector: {}
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: weave-gitops
+  hosts:
+    - "gitops.local.gd"
+  http:
+    - route:
+        - destination:
+            host: weave-gitops
+            port:
+              number: 9001
+  gateways:
+    - "istio-system/public-gateway"
 ---
