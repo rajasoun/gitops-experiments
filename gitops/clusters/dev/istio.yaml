@@ -41,3 +41,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+---
