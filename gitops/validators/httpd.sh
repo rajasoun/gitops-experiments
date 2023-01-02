@@ -30,7 +30,6 @@ function test(){
   kill $pid
   kubectl delete -f "$GIT_BASE_PATH/gitops/validators/resources/httpd.yaml" -n infrastrcuture-demo
   kubectl wait --for=delete --timeout=30s deployment/httpd  -n infrastrcuture-demo
-  kubectl delete ns infrastrcuture-demo
   line_separator
 }
 
