@@ -230,6 +230,23 @@ function list_istio_resources(){
     line_separator
 }
 
+
+# kubeshark hub 
+function kubeshark_hub(){
+    local filter="timestamp >= now()"
+    exlude_health_probes=("/health" "/healthz" "/ready" "/readyz" "/live" "/livez" "/healthz/ready")
+    for path in "${exlude_health_probes[@]}"; do
+        filter="$filter and request.path != \"$path\""
+    done
+    exclude_flux_probes=("" "source-controller.flux-system" "weave-gitops.flux-system" "notification-controller.flux-system")
+    for path in "${exclude_flux_probes[@]}"; do
+        filter="$filter and dst.name  != \"$path\""
+    done
+    pretty_print "${BLUE}$filter${NC}"
+    url_encoded_filter=$(curl -s -w '%{url_effective}\n' -G / --data-urlencode "=$filter" | cut -c 3-)
+    open -a "Google Chrome" "http://localhost:8899?q=$url_encoded_filter"
+}
+
 # # install istio if not installed
 # function install_istio_if_not(){
 #     # Check if istio is installed
