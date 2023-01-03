@@ -74,11 +74,16 @@ function setup(){
 }
 
 function teardown(){
-  namespaces=("istio-system" "flux-system" "cert-manager" "ingress-nginx")
+  namespaces=("istio-system" "flux-system" "ingress-nginx" "cert-manager" "kubeshark")
   for namespace in "${namespaces[@]}"; do
-    pretty_print "${YELLOW}Executing -> flux uninstall --namespace=$namespace --silent\n${NC}"
-    flux uninstall --namespace=$namespace --silent
-    line_separator
+    if [ $(kubectl get namespaces | grep -c $namespace) -eq 0 ]; then
+      pretty_print "${YELLOW}Skipping -> $namespace namespace not found\n${NC}"
+      continue
+    else 
+      pretty_print "${YELLOW}Executing -> flux uninstall --namespace=$namespace --silent\n${NC}"
+      flux uninstall --namespace=$namespace --silent
+      line_separator
+    fi
   done
   # $GIT_BASE_PATH/local-dev/iaac/env/env.sh teardown 
   # line_separator
