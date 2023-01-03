@@ -6,7 +6,7 @@ metadata:
   namespace: podinfo
 spec:
   hosts:
-    - "podinfo-1.local.gd"
+    - "podinfo.local.gd"
   http:
     - route:
         - destination:
