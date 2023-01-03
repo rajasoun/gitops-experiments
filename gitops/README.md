@@ -69,7 +69,7 @@ flux check --pre
 Export your GitHub personal access token and username:
 
 ```sh
-git checkout step-3.apps.podinfo
+git checkout main
 local-dev/iaac/env/env.sh teardown
 local-dev/iaac/env/env.sh setup
 source .env
@@ -80,7 +80,7 @@ source .env
 Run the bootstrap command:
 
 ```sh
-  export BRANCH="step-3.apps.podinfo"
+  export BRANCH="main"
   flux bootstrap github \
     --owner=$GITHUB_USER \
     --repository=$GITHUB_REPO \
