@@ -1,0 +1,9 @@
+name: 'kustomize'
+description: 'A GitHub Action with Kubernetes tools'
+author: 'Raja Soundaramourty'
+branding:
+  icon: 'command'
+  color: 'blue'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
