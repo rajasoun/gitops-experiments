@@ -247,6 +247,11 @@ function kubeshark_hub(){
     open -a "Google Chrome" "http://localhost:8899?q=$url_encoded_filter"
 }
 
+# flux reconcile 
+function flux_reconcile(){
+    names=("infra-controllers" "infra-configs" "istio-system" "istio-gateway" "apps" "")
+}
+
 # # install istio if not installed
 # function install_istio_if_not(){
 #     # Check if istio is installed
