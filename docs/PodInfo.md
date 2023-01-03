@@ -68,6 +68,7 @@ Install from github.io:
 ```bash
 helm repo add podinfo https://stefanprodan.github.io/podinfo
 
+kubectl create namespace test
 helm upgrade --install --wait frontend \
 --namespace test \
 --set replicaCount=2 \
