@@ -69,11 +69,10 @@ flux check --pre
 Export your GitHub personal access token and username:
 
 ```sh
-gh auth login --hostname $GITHUB_BASE_URL --git-protocol https --web
-export GITHUB_BASE_URL="github.com"
-export GITHUB_USER=$(gh api "https://api.$GITHUB_BASE_URL/user" | jq .login | tr -d '"')
-export GITHUB_TOKEN=$(gh auth token)
-echo "GITHUB_USER=$GITHUB_USER | GITHUB_TOKEN=$GITHUB_TOKEN" 
+git checkout step-3.apps.podinfo
+local-dev/iaac/env/env.sh teardown
+local-dev/iaac/env/env.sh setup
+source .env
 ```
 
 ## Install Flux onto your cluster
@@ -81,11 +80,11 @@ echo "GITHUB_USER=$GITHUB_USER | GITHUB_TOKEN=$GITHUB_TOKEN"
 Run the bootstrap command:
 
 ```sh
-  export BRANCH="step-0.bootstrap"
+  export BRANCH="step-3.apps.podinfo"
   flux bootstrap github \
     --owner=$GITHUB_USER \
-    --repository=gitops-istio \
-    --branch=$BRANCH \
+    --repository=$GITHUB_REPO \
+    --branch=$GITHUB_BRANCH \
     --path=./gitops/clusters/dev \
     --private=false \
     --personal=true
@@ -93,9 +92,16 @@ Run the bootstrap command:
 
 The bootstrap command above does following:
 
-- Creates a git repository `gitops-istio` on your GitHub account
+- Creates a git repository `gitops-experiments` on your GitHub account
 - Adds Flux component manifests to the repository
 - Deploys Flux Components to your Kubernetes Cluster
-- Configures Flux components to track the path `/gitops/clusters/dev` in the repository
+- installs Istio using the Istio base, istiod and gateway Helm charts
+- waits for Istio control plane to be ready
+- creates the Istio public gateway
+- installs the nginx ingress controller
+- installs the weave dashboard
+- installs the cert-manager and letsencrypt cluster issuer
+- install the podinfo app
+- creates the podinfo ingress route using the Istio gateway
 
 
