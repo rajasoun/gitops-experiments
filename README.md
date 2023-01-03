@@ -90,8 +90,6 @@ The infrastructure is structured into:
     └── kustomization.yaml
 ```
 
-In **infrastructure/controllers/** dir we have the Flux `HelmRepository` and `HelmRelease` definitions
-In **infrastructure/configs/** dir we have Kubernetes custom resources, such as the Let's Encrypt issuer
 In **clusters/production/infrastructure.yaml** we replace the Let's Encrypt server value to point to the production API
 
 > Note that with ` interval: 12h` we configure Flux to pull the Helm repository index every twelfth hours to check for updates. If the new chart version that matches the `1.x` semver range is found, Flux will upgrade the release.
@@ -109,20 +107,9 @@ The clusters dir contains the Flux configuration:
 │   ├── apps.yaml
 │   ├── infrastructure.yaml
 │   └── istio.yaml
-├── staging
-│   ├── apps.yaml
-│   ├── infrastructure.yaml
-│   └── istio.yaml
-└── production
-│   ├── apps.yaml
-│   ├── infrastructure.yaml
-│   └── istio.yaml
 ```
 
-In **clusters/staging/** dir we have the Flux Kustomization definitions.
-
-> Note that with `path: ./gitops/apps/staging` we configure Flux to sync the dev Kustomize overlay and 
-with `dependsOn` we tell Flux to create the infrastructure items before deploying the apps.
+**clusters/staging/** dir we can have the Flux Kustomization definitions specific to staging 
 
 
 ### Access the Flux UI
