@@ -249,7 +249,7 @@ function kubeshark_hub(){
 
 # flux reconcile 
 function flux_reconcile(){
-    names=("infra-controllers" "infra-configs" "istio-system" "istio-gateway" "apps" "apps-helm-kustomize")
+    names=("infra-controllers" "infra-configs" "istio-system" "istio-gateway" "apps")
     for name in "${names[@]}"; do
         pretty_print "\n${BLUE}Reconciling $name${NC}\n"
         flux reconcile kustomization "$name" --with-source && pass "Reconciled $name\n" || fail "Failed to reconcile $name\n"
