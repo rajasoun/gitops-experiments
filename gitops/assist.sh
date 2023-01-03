@@ -74,7 +74,7 @@ function setup(){
 }
 
 function teardown(){
-  namespaces=("istio-system" "flux-system" "ingress-nginx" "cert-manager" "kubeshark")
+  namespaces=("istio-system" "flux-system" "ingress-nginx" "cert-manager" "kubeshark" "prod" )
   for namespace in "${namespaces[@]}"; do
     if [ $(kubectl get namespaces | grep -c $namespace) -eq 0 ]; then
       pretty_print "${YELLOW}Skipping -> $namespace namespace not found\n${NC}"
