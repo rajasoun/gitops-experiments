@@ -1,8 +1,7 @@
-Kubernetes Ingress with Nginx 
-=============================
+# Kubernetes Ingress with Nginx 
 
-What is an Ingress?
--------------------
+
+## What is an Ingress?**
 
 In Kubernetes, an Ingress is an object that allows access to your Kubernetes services from outside the Kubernetes cluster. You configure access by creating a collection of rules that define which inbound connections reach which services.
 
@@ -17,8 +16,8 @@ With an Ingress, you can easily set this up without creating a bunch of LoadBala
 
 Which leads us to the next point…
 
-Kubernetes Ingress vs LoadBalancer vs NodePort
-----------------------------------------------
+## Kubernetes Ingress vs LoadBalancer vs NodePort
+
 
 These options all do the same thing. 
 
@@ -69,8 +68,7 @@ The one downside is that you need to configure an Ingress Controller for your cl
 
 Reference - https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 
-Summary
--------
+### Summary
 
 A Kubernetes Ingress is a robust way to expose your services outside the cluster. It lets you consolidate your routing rules to a single resource, and gives you powerful options for configuring these rules.
 

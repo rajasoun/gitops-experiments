@@ -59,39 +59,5 @@ Afterward, a Git workflow such as a pull request can change the Kubernetes manif
 
 ![Git Ops Cookbook](https://developers.redhat.com/sites/default/files/gocb_0102.png)
 
-## GitOps loop
+[GitOps](./GitOps.md) is a way to do CI/CD on Kubernetes. It uses Git as a single source of truth for declarative infrastructure and applications.
 
-Is composed of four main actions
-
-1. **Deploy:** Deploy the manifests from Git.
-1. **Monitor:** Monitor either the Git repo or the cluster state.
-3. **Detect drift:** Detect any change from what is described in Git and what is present in the cluster.
-4. **Take action:** Perform an action that reflects what is on Git (rollback or three-way diff). Git is the source of truth, and any change is performed via a Git workflow.
-
-```mermaid
-graph TB
-    subgraph GitOpsLoop
-        A((Deploy)) --> B((Monitor))
-        B --> C((Detect Drift))
-        C --> D((Take Action))
-        D --> A
-    end
-```
-
-## GitOps loop with Kubernetes
-
-In Kubernetes, application deployment using the GitOps approach makes use of at least two Git repositories: 
-
-1. app source code, and 
-1. Kubernetes manifests describing the app’s deployment (Deployment, Service, etc.).
-
-
-![GitOps Loop with Kubernetes](https://developers.redhat.com/sites/default/files/gocb_0104.png)
-
-Outline of the GitOps loop with Kubernetes
-
-1. App source code repository
-2. CI pipeline creating a container image
-3. Container image registry
-4. Kubernetes manifests repository
-5. GitOps engine syncing manifests to one or more clusters and detecting drifts

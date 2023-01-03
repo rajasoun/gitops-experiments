@@ -46,26 +46,39 @@ Every change throughout the application lifecycle is traced in the Git repositor
 1. **Visibility and audit:** Capture and trace any change to clusters through Git history
 1. **Multicluster consistency:** Reliably and consistently configure multiple environments and multiple Kubernetes clusters and deployment
 
-## Gitops with Flux
+## GitOps loop
 
-Flux is a tool that automatically ensures that the state of a cluster matches the config in git. It uses a GitOps approach to do so.
+Is composed of four main actions
 
-## Flux in Short
+1. **Deploy:** Deploy the manifests from Git.
+1. **Monitor:** Monitor either the Git repo or the cluster state.
+3. **Detect drift:** Detect any change from what is described in Git and what is present in the cluster.
+4. **Take action:** Perform an action that reflects what is on Git (rollback or three-way diff). Git is the source of truth, and any change is performed via a Git workflow.
 
-|     |     |
-| --- | --- |
-| 🤝 Flux provides GitOps for both apps and infrastructure | Flux and Flagger deploy apps with canaries, feature flags, and A/B rollouts. Flux can also manage any Kubernetes resource. Infrastructure and workload dependency management is built in. |
-| 🤖 Just push to Git and Flux does the rest | Flux enables application deployment (CD) and (with the help of Flagger) progressive delivery (PD) through automatic reconciliation. Flux can even push back to Git for you with automated container image updates to Git (image scanning and patching). |
-| 🔩 Flux works with your existing tools | Flux works with your Git providers (GitHub, GitLab, Bitbucket, can even use s3-compatible buckets as a source), all major container registries, and all CI workflow providers. |
-| 🔒 Flux is designed with security in mind | Pull vs. Push, least amount of privileges, adherence to Kubernetes security policies and tight integration with security tools and best-practices. Read more about [our security considerations](/flux/security). |
-| ☸️ Flux works with any Kubernetes and all common Kubernetes tooling |  Kustomize, Helm, RBAC, and policy-driven validation (OPA, Kyverno, admission controllers) so it simply falls into place. |
-| 🤹 Flux does Multi-Tenancy (and “Multi-everything”) | Flux uses true Kubernetes RBAC via impersonation and supports multiple Git repositories. Multi-cluster infrastructure and apps work out of the box with Cluster API: Flux can use one Kubernetes cluster to manage apps in either the same or other clusters, spin up additional clusters themselves, and manage clusters including lifecycle and fleets. |
-| 📞 Flux alerts and notifies | Flux provides health assessments, alerting to external systems, and external events handling. Just “git push”, and get notified on Slack and [other chat systems](/flux/components/notification/provider/). |
-| 👍 Users trust Flux | Flux is a CNCF Graduated project and was categorised as "Adopt" on the [CNCF CI/CD Tech Radar](https://radar.cncf.io/2020-06-continuous-delivery) (alongside Helm). |
-| 💖 Flux has a lovely community that is very easy to work with! | We welcome contributors of any kind. The components of Flux are on Kubernetes core `controller-runtime`, so anyone can contribute and its functionality can be extended very easily. |
+```mermaid
+graph TB
+    subgraph GitOpsLoop
+        A((Deploy)) --> B((Monitor))
+        B --> C((Detect Drift))
+        C --> D((Take Action))
+        D --> A
+    end
+```
 
-## For Flux End to End
+## GitOps loop with Kubernetes
 
-[Flux from End-to-End](https://fluxcd.io/flux/flux-e2e/)
-[Introduction to GitOps on EKS with Weaveworks](https://weaveworks-gitops.awsworkshop.io/)
-[Sock Shop : A Microservice Demo Application](https://github.com/microservices-demo/microservices-demo)
+In Kubernetes, application deployment using the GitOps approach makes use of at least two Git repositories: 
+
+1. app source code, and 
+1. Kubernetes manifests describing the app’s deployment (Deployment, Service, etc.).
+
+
+![GitOps Loop with Kubernetes](https://developers.redhat.com/sites/default/files/gocb_0104.png)
+
+Outline of the GitOps loop with Kubernetes
+
+1. App source code repository
+2. CI pipeline creating a container image
+3. Container image registry
+4. Kubernetes manifests repository
+5. GitOps engine syncing manifests to one or more clusters and detecting drifts
