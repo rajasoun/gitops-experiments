@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: flux-system
+  name: weave-gitops-dashboard
   labels:
     toolkit.fluxcd.io/tenant: sre-team
 ---
