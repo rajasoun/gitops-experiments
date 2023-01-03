@@ -32,7 +32,6 @@ Tool Assembly
 | Ingress Controller        | [Nginx]        | 
 | Cert Manager              | [cert-manager] |
 | kubeconfim                | [kubeconfim]   |
-| 
 
 
 ## Local Development Environment
@@ -45,68 +44,30 @@ Tool Assembly
 **Refer to [Gitops](gitops/README.md) for more details**
 
 
-## GitOps Repository structure
+## GitOps Repository structure (opinionated)
 
 The Git repository contains the following top directories inside **gitops** directory:
 
 - **apps** dir contains Helm releases with a custom configuration per cluster
 - **infrastructure** dir contains common infra tools such as ingress-nginx and cert-manager
-- **istio** dir contains Helm releases for Istio service mesh
 - **clusters** dir contains the Flux configuration per cluster
 - **validators** dir contains the Flux validators by service per cluster
 
 ```
 ├── apps
-│   ├── dev 
-│   ├── staging 
-│   └── production
+│   ├── <microservice> 
+└── clusters
+│    ├── dev
+│    ├── staging
+│    └── production
 ├── infrastructure
 │   ├── configs
-│   └── controllers
-├── istio
-│   ├── system
-│   └── gateway
-└── clusters
-    ├── dev
-    ├── staging
-    └── production
+│   ├── controllers
+│   └── istio
+│       ├── system
+│       └── gateway
+└── validators
 ```
-
-@ToDo: Refactor httpd test service also with GitOps Style
-
-### Applications
-
-The apps configuration is structured into:
-
-- **apps/<pod_name>** dir contains namespaces and Helm release definitions for applications
-- **apps/dev/** dir contains the production Helm release values
-- **apps/staging/** dir contains the staging values
-- **apps/production/** dir contains the production values
-
-```
-./apps/
-├── podinfo
-│   ├── kustomization.yaml
-│   ├── namespace.yaml
-│   ├── release.yaml
-│   └── repository.yaml
-├── dev
-│   ├── kustomization.yaml
-│   └── podinfo-patch.yaml
-├── staging 
-│   ├── kustomization.yaml
-│   └── podinfo-patch.yaml
-└── production
-    ├── kustomization.yaml
-    └── podinfo-patch.yaml
-```
-
-In **apps/podinfo/** dir we have a Flux `HelmRelease` with common values for both clusters.
-In **apps/staging/** and **apps/staging/** dirs lets have Kustomize patch with the dev specific values
-In **apps/production/** dir we have a Kustomize patch with the production specific values
-
-> Note that with `version: ">=1.0.0-alpha"` we configure Flux to automatically upgrade the `HelmRelease` to the latest chart version including alpha, beta and pre-releases.
-
 
 ### Infrastructure
 
@@ -114,6 +75,7 @@ The infrastructure is structured into:
 
 - **infrastructure/controllers/** dir contains namespaces and Helm release definitions for Kubernetes controllers
 - **infrastructure/configs/** dir contains Kubernetes custom resources such as cert issuers and networks policies
+- **infrastructure/istio/** dir contains istio deployment vi helm charts
 
 ```
 ./infrastructure/
