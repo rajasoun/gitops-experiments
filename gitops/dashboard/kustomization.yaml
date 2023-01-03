@@ -3,6 +3,6 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - weave-gitops.yaml
+  - network-policies.yaml
   - istio-ingress-policies.yaml
-  - nginx-ingress-policies.yaml
 ---
