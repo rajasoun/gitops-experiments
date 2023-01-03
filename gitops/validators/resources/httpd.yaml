@@ -4,6 +4,7 @@ metadata:
   name: infrastrcuture-demo
   labels:
     kubernetes.io/metadata.name: infrastrcuture-demo
+    istio-injection: enabled
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -61,4 +62,21 @@ spec:
               number: 80
         path: /
         pathType: Prefix
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpd
+  namespace: infrastrcuture-demo
+spec:
+  hosts:
+    - "httpd.dev.local.gd"
+  http:
+    - route:
+        - destination:
+            host: httpd
+            port:
+              number: 80
+  gateways:
+    - "istio-system/public-gateway"
 ---
