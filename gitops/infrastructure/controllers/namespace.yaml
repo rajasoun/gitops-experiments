@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: istio-system
+  name: infrastructure
   labels:
     toolkit.fluxcd.io/tenant: sre-team
+---
