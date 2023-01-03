@@ -249,7 +249,11 @@ function kubeshark_hub(){
 
 # flux reconcile 
 function flux_reconcile(){
-    names=("infra-controllers" "infra-configs" "istio-system" "istio-gateway" "apps" "")
+    names=("infra-controllers" "infra-configs" "istio-system" "istio-gateway" "apps" "apps-helm-kustomize")
+    for name in "${names[@]}"; do
+        pretty_print "${BLUE}Reconciling $name${NC}"
+        flux reconcile kustomization "$name" --with-source
+    done
 }
 
 # # install istio if not installed
