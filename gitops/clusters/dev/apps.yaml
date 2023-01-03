@@ -27,7 +27,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./gitops/apps/helm-kustomize
+  path: ./gitops/apps/dev
   prune: true
   wait: true
   timeout: 5m0s
