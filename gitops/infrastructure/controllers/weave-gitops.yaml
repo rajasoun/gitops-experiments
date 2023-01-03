@@ -4,6 +4,7 @@ kind: HelmRepository
 metadata:
   name: weave-gitops
   namespace: flux-system
+  istio-injection: enabled
 spec:
   type: oci
   interval: 60m0s
