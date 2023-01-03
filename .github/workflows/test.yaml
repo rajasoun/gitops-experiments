@@ -16,4 +16,4 @@ jobs:
       - name: Setup tools
         uses: ./.github/actions/tools
       - name: Validate manifests
-        run: ./gitops/assist.sh test
+        run: ./local-dev/iaac/test/validate.sh
