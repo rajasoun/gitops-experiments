@@ -1,0 +1,23 @@
+---
+- name: "httpd"
+  namespace: "ingress-ngnix"
+  service: "ingress-nginx-controller"
+  port: "8080:80"
+  url: "http://httpd.dev.local.gd"
+  manifest: "resources/httpd.yaml"
+
+- name: "weave-gitops-dashboard"
+  namespace: "dashboard"
+  service: "weave-gitops"
+  port: "9001:9001"
+  url: "http://gitops.local.gd"
+  manifest: "None"
+
+- name: "podinfo"
+  namespace: "ingress-ngnix"
+  service: "ingress-nginx-controller"
+  port: "8080:80"
+  url: "http://podinfo.local.gd"
+  manifest: "None"
+
+

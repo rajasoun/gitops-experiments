@@ -25,6 +25,7 @@ function start_port_forward() {
 # $2 - expected http code
 function check_http_code() {
   url=$1
+  pretty_print "${YELLOW}Checking HTTP Code for $url ${NC}\n"
   expected_http_code=$2
   status_code=$(http --headers --check-status --ignore-stdin $url | grep HTTP | cut -d ' ' -f 2)
   echo -e "\n"
@@ -37,90 +38,98 @@ function check_http_code() {
   fi
 }
 
+function wait_till_action_complete(){
+  action=$1
+  service=$2
+  namespace=$3
+  pretty_print "${BOLD}${UNDERLINE}Waiting for $action to be ready on $service ${NC}\n"
+  case $action in
+    "apply")
+      kubectl wait --for=condition=available --timeout=30s deployment/$service  -n $namespace
+      ;;
+    "delete")
+      kubectl wait --for=delete --timeout=30s deployment/$service -n $namespace
+      ;;
+  esac
+}
+
 # deploy service
 # Parameters:
 # $1 - service name
 # $2 - manifest path
 # $3 - namespace
-function deploy_service() {
-  service=$1
-  manifest=$2
-  namespace=$3
-  pretty_print "${BOLD}${UNDERLINE}Deploying $service ${NC}\n"
-  kubectl apply -f "$manifest" -n $namespace
-  sleep 10
-  pretty_print "${BOLD}${UNDERLINE}Waiting for $service to be ready${NC}\n"
-  kubectl wait --for=condition=available --timeout=30s deployment/$service  -n $namespace
+function manage_deployment() {
+  namespace="infrastructure-demo"
+  action=$1
+  service=$2
+  manifest=$3
+  
+  # deploy service if manifest is not None and file exists
+  manifest_full_path="$GIT_BASE_PATH/gitops/validators/$manifest"
+  if [ "$manifest" != "None" ] && [ -f "$manifest_full_path" ]; then
+    pretty_print "${BOLD}${UNDERLINE}$action $service ${NC}\n"
+    kubectl $action -f "$manifest_full_path" -n $namespace
+    sleep 10
+    wait_till_action_complete $action $service $namespace
+  else 
+    pretty_print "Skipping deployment for $service_name\n"
+  fi
   line_separator
 }
 
-# deploy service
-# Parameters:
-# $1 - service name
-# $2 - manifest path
-# $3 - namespace
-function undeploy_service() {
-  service=$1
-  manifest=$2
-  namespace=$3
-  pretty_print "${BOLD}${UNDERLINE}UnDeploying $service ${NC}\n"
-  kubectl delete -f "$manifest" -n $namespace
-  pretty_print "${BOLD}${UNDERLINE}Waiting for ${service_array[0]} to be delete${NC}\n"
-  kubectl wait --for=delete --timeout=30s deployment/$service -n $namespace
-  line_separator
-}
-
-
-function deploy_and_test(){
-  # array of services with service_name namespace service port urls to check and manifest path
-    local services=(
-      "httpd ingress-nginx ingress-nginx-controller 8080:80 http://httpd.dev.local.gd:8080 http://httpd.dev.local.gd $GIT_BASE_PATH/gitops/validators/resources/httpd.yaml"
-    )
-    for service in "${services[@]}"; do
-      IFS=' ' read -r -a service_array <<< "$service"
-      deploy_service ${service_array[0]} ${service_array[6]} "infrastrcuture-demo"
-      pretty_print "${BOLD}${UNDERLINE}Testing ${service_array[0]} using Nginx Ingress Controller & port-forward${NC}\n"
-      pretty_print "${YELLOW}Starting Port Forward${NC}\n"
-      pid=$(start_port_forward ${service_array[1]} ${service_array[2]} ${service_array[3]})
-      pretty_print "${YELLOW}Test ${service_array[1]}${NC}\n"
-      check_http_code ${service_array[4]} "200"
-      kill $pid
-      line_separator
-      pretty_print "${BOLD}${UNDERLINE}Testing ${service_array[0]} istio Virtual Service${NC}\n"
-      check_http_code ${service_array[5]} "200"
-      line_separator
-      undeploy_service ${service_array[0]} ${service_array[6]} "infrastrcuture-demo"
-    done
-}
-
-# function test deployed services
-function test_deployed_services(){
-  # array of services with service_name namespace service port and urls to check 
-  # format: "service_name namespace service port port_forward__url istio_url"
-  local deployed_services=(
-    "weave-gitops-dashboard dashboard weave-gitops 9001:9001 http://gitops.local.gd:9001 http://gitops.local.gd"
-    "podinfo ingress-nginx ingress-nginx-controller 8080:80 http://podinfo.local.gd:8080 http://podinfo.local.gd"
-  )
-  for deployed_service in "${deployed_services[@]}"; do
-    IFS=' ' read -r -a deployed_service_array <<< "$deployed_service"
-    pretty_print "${BOLD}${UNDERLINE}Testing ${deployed_service_array[0]} using Nginx Ingress Controller & port-forward${NC}\n"
-    pretty_print "${YELLOW}Starting Port Forward${NC}\n"
-    pid=$(start_port_forward ${deployed_service_array[1]} ${deployed_service_array[2]} ${deployed_service_array[3]})
-    pretty_print "${YELLOW}Test ${deployed_service_array[1]}${NC}\n"
-    check_http_code ${deployed_service_array[4]} "200"
-    kill $pid
+# test nginx ingress
+function nginx_ingress_test(){
+    namespace=$1
+    service=$2
+    port=$3
+    url=$4
+    # port forward
+    pretty_print "${BOLD}${UNDERLINE}Testing $service for Nginx Ingress ${NC}\n"
+    pretty_print "${YELLOW}Port Forwarding${NC}\n"
+    server_pid=$(start_port_forward $namespace $service $port)
+    local_port=$(echo $port | cut -d ':' -f 1)
+    # check http code for nginx ingress
+    check_http_code "$url:$local_port" 200
+    # kill port forward
+    kill $server_pid
     line_separator
-    pretty_print "${BOLD}${UNDERLINE}Testing ${deployed_service_array[0]} istio Virtual Service${NC}\n"
-    check_http_code ${deployed_service_array[5]} "200"
-    line_separator
-  done
-
 }
 
-# test 
+# test istio ingress
+function istio_ingress_test(){
+    url=$1
+    pretty_print "${BOLD}${UNDERLINE}Testing $service for Istio Ingress ${NC}\n"
+    check_http_code "$url" 200
+    line_separator
+}
+
+function test_service(){
+  service_name=$1
+  namespace=$2
+  service=$3
+  port=$4
+  test_url=$5
+  manifest=$6
+
+  # deploy service if manifest is not None and file exists
+  manage_deployment "apply" "$service_name" "$manifest" "$namespace"
+  # test nginx ingress test
+  nginx_ingress_test "$namespace" "$service" "$port" "$test_url"
+  # check istio ingress
+  istio_ingress_test "$test_url"
+  # undeploy service if manifest is not None and file exists
+  manage_deployment "delete" "$service_name" "$manifest" "$namespace"
+}
+
 function test(){
-  deploy_and_test 
-  test_deployed_services
+  # load yaml to bash array usimh yq
+  yaml_file="$GIT_BASE_PATH/gitops/validators/resources/services.yaml"
+  services_csv=$(yq eval -o=csv "$yaml_file" | tail -n +2)
+  while IFS="," read -r service_name namespace service port test_url manifest
+  do
+    pretty_print "${BOLD}${UNDERLINE}Testing $service_name ${NC}\n"
+    test_service "$service_name" "$namespace" "$service" "$port" "$test_url" "$manifest"
+  done < <(echo "$services_csv")
 }
 
 trap "exit" INT TERM ERR
