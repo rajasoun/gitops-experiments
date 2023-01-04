@@ -15,7 +15,7 @@ function check_http_code() {
   status_code=$(http --headers --check-status --ignore-stdin $url | grep HTTP | cut -d ' ' -f 2)
   echo -e "\n"
   if [ "$status_code" == "200" ]; then
-    http --headers --check-status --ignore-stdin $url 
+    http --ignore-stdin $url 
     return 0
   else
     return 1
