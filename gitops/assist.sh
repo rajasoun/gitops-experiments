@@ -8,7 +8,6 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 #Run bootstrap for a public repository on a personal account
 function flux_bootstrap(){
-  flux install
   flux bootstrap github \
     --owner=$GITHUB_USER \
     --repository=$GITHUB_REPO \
