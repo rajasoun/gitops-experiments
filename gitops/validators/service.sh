@@ -116,14 +116,9 @@ function test_service(){
 }
 
 function test(){
-  # load yaml to bash array usimh yq
-  yaml_file="$GIT_BASE_PATH/gitops/validators/resources/services.yaml"
-  services_csv=$(yq eval -o=csv "$yaml_file" | tail -n +2)
-  while IFS="," read -r service_name namespace service test_url
-  do
-    pretty_print "${BOLD}${UNDERLINE}Testing $service_name ${NC}\n"
-    test_service "$service_name" "$test_url" 
-  done < <(echo "$services_csv")
+  pretty_print "${BOLD}${UNDERLINE}Testing Services ${NC}\n"
+  test_service "podinfo" "http://podinfo.local.gd"
+  test_service "weave-dashboard" "http://gitops.local.gd"
   deploy_test_service "httpd" "ingress-ngnix" "ingress-nginx-controller" "8080:80" "http://httpd.dev.local.gd" "resources/httpd.yaml"
 }
 
