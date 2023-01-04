@@ -15,6 +15,7 @@ function flux_bootstrap(){
     --path=./gitops/clusters/dev \
     --private=false \
     --personal=true
+  kubectl wait --for=condition=ready --timeout=30s --all pods -n flux-system 
   kubectl label namespace flux-system istio-injection=disabled
 }
 
