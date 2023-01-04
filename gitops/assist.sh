@@ -49,7 +49,7 @@ function post_check(){
   # check flux-system kustomization is deployed
   [ $(flux get kustomizations --all-namespaces | grep -c "flux-system") -eq 0 ] && fail "flux-system kustomization not deployed" && return 1 || pass "flux-system kustomization deployed\n"
   # check kubernetes cluster is running
-  [ ! $(kubectl get --raw '/readyz?verbose' | grep -c "ok") -eq 24 ] && fail "kubernetes cluster is unhealthy" && return 1 || pass "kubernetes cluster is healthy\n"
+  [ ! $(kubectl get --raw '/readyz?verbose' | grep -c "ok") -eq 30 ] && fail "kubernetes cluster is unhealthy" && return 1 || pass "kubernetes cluster is healthy\n"
   # check istio-system kustomization is deployed
   [ $(flux get kustomizations --all-namespaces | grep -c "istio-system") -eq 0 ] && fail "istio-system kustomization not deployed" && return 1 || pass "istio-system kustomization deployed\n"
   # check istio-system namespace is created
