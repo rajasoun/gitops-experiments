@@ -1,6 +1,13 @@
 ---
+- name: "podinfo"
+  namespace: "ingress-nginx"
+  service: "ingress-nginx-controller"
+  port: "8080:80"
+  url: "http://podinfo.local.gd"
+  manifest: "None"
+
 - name: "httpd"
-  namespace: "ingress-ngnix"
+  namespace: "ingress-nginx"
   service: "ingress-nginx-controller"
   port: "8080:80"
   url: "http://httpd.dev.local.gd"
@@ -13,11 +20,5 @@
   url: "http://gitops.local.gd"
   manifest: "None"
 
-- name: "podinfo"
-  namespace: "ingress-ngnix"
-  service: "ingress-nginx-controller"
-  port: "8080:80"
-  url: "http://podinfo.local.gd"
-  manifest: "None"
 
 

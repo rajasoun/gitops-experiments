@@ -6,42 +6,26 @@ IFS=$'\n\t'
 GIT_BASE_PATH=$(git rev-parse --show-toplevel)
 SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
-# port forward
-# $1 - namespace
-# $2 - service name
-# $3 - port - format <local_port>:<remote_port>
-function start_port_forward() {
-  namespace=$1
-  service=$2
-  port=$3
-  kubectl port-forward --namespace=$namespace svc/$service $port > /dev/null 2>&1 &
-  sleep 1
-  server_pid=$!
-  echo $server_pid
-}
-
 # function check_http_code()
 # $1 - url
 # $2 - expected http code
 function check_http_code() {
-  url=$1
+  local url=$1
   pretty_print "${YELLOW}Checking HTTP Code for $url ${NC}\n"
-  expected_http_code=$2
   status_code=$(http --headers --check-status --ignore-stdin $url | grep HTTP | cut -d ' ' -f 2)
   echo -e "\n"
-  # check http_code is 200
-  if [ $status_code == $2 ]; then
-    pass "$url Reachable\n"
-    http $url
+  if [ "$status_code" == "200" ]; then
+    http --headers --check-status --ignore-stdin $url 
+    return 0
   else
-    fail "$url Not Reachable\n"
+    return 1
   fi
 }
 
 function wait_till_action_complete(){
-  action=$1
-  service=$2
-  namespace=$3
+  local ction=$1
+  local service=$2
+  local namespace=$3
   pretty_print "${BOLD}${UNDERLINE}Waiting for $action to be ready on $service ${NC}\n"
   case $action in
     "apply")
@@ -59,16 +43,16 @@ function wait_till_action_complete(){
 # $2 - manifest path
 # $3 - namespace
 function manage_deployment() {
-  namespace="infrastructure-demo"
-  action=$1
-  service=$2
-  manifest=$3
-  
+  local namespace="infrastrcuture-demo"
+  local action=$1
+  local service=$2
+  local manifest=$3
+
   # deploy service if manifest is not None and file exists
   manifest_full_path="$GIT_BASE_PATH/gitops/validators/$manifest"
   if [ "$manifest" != "None" ] && [ -f "$manifest_full_path" ]; then
     pretty_print "${BOLD}${UNDERLINE}$action $service ${NC}\n"
-    kubectl $action -f "$manifest_full_path" -n $namespace
+    kubectl $action -f "$manifest_full_path" 
     sleep 10
     wait_till_action_complete $action $service $namespace
   else 
@@ -79,17 +63,20 @@ function manage_deployment() {
 
 # test nginx ingress
 function nginx_ingress_test(){
-    namespace=$1
-    service=$2
-    port=$3
-    url=$4
+    local namespace=$1
+    local service=$2
+    local port=$3
+    local url=$4
     # port forward
     pretty_print "${BOLD}${UNDERLINE}Testing $service for Nginx Ingress ${NC}\n"
-    pretty_print "${YELLOW}Port Forwarding${NC}\n"
-    server_pid=$(start_port_forward $namespace $service $port)
+
+    pretty_print "${YELLOW}Port Forwarding -> kubectl port-forward --namespace=$namespace svc/$service $port  ${NC}\n"
+    kubectl port-forward --namespace=$namespace svc/$service $port > /dev/null 2>&1 &
+    sleep 3
+    server_pid=$!
     local_port=$(echo $port | cut -d ':' -f 1)
     # check http code for nginx ingress
-    check_http_code "$url:$local_port" 200
+    check_http_code "$url:$local_port" && pass "Service Check Passed" || fail "Service Check Failed"
     # kill port forward
     kill $server_pid
     line_separator
@@ -97,19 +84,19 @@ function nginx_ingress_test(){
 
 # test istio ingress
 function istio_ingress_test(){
-    url=$1
+    local url=$1
     pretty_print "${BOLD}${UNDERLINE}Testing $service for Istio Ingress ${NC}\n"
-    check_http_code "$url" 200
+    check_http_code "$url" && pass "Service Check Passed" || fail "Service Check Failed"
     line_separator
 }
 
 function test_service(){
-  service_name=$1
-  namespace=$2
-  service=$3
-  port=$4
-  test_url=$5
-  manifest=$6
+  local service_name=$1
+  local namespace=$2
+  local service=$3
+  local port=$4
+  local test_url=$5
+  local manifest=$6
 
   # deploy service if manifest is not None and file exists
   manage_deployment "apply" "$service_name" "$manifest" "$namespace"
@@ -128,8 +115,12 @@ function test(){
   while IFS="," read -r service_name namespace service port test_url manifest
   do
     pretty_print "${BOLD}${UNDERLINE}Testing $service_name ${NC}\n"
-    test_service "$service_name" "$namespace" "$service" "$port" "$test_url" "$manifest"
+    test_service "$service_name" "$namespace" "$service" "$port" "$test_url" "$manifest" 
   done < <(echo "$services_csv")
+  # <service_name> <namespace> <service> <port> <test_url> <manifest_path> 
+  # test_service "httpd" "ingress-ngnix" "ingress-nginx-controller" "8080:80" "http://httpd.dev.local.gd" "resources/httpd.yaml"
+  # test_service "weave-gitops-dashboard" "dashboard" "weave-gitops" "9001:9001" "http://gitops.local.gd" "None"
+  # test_service "podinfo" "ingress-ngnix" "ingress-nginx-controller" "8080:80" "http://podinfo.local.gd" "None"
 }
 
 trap "exit" INT TERM ERR
