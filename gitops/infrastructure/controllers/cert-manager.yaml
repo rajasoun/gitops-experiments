@@ -5,6 +5,7 @@ metadata:
   name: cert-manager
   labels:
     toolkit.fluxcd.io/tenant: sre-team
+    istio-injection: disabled
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
