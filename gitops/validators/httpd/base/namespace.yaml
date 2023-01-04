@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infrastrcuture-demo
+  labels:
+    kubernetes.io/metadata.name: infrastrcuture-demo
+    istio-injection: enabled
+---
