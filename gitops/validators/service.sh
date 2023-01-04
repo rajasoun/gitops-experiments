@@ -82,15 +82,7 @@ function nginx_ingress_test(){
     line_separator
 }
 
-# test istio ingress
-function istio_ingress_test(){
-    local url=$1
-    pretty_print "${BOLD}${UNDERLINE}Testing $service for Istio Ingress ${NC}\n"
-    check_http_code "$url" && pass "Service Check Passed" || fail "Service Check Failed"
-    line_separator
-}
-
-function test_service(){
+function deploy_test_service(){
   local service_name=$1
   local namespace=$2
   local service=$3
@@ -103,24 +95,36 @@ function test_service(){
   # test nginx ingress test
   nginx_ingress_test "$namespace" "$service" "$port" "$test_url"
   # check istio ingress
-  istio_ingress_test "$test_url"
+  pretty_print "${BOLD}${UNDERLINE}Testing $service for Istio Ingress ${NC}\n"
+  local_port=$(echo $port | cut -d ':' -f 1)
+  check_http_code "$test_url:$local_port" && pass "Service $service Check Passed" || fail "Service $service Check Failed"
+  line_separator
+  pretty_print "${BOLD}${UNDERLINE}Testing $service for Istio Ingress ${NC}\n"
+  check_http_code "$test_url" && pass "Service $service Check Passed" || fail "Service $service Check Failed"
+  line_separator
   # undeploy service if manifest is not None and file exists
   manage_deployment "delete" "$service_name" "$manifest" "$namespace"
+  line_separator
+}
+
+function test_service(){
+  local service_name=$1
+  local url=$2
+  pretty_print "${BOLD}${UNDERLINE}Testing $service for Istio Ingress ${NC}\n"
+  check_http_code "$url" && pass "Service $service Check Passed" || fail "Service $service Check Failed"
+  line_separator
 }
 
 function test(){
   # load yaml to bash array usimh yq
   yaml_file="$GIT_BASE_PATH/gitops/validators/resources/services.yaml"
   services_csv=$(yq eval -o=csv "$yaml_file" | tail -n +2)
-  while IFS="," read -r service_name namespace service port test_url manifest
+  while IFS="," read -r service_name namespace service test_url
   do
     pretty_print "${BOLD}${UNDERLINE}Testing $service_name ${NC}\n"
-    test_service "$service_name" "$namespace" "$service" "$port" "$test_url" "$manifest" 
+    test_service "$service_name" "$test_url" 
   done < <(echo "$services_csv")
-  # <service_name> <namespace> <service> <port> <test_url> <manifest_path> 
-  # test_service "httpd" "ingress-ngnix" "ingress-nginx-controller" "8080:80" "http://httpd.dev.local.gd" "resources/httpd.yaml"
-  # test_service "weave-gitops-dashboard" "dashboard" "weave-gitops" "9001:9001" "http://gitops.local.gd" "None"
-  # test_service "podinfo" "ingress-ngnix" "ingress-nginx-controller" "8080:80" "http://podinfo.local.gd" "None"
+  deploy_test_service "httpd" "ingress-ngnix" "ingress-nginx-controller" "8080:80" "http://httpd.dev.local.gd" "resources/httpd.yaml"
 }
 
 trap "exit" INT TERM ERR
