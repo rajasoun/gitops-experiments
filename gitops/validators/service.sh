@@ -39,6 +39,15 @@ function test(){
   test_service "weave-dashboard" "http://gitops.local.gd"
 }
 
+function status(){
+  pretty_print "${YELLOW}List Istio Virtual Services  ${NC}\n"
+  kubectl get virtualservices.networking.istio.io -A 
+  line_separator
+  pretty_print "${YELLOW}List Istio Gateways  ${NC}\n"
+  kubectl get gateways.networking.istio.io -A 
+  line_separator
+}
+
 source "${SCRIPT_LIB_DIR}/main.sh" $@
 
 
