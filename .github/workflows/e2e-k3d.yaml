@@ -23,7 +23,7 @@ jobs:
           args: >-
             --agents 2
             --no-lb
-            --image docker.io/rancher/rancher/k3s:v1.26.0-k3s1
+            --image docker.io/rancher/k3s:v1.26.0-k3s1
             --k3s-arg "--no-deploy=traefik,servicelb,metrics-server@server:*" 
       - name: Install Flux in Kubernetes Kind
         run: flux install
