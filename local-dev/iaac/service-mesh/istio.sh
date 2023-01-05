@@ -78,6 +78,8 @@ function status(){
 
 # teardown istio
 function teardown(){
+    export PATH=$HOME/.istioctl/bin:$PATH 
+    source <(istioctl completion zsh)
     istioctl version
     istioctl uninstall -y --purge
     kubectl delete namespace istio-system
