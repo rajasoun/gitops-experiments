@@ -12,7 +12,7 @@ export SOURCED="yes"
 export PATH=bin:$PATH 
 
 #PACKAGES="$(cat packages/brew.txt | sed 's/#.*$//' | grep -v 'tektoncd-cli\|kubectx\|stern\|watch')"
-PACKAGES=(k3d k9s tkn k6)
+PACKAGES=(k3d k9s k6)
 for pkg in  ${PACKAGES[@]}; do 
     echo -e "${BLUE}Applying zsh completion for $pkg${NC}" 
     source <($pkg completion zsh)

@@ -261,6 +261,42 @@ function flux_reconcile(){
     done
 }
 
+# install Brewfile by directory name 
+function install(){
+    local app="$1"
+    local directory="$GIT_BASE_PATH/local-dev/iaac/prerequisites/local"
+    local brewfile="$directory/$app/Brewfile"
+
+    if [ -f "$brewfile" ]; then
+        pretty_print "${BLUE}Installing Brewfile for $app ${NC}\n"
+        pretty_print "Brewfile -> $brewfile\n"
+        brew bundle --file="$brewfile"
+    else
+        pretty_print "${RED}Brewfile not found for $app ${NC}\n"
+        pretty_print "Brewfile -> $brewfile\n"
+    fi
+}
+
+# uninstall Brewfile by directory name 
+function uninstall(){
+    local app="$1"
+    GIT_BASE_PATH=$(git rev-parse --show-toplevel)
+    local brewfile="$GIT_BASE_PATH/local-dev/iaac/prerequisites/local/$app/Brewfile"
+    if [ -f "$brewfile" ]; then
+        pretty_print "${BLUE}Uninstalling Brewfile for $app ${NC}\n"
+        pretty_print "Brewfile -> $brewfile\n"
+        rm -fr /tmp/Brewfile
+        cat  $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile > /tmp/Brewfile
+        echo -e "\n" >> /tmp/Brewfile
+        cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile >> /tmp/Brewfile
+        brew bundle --file /tmp/Brewfile check --force 
+        rm -fr /tmp/Brewfile
+    else
+        pretty_print "${RED}Brewfile not found for $app ${NC}\n"
+        pretty_print "Brewfile -> $brewfile\n"
+    fi
+}
+
 # # install istio if not installed
 # function install_istio_if_not(){
 #     # Check if istio is installed
