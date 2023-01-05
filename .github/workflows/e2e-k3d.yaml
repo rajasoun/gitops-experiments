@@ -17,11 +17,15 @@ jobs:
       - name: Setup Flux
         uses: fluxcd/flux2/action@main
       - name: Setup Kubernetes
-        uses: ./
+        uses: AbsaOSS/k3d-action@v2
         with:
-          cluster_name: flux
+          cluster-name: "flux"
           args: >-
-            --config=./local-dev/iaac/kubernetes/k3d/config/k3d-config.yaml
+            --servers 1
+            --agents 2
+            --no-lb
+            --image docker.io/rancher/k3s:v1.26.0-k3s1
+            --k3s-arg "--disable=traefik@server:*"
       - name: Install Flux in Kubernetes Kind
         run: flux install
       - name: Setup cluster reconciliation
