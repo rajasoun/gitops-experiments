@@ -12,10 +12,6 @@ brew "kubectx"
 brew "stern"          
 brew "watch"
 
-# ctlptl
-tap "tilt-dev/tap"
-brew "tilt-dev/tap/ctlptl"
-
 # Parsers
 brew "cue"
 

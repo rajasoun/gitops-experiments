@@ -790,6 +790,10 @@
       "tilt-dev/tap/ctlptl": {
         "version": "0.8.15",
         "bottle": false
+      },
+      "tilt-dev/tap/tilt": {
+        "version": "0.30.13",
+        "bottle": false
       }
     },
     "tap": {
