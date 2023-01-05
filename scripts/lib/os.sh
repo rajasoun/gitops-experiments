@@ -262,7 +262,7 @@ function flux_reconcile(){
 }
 
 # install Brewfile by directory name 
-function install(){
+function brew_install(){
     local app="$1"
     local directory="$GIT_BASE_PATH/local-dev/iaac/prerequisites/local"
     local brewfile="$directory/$app/Brewfile"
@@ -278,7 +278,7 @@ function install(){
 }
 
 # uninstall Brewfile by directory name 
-function uninstall(){
+function brew_uninstall(){
     local app="$1"
     GIT_BASE_PATH=$(git rev-parse --show-toplevel)
     local brewfile="$GIT_BASE_PATH/local-dev/iaac/prerequisites/local/$app/Brewfile"
