@@ -35,3 +35,6 @@ Docs In Progress
 1. Run VS Code User Defined Taks located in [tasks.json](./.vscode/tasks.json)  - CMD + SHIFT + T + R 
 2. iterm2 Automation - Run `scripts/wrapper.sh watch` 
 3. Wrapper to run fluc reconcile - Run `acripts/wrapper.sh run flux_reconcile`
+4. Run `scripts/wrapper.sh run brew_install tilt` to install tilt in [tilt Brewfile](./local-dev/iaac/prerequisites/local/tilt/Brewfile) and Run `scripts/wrapper.sh run brew_uninstall tilt` to uninstall tilt
+5. Run `scripts/wrapper.sh run check_brew_drift` to check drift on installed packages via Drift
+6. Run `scripts/wrapper.sh run audit_trail` to update the audit trail
