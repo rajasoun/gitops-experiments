@@ -297,6 +297,25 @@ function brew_uninstall(){
     fi
 }
 
+function check_brew_drift(){
+    brew_integrity=$(brew list --version | sha256sum | awk '{print $1}')
+    if [ $(cat "${GIT_BASE_PATH}/.github/.setup" | grep -c $brew_integrity) = 1 ];then
+        echo -e "${GREEN}\nDrift Check - Passsed${NC}"
+        echo -e "   ${GREEN}No Installation(s) found outside of Automation using Homebrew${NC}\n"
+        return 0
+    else
+        echo -e "${RED}\nDrfit Check - Failed${NC}\n"
+        echo -e "   ${ORGANGE}Installation(s) found outside of Automation using Homebrew${NC}\n"
+        return 1
+    fi
+}
+
+function audit_trail(){
+    brew_integrity=$(brew list --version | sha256sum | awk '{print $1}')
+    echo "Installed Packages (via brew) Integrity: $brew_integrity" > ${GIT_BASE_PATH}/.github/.setup
+}
+
+
 # # install istio if not installed
 # function install_istio_if_not(){
 #     # Check if istio is installed
