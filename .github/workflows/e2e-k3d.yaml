@@ -1,4 +1,4 @@
-name: e2e-with-kind
+name: e2e-with-k3d
 
 on:
   workflow_dispatch:
