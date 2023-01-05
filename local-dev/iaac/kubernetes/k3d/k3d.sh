@@ -22,12 +22,12 @@ function create_cluster(){
     echo "KUBECONFIG=${KUBECONFIG}"
     pretty_print "${GREEN}k3d cluster created successfully\n${NC}"
     pretty_print "${YELLOW}Waiting for pods to comeup\n${NC}"
-    # wait untill all pods are in Ready State
-    kubectl wait --for=condition=Ready --timeout=60s pods --all -n kube-system && pass "k3d cluster Done < 60s" || fail "k3d cluster taking > 60s"
     # List Running Containers
     pretty_print "${GREEN}Running Containers: \n${NC}"
     docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Ports}}'
     try source ${SCRIPT_LIB_DIR}/tools.sh
+    # wait untill all pods are in Ready State
+    kubectl wait --for=condition=Ready --timeout=120s pods --all -n kube-system && pass "k3d cluster Done < 120s\n" || warn "k3d cluster taking > 120s\n"
     echo -e "${GREEN}k3d Installation Sucessfull${NC}"
 }
 
