@@ -22,9 +22,9 @@ We will use k3d for Kubernetes
 
     For kind,
     ```sh
-    sed -i '' -E   's/KUBERNETES_TYPE=k3d/KUBERNETES_TYPE=kind/' .env.sample
+    local-dev/iaac/env/env.sh teardown
+    export KUBERNETES_TYPE=kind
     local-dev/assist.sh setup 
-    sed -i '' -E   's/KUBERNETES_TYPE=kind/KUBERNETES_TYPE=k3d/' .env.sample
     ```
 
 
