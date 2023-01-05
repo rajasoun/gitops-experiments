@@ -21,8 +21,10 @@ function create_cluster(){
     export KUBECONFIG="$(kind get kubeconfig --name=${CLUSTER_NAME})"
     pretty_print "${GREEN}kind cluster created successfully\n${NC}"
     pretty_print "${YELLOW}Waiting for pods to comeup\n${NC}"
+    # Temp Fix
+    kind get kubeconfig --name=${CLUSTER_NAME} --internal > /tmp/kind-config
     # wait untill all pods are in Ready State
-    kubectl wait --for=condition=Ready --timeout=60s pods --all -n kube-system && pass "kind cluster Done < 60s" || fail "kind cluster taking > 60s"
+    kubectl wait --for=condition=Ready --timeout=60s pods --all -n kube-system && pass "kind cluster Done < 60s\n" || fail "kind cluster taking > 60s\n"
     # List Running Containers
     pretty_print "${GREEN}Running Containers: \n${NC}"
     docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Ports}}'
