@@ -15,5 +15,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup tools
         uses: ./.github/actions/tools
+      - name: Check Paths
+        run: ls -asl $GITHUB_PATH
       - name: Validate manifests
         run: ./local-dev/iaac/test/validate.sh
