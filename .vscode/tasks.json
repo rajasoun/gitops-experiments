@@ -1,0 +1,37 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Launch - k9s",
+            "type": "shell",
+            "command": "k9s",
+        },
+        {
+            "label": "Launch - kubeshark",
+            "type": "shell",
+            "command": "kubeshark clean && kubeshark tap -A --set headless=true",
+        },
+        {
+            "label": "Flux - Watch Customization",
+            "type": "shell",
+            "command": "watch flux get kustomizations",
+        },
+        {
+            "label": "Flux - Watch HelmReleases",
+            "type": "shell",
+            "command": "watch flux get helmreleases --all-namespaces",
+        },
+        {
+            "label" : "Flux - Watch Logs",
+            "type" : "shell",
+            "command" : "flux logs --all-namespaces --follow --tail=10",
+        },
+        {
+            "label": "Flux - Reconcile",
+            "type": "shell",
+            "command": "scripts/wrapper.sh run flux_reconcile",
+        },
+    ]
+}

@@ -27,3 +27,11 @@ Guide to gain hands-on experience with GitOps using k3d Kubernetes cluster
 1. Refer to [Structuring Repository for Managing Multiple Environments](./docs/GitOps-Repo-Structure.md) for more details
 1. Refer to [Istio](./docs/ISTIO.md) for more details
 1. Refer to [Podinfo](./docs/Podinfo.md) for more details
+
+
+Docs In Progress
+---
+
+1. Run VS Code User Defined Taks located in [tasks.json](./.vscode/tasks.json)  - CMD + SHIFT + T + R 
+2. iterm2 Automation - Run `scripts/wrapper.sh watch` 
+3. Wrapper to run fluc reconcile - Run `acripts/wrapper.sh run flux_reconcile`
