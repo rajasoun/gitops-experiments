@@ -21,9 +21,10 @@ jobs:
         with:
           cluster-name: "flux"
           args: >-
-            --agents 1
+            --agents 3
             --no-lb
             --image docker.io/rancher/k3s:v1.26.0-k3s1
+            --k3s-arg "--no-deploy=traefik@server:*"
       - name: Install Flux in Kubernetes Kind
         run: flux install
       - name: Setup cluster reconciliation
