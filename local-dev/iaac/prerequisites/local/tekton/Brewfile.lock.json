@@ -1,0 +1,67 @@
+{
+  "entries": {
+    "brew": {
+      "tektoncd-cli": {
+        "version": "0.28.0",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:cf4bd29c4357e99df4edecf761c5fd4c41999d3c00490e8b6f58d885a2dd3242",
+              "sha256": "cf4bd29c4357e99df4edecf761c5fd4c41999d3c00490e8b6f58d885a2dd3242"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:fad5f915d0c89ff1675e96812893b9c3907bb8c139e0cbfa8935905bd96f308c",
+              "sha256": "fad5f915d0c89ff1675e96812893b9c3907bb8c139e0cbfa8935905bd96f308c"
+            },
+            "arm64_big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:394394649fbf1aed03fa12c640a942aa02017628f168c256dea59a147b0ca59c",
+              "sha256": "394394649fbf1aed03fa12c640a942aa02017628f168c256dea59a147b0ca59c"
+            },
+            "ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:37c2ef6f6b461990bb741ae5a98dd5a7f9201897d23777671d431d0f62e8d0ae",
+              "sha256": "37c2ef6f6b461990bb741ae5a98dd5a7f9201897d23777671d431d0f62e8d0ae"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:a22b88e572afe7b20b665d6c84dac8a2f3346783d663d0589fe1be9372717425",
+              "sha256": "a22b88e572afe7b20b665d6c84dac8a2f3346783d663d0589fe1be9372717425"
+            },
+            "big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:36a569fbf8dc43a58457a8c903d359323444c91c97aa5c60ea1210e9241fbaa5",
+              "sha256": "36a569fbf8dc43a58457a8c903d359323444c91c97aa5c60ea1210e9241fbaa5"
+            },
+            "catalina": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:cf07680315f35bf4159b182b22f165ce43f89a4761871f1563c71f9e979a775c",
+              "sha256": "cf07680315f35bf4159b182b22f165ce43f89a4761871f1563c71f9e979a775c"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/tektoncd-cli/blobs/sha256:1d3bab952da50d5018abfe1c8de9a5bcc2ec046757aa353e30ea8067de64e2d0",
+              "sha256": "1d3bab952da50d5018abfe1c8de9a5bcc2ec046757aa353e30ea8067de64e2d0"
+            }
+          }
+        }
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "ventura": {
+        "HOMEBREW_VERSION": "3.6.17",
+        "HOMEBREW_PREFIX": "/opt/homebrew",
+        "Homebrew/homebrew-core": "e3e9f3aa11e32699c87c0d4d772528fd0a47d81d",
+        "CLT": "14.2.0.0.1.1668646533",
+        "Xcode": "14.1",
+        "macOS": "13.1"
+      }
+    }
+  }
+}
