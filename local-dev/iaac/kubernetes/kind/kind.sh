@@ -20,11 +20,13 @@ function create_cluster(){
     try kind create cluster --name $CLUSTER_NAME  --wait 5m --config="$GIT_BASE_PATH/local-dev/iaac/kubernetes/kind/config/kind.yaml" 
     export KUBECONFIG="$(kind get kubeconfig --name=${CLUSTER_NAME})"
     pretty_print "${GREEN}kind cluster created successfully\n${NC}"
+    pretty_print "${YELLOW}Waiting for pods to comeup\n${NC}"
+    # wait untill all pods are in Ready State
+    kubectl wait --for=condition=Ready --timeout=60s pods --all -n kube-system && pass "kind cluster Done < 60s" || fail "kind cluster taking > 60s"
     # List Running Containers
     pretty_print "${GREEN}Running Containers: \n${NC}"
     docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Ports}}'
-    # pretty_print "${YELLOW}Waiting for pods to comeup\n${NC}"
-    # kubectl wait -n kube-system --for=condition=ready pods --all --timeout=120s
+    try source ${SCRIPT_LIB_DIR}/tools.sh
     pretty_print "${GREEN}kind Installation Sucessfull${NC}"
 }
 
