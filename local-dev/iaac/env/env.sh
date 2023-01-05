@@ -13,6 +13,8 @@ function setup(){
     export GITHUB_REPO=$(gh repo view --json name -q ".name")
     export GITHUB_BRANCH=$(git rev-parse --abbrev-ref HEAD)
     export GITHUB_TOKEN=$(gh auth token)
+    # if KUBERNETES_TYPE is not set, default to k3d
+    export KUBERNETES_TYPE=${KUBERNETES_TYPE:-k3d}
     cat "$ENV_FILE.sample"| envsubst > "$ENV_FILE"
 }
 
