@@ -289,7 +289,7 @@ function brew_uninstall(){
         cat  $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile > /tmp/Brewfile
         echo -e "\n" >> /tmp/Brewfile
         cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile >> /tmp/Brewfile
-        brew bundle --file /tmp/Brewfile check --force 
+        brew bundle --file /tmp/Brewfile cleanup --force
         rm -fr /tmp/Brewfile
     else
         pretty_print "${RED}Brewfile not found for $app ${NC}\n"
