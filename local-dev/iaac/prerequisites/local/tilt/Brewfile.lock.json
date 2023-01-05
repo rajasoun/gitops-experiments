@@ -1,0 +1,31 @@
+{
+  "entries": {
+    "tap": {
+      "tilt-dev/tap": {
+        "revision": "23b36fa4021b9f491336d744455ee6ebaa58f5a2"
+      }
+    },
+    "brew": {
+      "tilt-dev/tap/ctlptl": {
+        "version": "0.8.15",
+        "bottle": false
+      },
+      "tilt-dev/tap/tilt": {
+        "version": "0.30.13",
+        "bottle": false
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "ventura": {
+        "HOMEBREW_VERSION": "3.6.17",
+        "HOMEBREW_PREFIX": "/opt/homebrew",
+        "Homebrew/homebrew-core": "e3e9f3aa11e32699c87c0d4d772528fd0a47d81d",
+        "CLT": "14.2.0.0.1.1668646533",
+        "Xcode": "14.1",
+        "macOS": "13.1"
+      }
+    }
+  }
+}

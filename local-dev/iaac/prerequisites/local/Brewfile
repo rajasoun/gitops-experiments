@@ -24,9 +24,6 @@ brew "cosign"
 tap "fluxcd/tap"
 brew "fluxcd/tap/flux"   
 
-# tekton 
-brew "tektoncd-cli"
-
 # Load Test
 brew "k6"  
 
