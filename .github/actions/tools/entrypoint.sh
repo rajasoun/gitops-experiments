@@ -6,20 +6,8 @@ YQ_VERSION="v4.30.6"
 KUSTOMIZE_VERSION="4.5.7"
 KUBECONFORM_VERSION="0.5.0"
 
-function create_workspace() {
-  if [ -z "${GITHUB_WORKSPACE:-}" ]; then
-    echo "GITHUB_WORKSPACE is not set"
-    exit 1
-  fi
-
-  if [ ! -d "$GITHUB_WORKSPACE" ]; then
-    echo -e "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-    mkdir -p $GITHUB_WORKSPACE/bin
-  fi
-}
-
 function install_tools(){
-    create_workspace
+    mkdir -p $GITHUB_WORKSPACE/bin
     cd $GITHUB_WORKSPACE/bin
     curl -sL https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 -o yq
     chmod +x $GITHUB_WORKSPACE/bin/yq
