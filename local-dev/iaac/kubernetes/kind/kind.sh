@@ -23,13 +23,11 @@ function create_cluster(){
     pretty_print "${YELLOW}Waiting for pods to comeup\n${NC}"
     # Temp Fix
     kind get kubeconfig --name=${CLUSTER_NAME} --internal > /tmp/kind-config
-    # wait untill all pods are in Ready State
-    kubectl wait --for=condition=Ready --timeout=60s pods --all -n kube-system && pass "kind cluster Done < 60s\n" || fail "kind cluster taking > 60s\n"
     # List Running Containers
     pretty_print "${GREEN}Running Containers: \n${NC}"
     docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Ports}}'
     try source ${SCRIPT_LIB_DIR}/tools.sh
-    pretty_print "${GREEN}kind Installation Sucessfull${NC}"
+    pretty_print "${GREEN}kind Installation Sucessfull${NC}\n"
 }
 
 function setup(){
@@ -66,9 +64,13 @@ function status(){
         pretty_print "${ORANGE}kind cluster does not exists. Skipping...\n${NC}"
         return 1
     fi
-    pretty_print "${GREEN}${UNDERLINE}POD Status \n${NC}"
+    pretty_print "${GREEN}${UNDERLINE}Status \n${NC}"
+    pretty_print "${YELLOW}Executing -> kubectl get nodes -A\n${NC}" 
+    kubectl get nodes -A
+    line_separator
     pretty_print "${YELLOW}Executing -> kubectl get pods -n kube-system\n${NC}" 
-    kubectl get pods -n kube-system
+    kubectl wait --for=condition=Ready --timeout=60s pods --all -n kube-system 
+    line_separator
 }
 
 source "${SCRIPT_LIB_DIR}/main.sh" $@
