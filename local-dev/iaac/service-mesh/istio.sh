@@ -31,16 +31,14 @@ function setup(){
     istioctl version
     # istio configuration Profile - https://istio.io/latest/docs/setup/additional-setup/config-profiles/
     # Use the minimal configuration profile
-    istioctl install --set profile=minimal -y
+    istioctl install --set profile=default -y
     
     # Add a namespace label to instruct Istio to automatically inject Envoy 
     # sidecar proxies when you deploy your application later
     kubectl label namespace default istio-injection=enabled
      # Ensure that there are no issues with the configuration
     istioctl analyze -A
-    
     install_gateway_api
-
     pretty_print "${GREEN}istio Installation Sucessfull${NC}\n"
 }
 
