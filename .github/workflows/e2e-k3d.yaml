@@ -1,4 +1,4 @@
-name: e2e-with-k3d
+name: e2e-with-kind
 
 on:
   workflow_dispatch:
@@ -17,11 +17,12 @@ jobs:
       - name: Setup Flux
         uses: fluxcd/flux2/action@main
       - name: Setup Kubernetes
-        uses: AbsaOSS/k3d-action@v2
+        uses: ./
         with:
-          cluster-name: "flux"
-          args: 
-            --config=./local-dev/iaac/kubernetes/k3d/config/k3d-config.yaml 
+          cluster_name: flux
+          args: >-
+            --config=./local-dev/iaac/kubernetes/k3d/config/k3d-config.yaml
+      - name: Install Flux in Kubernetes Kind
         run: flux install
       - name: Setup cluster reconciliation
         run: |
