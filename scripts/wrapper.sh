@@ -37,6 +37,14 @@ function watch(){
     "$GIT_BASE_PATH/scripts/iterm2/watch.sh"
 }
 
+# Docs Pointer 
+function docs(){
+    # get github remote url 
+    url=$(git remote get-url origin)
+    open_url "$url"
+
+}
+
 # Print Usage
 function print_usage(){
     echo "${RED}Usage: $0 < run | list | watch >${NC}"
@@ -45,7 +53,8 @@ cat <<-EOF
     ---------
     run           -> Run Function  
     list          -> List Functions in os.sh 
-    watch        -> Invoke scripts/iterm2/watch.sh
+    watch         -> Invoke scripts/iterm2/watch.sh
+    docs          -> Print Docs Pointers
 EOF
 }
 
@@ -56,6 +65,7 @@ case $choice in
     run)execute_function $@;;
     list)list_functions $@;;
     watch)watch $@;;
+    docs)docs $@;;
     *) # Invalid option
     print_usage;;
 esac

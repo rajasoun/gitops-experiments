@@ -360,14 +360,19 @@ function stop_port_forward(){
     pretty_print "${GREEN}Port Forward Stopped${NC}\n"
 }
 
-# print docs pointer to get started 
-function docs(){
-    echo -e "\n"
-    pretty_print "${GREEN}${BOLD}Getting Started Guide${NC}"
-    line_separator
-    pretty_print "${BLUE}1. GitHub URL - https://github.com/rajasoun/gitops-experiments/ ${NC}\n"
-    line_separator
-    echo -e "\n"
+# open url in default browser 
+# Parameters:
+#   $1 - url - e.g. "http://localhost:8080"
+function open_url(){
+    local url="$1"
+    pretty_print "${YELLOW}Opening URL in default browser${NC}\n"
+    #open "$url"
+    # check if python3 is installed
+    if command -v python3 &> /dev/null; then
+        python3 -m webbrowser -t "$url"
+    else
+       open "$url" 
+    fi
 }
 
 # # install istio if not installed
