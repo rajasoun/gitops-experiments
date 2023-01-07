@@ -33,5 +33,22 @@
             "type": "shell",
             "command": "scripts/wrapper.sh run flux_reconcile",
         },
+        {
+            "label": "Watch",
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "Flux - Watch Kustomization",
+                "Flux - Reconcile",
+                "Flux - Watch Logs"
+            ]
+        },
+        {
+            "label": "Monitor",
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "Launch - k9s"
+            ],
+            "problemMatcher": []
+        }
     ]
 }
