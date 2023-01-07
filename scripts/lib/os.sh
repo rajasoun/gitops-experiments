@@ -315,6 +315,50 @@ function audit_trail(){
     echo "Installed Packages (via brew) Integrity: $brew_integrity" > ${GIT_BASE_PATH}/.github/.setup
 }
 
+# start port forwarding for a service
+# Parameters:
+#   $1 - namespace - e.g. "httpd-app"
+#   $2 - service_name - e.g. "httpd"
+#   $3 - port_mapping - e.g. "8080:80"
+function port_forward(){
+  local namespace="$1"
+  local service_name="$2"
+  local port_mapping="$3"
+
+  # check parameters are not empty
+    if [ -z "$namespace" ] || [ -z "$service_name" ] || [ -z "$port_mapping" ]; then
+        echo -e "${RED}${BOLD}Invalid parameters${NC}"
+        echo -e "${BLUE}Usage: scripts/wrapper.sh run port_forward  <namespace> <service_name> <port_mapping>${NC}"
+        echo -e "${BOLD}Example:${NC} scripts/wrapper.sh run port_forward ingress-nginx ingress-nginx-controller 8080:80"
+        return 1
+    fi
+
+  pretty_print "${YELLOW}Starting Port Forward${NC}\n"
+  #kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80 &> "./logs/$service_name.log" &
+  kubectl port-forward "--namespace=$namespace" "service/$service_name" "$port_mapping" &> "./logs/$service_name.log" &
+  server_pid=$!
+  echo "pid=$server_pid" > "./logs/pids/$service_name.pid"
+  pretty_print "${GREEN}Port Forward Started with pid=$server_pid${NC}\n"
+}
+
+# stop port forwarding for a service
+# Parameters:
+#   $1 - service_name - e.g. "httpd"
+function stop_port_forward(){
+    service_name="$1"
+    if [ -z "$service_name" ]; then
+        echo -e "${RED}${BOLD}Invalid parameters${NC}"
+        echo -e "${BLUE}Usage: scripts/wrapper.sh run stop_port_forward <service_name>${NC}"
+        echo -e "${BOLD}Example:${NC} scripts/wrapper.sh run stop_port_forward ingress-nginx-controller"
+        return 1
+    fi
+    source "./logs/pids/$service_name.pid"
+    pretty_print "${YELLOW}Stopping Port Forward${NC}\n"
+    kill -9 $pid
+    rm -fr "./logs/pids/$service_name.pid"
+    rm -fr "./logs/$service_name.log"
+    pretty_print "${GREEN}Port Forward Stopped${NC}\n"
+}
 
 # # install istio if not installed
 # function install_istio_if_not(){
