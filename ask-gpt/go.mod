@@ -1,4 +1,4 @@
-module github.com/rajasoun/gpt-helper
+module github.com/rajasoun/ask-gpt
 
 go 1.19
 

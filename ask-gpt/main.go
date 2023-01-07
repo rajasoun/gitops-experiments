@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rajasoun/gpt-helper/cli"
+	"github.com/rajasoun/ask-gpt/cli"
 )
 
 type Data struct {
