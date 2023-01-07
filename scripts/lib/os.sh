@@ -360,6 +360,16 @@ function stop_port_forward(){
     pretty_print "${GREEN}Port Forward Stopped${NC}\n"
 }
 
+# print docs pointer to get started 
+function docs(){
+    echo -e "\n"
+    pretty_print "${GREEN}${BOLD}Getting Started Guide${NC}"
+    line_separator
+    pretty_print "${BLUE}1. GitHub URL - https://github.com/rajasoun/gitops-experiments/ ${NC}\n"
+    line_separator
+    echo -e "\n"
+}
+
 # # install istio if not installed
 # function install_istio_if_not(){
 #     # Check if istio is installed

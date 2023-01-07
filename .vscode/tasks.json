@@ -49,6 +49,14 @@
                 "Launch - k9s"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "Docs",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "type": "shell",
+            "command": "scripts/wrapper.sh run docs",
         }
     ]
 }

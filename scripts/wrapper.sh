@@ -9,13 +9,13 @@ source "${SCRIPT_LIB_DIR}/os.sh"
 function execute_function(){
     shift 
     function_name=$1
-    echo $function_name
+    #echo $function_name
     shift
     if [ -n "$function_name" ]; then
         source "${SCRIPT_LIB_DIR}/tools.sh" > /dev/null 2>&1
         if [ "$(type -t $function_name)" == "function" ]; then
-             args=$1
-             pretty_print "${YELLOW}${UNDERLINE}Executing function: $function_name $args ${NC}\n"
+             args=$@
+             pretty_print "${UNDERLINE}Executing function: $function_name $args${NC}\n"
              $function_name $args
         else
             echo "Function $function_name not found"
