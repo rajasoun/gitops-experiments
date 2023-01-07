@@ -42,7 +42,7 @@ function docs(){
     # get github remote url 
     url=$(git remote get-url origin)
     open_url "$url"
-
+    
 }
 
 # Print Usage
