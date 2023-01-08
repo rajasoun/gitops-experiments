@@ -42,7 +42,7 @@ function docs(){
     # get github remote url 
     pretty_print "${BOLD}${UNDERLINE}${YELLOW}Documentation Pointers${NC}\n"
     echo -e "\n"   
-    mdcat "$GIT_BASE_PATH/docs/console.md"
+    mdcat "$GIT_BASE_PATH/docs/v0/console.md"
     line_separator
 }
 
