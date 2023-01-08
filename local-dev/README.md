@@ -15,19 +15,12 @@ We will use k3d for Kubernetes
     ```
 
 2. Setup local development environment for k3d
+    > Default local kubernetes cluster is k3d. To use kind, set `export KUBERNETES_TYPE=kind` before running `setup` command.
 
     ```sh
     local-dev/assist.sh setup
     ```
-
-    For kind,
-    ```sh
-    local-dev/iaac/env/env.sh teardown
-    export KUBERNETES_TYPE=kind
-    local-dev/assist.sh setup 
-    ```
-
-
+    > Kubernetes [10 minutes Refresher][k8s_refresher]
 3. Test local development environment
 
     ```sh
@@ -74,3 +67,5 @@ We will use k3d for Kubernetes
 
 > Note: This will delete the entire cluster and all the data. Use with caution. `iaac/prerequisites/prerequisite.sh teardown` is commented out by default. Uncomment it if you want to remove the prerequisite tools.
 
+
+[k8s_refresher]: ../docs/v0/k8s.md
