@@ -44,10 +44,10 @@ Docs In Progress
 [tech_radar]: ./docs/DevSecOps-Tools-Radar.md
 [local_dev]: local-dev/README.md
 [git_ops]: gitops/README.md
-[ci_cd]: ./docs/CI-CD.md
-[git_ops]: ./docs/GitOps.md
-[repo_structure]: ./docs/GitOps-Repo-Structure.md
-[istio]: ./docs/ISTIO.md
-[podinfo]: ./docs/Podinfo.md
+[ci_cd]: ./docs/v0/ci-cd.md
+[git_ops]: ./docs/v0/gitops.md
+[repo_structure]: ./docs/v0/gitops-repo-structure.md
+[istio]: ./docs/v0/istio.md
+[podinfo]: ./docs/v0/podinfo.md
 [tasks_json]: ./.vscode/tasks.json
 [local_brew_file]: ./local-dev/iaac/prerequisites/local/tilt/Brewfile
