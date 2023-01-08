@@ -43,7 +43,7 @@ graph LR;
         secrets-->build[Build & Release];
         build-->image[Container Registry];
     end
-    DevOps([DevOps])-. Deploys <br> Image .->Microservice[Git Push];
+    DevOps([DevOps])-. Deploys <br> Image .->Microservice[K8s Deployer];
     Microservice-->image[Container Registry];
     subgraph Continous Delivery
         Microservice-->|Deploy|dev[Dev];
