@@ -1,16 +1,39 @@
-# Kubernetes Ingress with Nginx 
+# Ingress
+
+An API object that manages external access to the services in a cluster, typically HTTP.
+
+An Ingress may be configured to give Services
+- externally-reachable URLs,
+- load balance traffic,
+- terminate SSL / TLS and
+- offer name-based virtual hosting
 
 
 ## What is an Ingress?**
 
-In Kubernetes, an Ingress is an object that allows access to your Kubernetes services from outside the Kubernetes cluster. You configure access by creating a collection of rules that define which inbound connections reach which services.
+In Kubernetes, an Ingress is an object that allows access to your Kubernetes services from outside the Kubernetes cluster. 
+You configure access by creating a collection of rules that define which inbound connections reach which services.
 
-This lets you consolidate routing rules into a single resource. 
+ Example where an Ingress sends all its traffic to one Service
 
-For example, send requests to
+```mermaid
+graph LR;
+  classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+  classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+  classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
 
-* `example.com/api/v1/` to  `api-v1` service, and 
-* `example.com/api/v2/` to  `api-v2` service. 
+  client([client])-. Ingress-managed <br> load balancer .->ingress[Ingress];
+  ingress-->|routing rule|service[Service];
+  subgraph cluster
+  ingress;
+  service-->pod1[Pod];
+  service-->pod2[Pod];
+  end
+  
+  class ingress,service,pod1,pod2 k8s;
+  class client plain;
+  class cluster cluster;
+``` 
 
 With an Ingress, you can easily set this up without creating a bunch of LoadBalancers or exposing each service on the Node.
 
@@ -71,4 +94,3 @@ Reference - https://matthewpalmer.net/kubernetes-app-developer/articles/kubernet
 ### Summary
 
 A Kubernetes Ingress is a robust way to expose your services outside the cluster. It lets you consolidate your routing rules to a single resource, and gives you powerful options for configuring these rules.
-
