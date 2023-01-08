@@ -23,29 +23,35 @@ Continuous integration (CI) and continuous delivery (CD) are software developmen
 
 ## CI/CD pipeline 
 
-Mermaid CI/CD pipeline diagram
+Continous Integration and Continous Deployment pipeline in mermaid
+
 
 ```mermaid
-graph TB
-    subgraph ContinousIntegration    
-        A[Developer] --> B[Git Push]
-        B --> C[Unit Tests]
-        C --> D[Code Quality]
-        D --> E[Security]
-        E --> F[Secrets]
-        F --> G[Build & Release]
+graph LR;
+  classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+  classDef blue_fill fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+  classDef ci fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+
+  Dev([Dev])-. Check In <br> code .->Github[Git Push];
+  Github-->|Run Tests|automation[Automation Suites];
+    subgraph Continous Integration
+        Github;
+        automation-->unit_test[Unit Test];
+        unit_test-->code_quality[Code Quality];
+        code_quality-->security[Security];
+        security-->secrets[Secrets];
+        secrets-->build[Build & Release];
     end
-    subgraph ContinousDelivery
-        G[Build & Release] --> H[Deploy - Test]
-        H --> I[Smoke Tests]
-        I --> J[UI Tests]
-        J --> K[Load Tests]
-        K --> L[Integration Tests]
-        L --> M[API Reliability Tests]
-        M --> N[Deploy - Stage]
-        N --> O[Manual Approval]
-        O --> P[Deploy - Production]
+
+    Microservice-->|Image|automation[Container Registry];
+    subgraph Continous Delivery
+        Microservice-->|Deploy|dev[Dev];
+        dev-->|Staging|staging[Staging];
+        staging-->|production|production[Production];
     end
+    
+    class Github,automation,unit_test,code_quality,security,secrets,build blue_fill;
+    class Microservice,dev,staging,production blue_fill;
 ```
 
 
