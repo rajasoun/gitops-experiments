@@ -38,6 +38,7 @@
 [Oh My Zsh]: https://ohmyz.sh/
 [jq]: https://stedolan.github.io/jq/
 [yq]: https://github.com/mikefarah/yq
+[kubeconfim]: https://github.com/yannh/kubeconform
 
 [k3d]: https://k3d.io/
 [k3s]: https://k3s.io/
