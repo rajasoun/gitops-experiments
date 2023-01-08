@@ -42,7 +42,7 @@ function docs(){
     # get github remote url 
     pretty_print "${BOLD}${UNDERLINE}${YELLOW}Documentation Pointers${NC}\n"
     echo -e "\n"   
-    print_doc_reference "$GIT_BASE_PATH/scripts/docs/references.csv"
+    mdcat "$GIT_BASE_PATH/docs/console.md"
     line_separator
 }
 
