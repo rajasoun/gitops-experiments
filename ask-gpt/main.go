@@ -50,7 +50,7 @@ func main() {
 	}
 	if len(os.Args) != 2 {
 		fmt.Println(`No arguments!
-		$ gpt-helper 'How does ChatGPT API work?'`)
+		$ ask-gpt 'How does ChatGPT API work?'`)
 		os.Exit(0)
 	} else {
 
