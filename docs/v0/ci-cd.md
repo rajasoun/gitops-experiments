@@ -41,16 +41,17 @@ graph LR;
         code_quality-->security[Security];
         security-->secrets[Secrets];
         secrets-->build[Build & Release];
+        build-->image[Container Registry];
     end
-
-    Microservice-->|Image|automation[Container Registry];
+    DevOps([DevOps])-. Deploys <br> Image .->Microservice[Git Push];
+    Microservice-->image[Container Registry];
     subgraph Continous Delivery
         Microservice-->|Deploy|dev[Dev];
         dev-->|Staging|staging[Staging];
         staging-->|production|production[Production];
     end
     
-    class Github,automation,unit_test,code_quality,security,secrets,build blue_fill;
+    class Github,automation,unit_test,code_quality,security,secrets,build,image blue_fill;
     class Microservice,dev,staging,production blue_fill;
 ```
 
