@@ -46,6 +46,12 @@ function teardown(){
     brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile --cleanup
     brew cleanup
     rm -fr bin/*
+    shift 1
+    arg=$1
+    if [[ $arg == "--audit" ]]; then
+        $HOME/workspace/mac-onboard/assist.sh update-audit-trail
+        $HOME/workspace/mac-onboard/assist.sh drift-check
+    fi
     echo -e "${GREEN}Pre Requisites Teardown Sucessfull!!!${NC}"
 }
 
