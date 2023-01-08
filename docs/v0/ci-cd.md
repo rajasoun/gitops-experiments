@@ -37,8 +37,15 @@ graph LR;
     subgraph ci[Continous Integration]
         Github;
         subgraph Automation Tests
-            automated_tests-->unit_test[Unit Test];
-            unit_test-->api_test[API/e2e Test];
+            automated_tests-->unit_test[Unit];
+            unit_test-->api_test[API];
+            api_test-->integration_test[Integration];
+            automated_tests-->e2e_test[e2e];
+            e2e_test-->ui_test[UI];
+            e2e_test-->headless_test[Headless];
+            automated_tests-->reliability[Reliability];
+            reliability-->availability_test[Availability];
+            reliability-->dr_test[Disaster Recovery];
             automated_tests-->security[Security];
             automated_tests-->code_qaulity[Code Quality];
             on_success[On Success];
@@ -57,7 +64,7 @@ graph LR;
         staging-->|production|production[Production];
     end
     
-    class Github,automated_tests,unit_test,code_quality,security,secrets,build,container_registry,api_test,code_qaulity,on_success,build_image,push_image blue_fill;
+    class Github,automated_tests,unit_test,code_quality,security,secrets,build,container_registry,api_test,code_qaulity,on_success,build_image,push_image,unit_test,integration_test,e2e_test,ui_test,headless_test,reliability,availability_test,dr_test blue_fill;
     class Microservice,dev,staging,production blue_fill;
 ```
 
