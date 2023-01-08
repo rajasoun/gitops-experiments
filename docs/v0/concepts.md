@@ -1,5 +1,6 @@
 # Concepts
 
+1. [Getting Started][getting_started]
 1. [Kubernetes][k8s]
 1. [Tools Assembly & Radar][tools]
 1. [IaC][iac]
@@ -13,6 +14,7 @@
 1. [Repo Structure][repo_structure] 
 1. [Example App - podinfo][podinfo]
 
+[getting_started]: ../../local-dev/README.md
 [k8s]: k8s.md
 [tools]: tools.md
 [iac]: iac.md

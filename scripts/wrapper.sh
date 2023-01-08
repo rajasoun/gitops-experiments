@@ -39,8 +39,8 @@ function watch(){
 
 # Docs Pointer 
 function docs(){
-    # clear the terminal 
-    clear
+    # clear the terminal buffer
+    clear 
     # get github remote url 
     pretty_print "${BOLD}${UNDERLINE}${YELLOW}Documentation Pointers${NC}\n"
     echo -e "\n"   
