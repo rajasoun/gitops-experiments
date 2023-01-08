@@ -40,9 +40,10 @@ function watch(){
 # Docs Pointer 
 function docs(){
     # get github remote url 
-    url=$(git remote get-url origin)
-    open_url "$url"
-    
+    pretty_print "${BOLD}${UNDERLINE}${YELLOW}Documentation Pointers${NC}\n"
+    echo -e "\n"   
+    print_doc_reference "$GIT_BASE_PATH/scripts/docs/references.csv"
+    line_separator
 }
 
 # Print Usage
