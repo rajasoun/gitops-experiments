@@ -33,25 +33,31 @@ graph LR;
   classDef ci fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
 
   Dev([Dev])-. Check In <br> code .->Github[Git Push];
-  Github-->|Run Tests|automation[Automation Suites];
-    subgraph Continous Integration
+  Github-->|Quality Check|automated_tests[Automated Tests];
+    subgraph ci[Continous Integration]
         Github;
-        automation-->unit_test[Unit Test];
-        unit_test-->code_quality[Code Quality];
-        code_quality-->security[Security];
-        security-->secrets[Secrets];
-        secrets-->build[Build & Release];
-        build-->image[Container Registry];
+        subgraph Automation Tests
+            automated_tests-->unit_test[Unit Test];
+            unit_test-->api_test[API/e2e Test];
+            automated_tests-->security[Security];
+            automated_tests-->code_qaulity[Code Quality];
+            on_success[On Success];
+        end
+    on_success-->build_image[Build Image];
+    build_image-->push_image[Push Image];
     end
+    push_image-->container_registry[Container Registry];
+
     DevOps([DevOps])-. Deploys <br> Image .->Microservice[K8s Deployer];
-    Microservice-->image[Container Registry];
+    container_registry-->Microservice;
+
     subgraph Continous Delivery
         Microservice-->|Deploy|dev[Dev];
         dev-->|Staging|staging[Staging];
         staging-->|production|production[Production];
     end
     
-    class Github,automation,unit_test,code_quality,security,secrets,build,image blue_fill;
+    class Github,automated_tests,unit_test,code_quality,security,secrets,build,container_registry,api_test,code_qaulity,on_success,build_image,push_image blue_fill;
     class Microservice,dev,staging,production blue_fill;
 ```
 
