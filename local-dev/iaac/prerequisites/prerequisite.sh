@@ -9,7 +9,7 @@ function setup(){
     is_mac
     check_for_docker_desktop
     brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile
-    audit_trail
+    shift 1 & do_audit $@
     source "${SCRIPT_LIB_DIR}/tools.sh"
     echo -e "${GREEN}Pre Requisites setup DONE!!!${NC}"
 }
@@ -46,12 +46,7 @@ function teardown(){
     brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile --cleanup
     brew cleanup
     rm -fr bin/*
-    shift 1
-    arg=$1
-    if [[ $arg == "--audit" ]]; then
-        $HOME/workspace/mac-onboard/assist.sh update-audit-trail
-        $HOME/workspace/mac-onboard/assist.sh drift-check
-    fi
+    shift 1 & do_audit $@
     echo -e "${GREEN}Pre Requisites Teardown Sucessfull!!!${NC}"
 }
 

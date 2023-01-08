@@ -419,6 +419,15 @@ function print_doc_reference(){
     done <<< "$csv_file_content"
 }
 
+# function update audit details 
+function do_audit(){
+    arg=$1
+    if [[ $arg == "--audit" ]]; then
+        $HOME/workspace/mac-onboard/assist.sh update-audit-trail
+        $HOME/workspace/mac-onboard/assist.sh drift-check
+    fi
+}
+
 # # install istio if not installed
 # function install_istio_if_not(){
 #     # Check if istio is installed
