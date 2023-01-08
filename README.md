@@ -4,8 +4,8 @@ Guide to gain hands-on experience with GitOps using k3d Kubernetes cluster
 
 ## Laptop Setup
 
-1. [Mac Setup][mac_setup]{:target="_blank" rel="noopener"}
-2. [Windows Setup][win_setup]
+1. [Mac Setup](https://github.com/rajasoun/mac-onboard){:target="_blank" rel="noopener"}
+2. [Windows Setup](https://github.com/rajasoun/win10x-onboard){:target="_blank" rel="noopener"}
 
 > ### Technology Radar - DevSecOps Tools
 > Refer to [DevSecOps Tools Technology Radar](./docs/DevSecOps-Tools-Radar.md) for details
@@ -38,6 +38,3 @@ Docs In Progress
 4. Run `scripts/wrapper.sh run brew_install tilt` to install tilt in [tilt Brewfile](./local-dev/iaac/prerequisites/local/tilt/Brewfile) and Run `scripts/wrapper.sh run brew_uninstall tilt` to uninstall tilt
 5. Run `scripts/wrapper.sh run check_brew_drift` to check drift on installed packages via Drift
 6. Run `scripts/wrapper.sh run audit_trail` to update the audit trail
-
-[mac_setup]: https://github.com/rajasoun/mac-onboard
-[win_setup]: https://github.com/rajasoun/win10x-onboard
