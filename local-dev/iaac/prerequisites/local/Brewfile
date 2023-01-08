@@ -27,6 +27,9 @@ brew "fluxcd/tap/flux"
 # Load Test
 brew "k6"  
 
+# markdown terminal viewer
+brew "mdcat"
+
 # network tools
 brew "nmap"
 
