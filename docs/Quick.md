@@ -9,7 +9,7 @@
 [mac_setup]: https://github.com/rajasoun/mac-onboard
 [win_setup]: https://github.com/rajasoun/win10x-onboard
 [repo_structure]: gitops-repo-structure.md
-[ci_cd]: ./docs/ci-cd.md
+[ci_cd]: ci-cd.md
 [git_ops]: gitops.md
 [istio]: istio.md
 [podinfo]: podinfo.md
