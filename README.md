@@ -4,8 +4,8 @@ Guide to gain hands-on experience with GitOps using k3d Kubernetes cluster
 
 ## Laptop Setup
 
-1. [Mac Setup][mac_setup]{:target="_blank"}
-2. [Windows Setup](https://github.com/rajasoun/win10x-onboard)
+1. [Mac Setup][mac_setup]{:target="_blank" rel="noopener"}
+2. [Windows Setup][win_setup]
 
 > ### Technology Radar - DevSecOps Tools
 > Refer to [DevSecOps Tools Technology Radar](./docs/DevSecOps-Tools-Radar.md) for details
@@ -40,3 +40,4 @@ Docs In Progress
 6. Run `scripts/wrapper.sh run audit_trail` to update the audit trail
 
 [mac_setup]: https://github.com/rajasoun/mac-onboard
+[win_setup]: https://github.com/rajasoun/win10x-onboard
