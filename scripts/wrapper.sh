@@ -39,11 +39,18 @@ function watch(){
 
 # Docs Pointer 
 function docs(){
+    # clear the terminal 
+    clear
     # get github remote url 
     pretty_print "${BOLD}${UNDERLINE}${YELLOW}Documentation Pointers${NC}\n"
     echo -e "\n"   
     mdcat "$GIT_BASE_PATH/docs/v0/console.md"
-    line_separator
+    # in line edit .vscode/settings.json to replace line .md": "default  .md": "vscode.markdown.preview.editor
+    sed -i '' 's/.md": "default/.md": "vscode.markdown.preview.editor/g' "$GIT_BASE_PATH/.vscode/settings.json"
+    code "$GIT_BASE_PATH/docs/v0/concepts.md"
+    sleep 1
+    # in line edit .vscode/settings.json to replace line .md": "vscode.markdown.preview.editor  .md": "default
+    sed -i '' 's/.md": "vscode.markdown.preview.editor/.md": "default/g' "$GIT_BASE_PATH/.vscode/settings.json"
 }
 
 # Print Usage

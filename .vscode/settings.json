@@ -1,0 +1,9 @@
+// Click the Open Settings (UI) button in the top
+// right corner gutter to toggle the settings UI
+{
+
+    "workbench.settings.editor": "json",
+    "workbench.editorAssociations": {   
+        "*.md": "default",
+    }
+}

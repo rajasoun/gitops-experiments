@@ -1,4 +1,4 @@
-APP := $(shell basename $(CURDIR))/ask-gpt
+APP := ask-gpt
 VERSION := $(shell git describe --tags --always --dirty)
 
 # HELP
@@ -13,15 +13,13 @@ help: ## This help.
 
 # Go TASKS
 build:  bin ## Build Go
-	go build -v -installsuffix 'static' -o bin/ -ldflags "-X main.Version='${VERSION}'"
-	
-check-for-updates:	## View minor/patch upgrades 
-	go list -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}}: {{.Version}} -> {{.Update.Version}}{{end}}' -m all 2> /dev/null
+	cd $(APP) && go build -v -installsuffix 'static' -o bin/ -ldflags "-X main.Version='${VERSION}'"
 
 bin: clean
-	mkdir -p bin/
+	mkdir -p $(APP)/bin/
 
 clean: ## Clean Go
-	rm -rf bin/
+	rm -rf $(APP)/bin/
+
 
 
