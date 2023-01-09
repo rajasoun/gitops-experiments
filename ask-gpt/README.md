@@ -24,7 +24,7 @@ This is a Go program that uses the GPT-3 language model to answer questions.
 3. Run the program:
 
     ```sh
-    ask-gpt/bin/ask-gpt <question>
+    bin/ask-gpt <question>
     ```
 
 [open_api_key]: https://beta.openai.com/

@@ -1,5 +1,5 @@
-APP := ask-gpt
-VERSION := $(shell git describe --tags --always --dirty)
+APP := ask-gpt # Name of the app
+VERSION := $(shell git describe --tags --always --dirty) # Version of the app
 
 # HELP
 # This will output the help for each task
@@ -13,13 +13,13 @@ help: ## This help.
 
 # Go TASKS
 build:  bin ## Build Go
-	cd $(APP) && go build -v -installsuffix 'static' -o bin/ -ldflags "-X main.Version='${VERSION}'"
+	go build -v -installsuffix 'static' -o bin/ ./$(APP) -ldflags "-X main.Version='${VERSION}'"
 
 bin: clean
-	mkdir -p $(APP)/bin/
+	mkdir -p bin
 
 clean: ## Clean Go
-	rm -rf $(APP)/bin/
+	rm -rf bin
 
 
 
