@@ -1,5 +1,7 @@
-APP := ask-gpt # Name of the app
+APP := "./ask-gpt" # Name of the app
 VERSION := $(shell git describe --tags --always --dirty) # Version of the app
+TRIMMED_VERSION := $(patsubst %,$(strip %),$(VERSION))
+
 
 # HELP
 # This will output the help for each task
@@ -13,7 +15,9 @@ help: ## This help.
 
 # Go TASKS
 build:  bin ## Build Go
-	go build -v -installsuffix 'static' -o bin/ ./$(APP) -ldflags "-X main.Version='${VERSION}'"
+	go build -v -installsuffix 'static' -o bin/ $(APP) 
+
+all:'"
 
 bin: clean
 	mkdir -p bin
