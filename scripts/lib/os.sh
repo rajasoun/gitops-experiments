@@ -336,4 +336,30 @@ function do_audit(){
     fi
 }
 
+# Check if the machine has at least 4GB of RAM
+function check_ram(){
+    ram=$(sysctl hw.memsize | awk '{print $2}')
+    if [ $ram -lt 4294967296 ]; then
+        fail "${RED}${BOLD}Insufficient RAM${NC}"
+        warn "${BLUE}Minimum RAM required is 4GB${NC}\n"
+        return 1
+    else 
+        pass "${GREEN}${BOLD}RAM Check (RAM: >= 4 GB) - Passed${NC}\n"
+        return 0
+    fi
+}
+
+# Check if the machine has at least a quad-core processor
+function check_processor(){
+    processor=$(sysctl hw.ncpu | awk '{print $2}')
+    if [ $processor -lt 4 ]; then
+        fail "${RED}${BOLD}Insufficient Processor${NC}"
+        warn "${BLUE}Minimum Processor required is a Quad-Core${NC}\n"
+        return 1
+    else 
+        pass "${GREEN}${BOLD}Processor Check (CPU: >= 4 )- Passed${NC}\n"
+        return 0
+    fi
+}
+
 ############################################################################################################

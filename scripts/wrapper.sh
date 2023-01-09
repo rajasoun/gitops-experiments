@@ -5,6 +5,12 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 source "${SCRIPT_LIB_DIR}/os.sh"
 
+# Run Prechecks
+function prechecks(){
+    check_ram 
+    check_processor
+}
+
 # Execute Function
 function execute_function(){
     shift 
@@ -55,10 +61,11 @@ function docs(){
 
 # Print Usage
 function print_usage(){
-    echo "${RED}Usage: $0 < run | list | watch >${NC}"
+    echo "${RED}Usage: $0 < prechecks | run | list | watch | docs >${NC}"
 cat <<-EOF
     Commands:
     ---------
+    prechecks     -> Run Prechecks
     run           -> Run Function  
     list          -> List Functions in os.sh 
     watch         -> Invoke scripts/iterm2/watch.sh
@@ -70,6 +77,7 @@ EOF
 opt="$1"
 choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
 case $choice in
+    prechecks)prechecks $@;;
     run)execute_function $@;;
     list)list_functions $@;;
     watch)watch $@;;
