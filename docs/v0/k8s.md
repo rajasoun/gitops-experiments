@@ -37,8 +37,8 @@ In Visual studio code, Open New Terminal and run the following commands
 
     ```bash
     make -f ask-gpt/Makefile build
-    ask-gpt/bin/ask-gpt "what is k3d" 
-    ask-gpt/bin/ask-gpt "what is k9s" 
+    bin/ask-gpt "what is k3d" 
+    bin/ask-gpt "what is k9s" 
     ```
 
 ## Kubernetes Cluster
