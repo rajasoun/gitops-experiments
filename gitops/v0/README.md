@@ -52,41 +52,16 @@
     http http://localhost:8080
     ```
 
-1. Access service from localhost using nginx-ingress controller
+1. Deploy nginx ingress controller
     ```bash
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml 
-    export host="dev.local.gd"
-    export service_path="/web"
-    export service_port_mapping="nginx:80"
-    kubectl create ingress httpd-app-ingress --class=nginx --rule="$host$service_path=$service_port_mapping" -n "$namespace"
-    http http:/dev.local.gd/web
+    kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
     ```
 
-
-export namespace="web-frontend"
-export image="nginx:latest"
-export host="nginx.local.gd"
-export service_path="/*"
-export service_port_mapping="nginx:80" 
-
-kubectl create namespace $namespace
-kubectl create deployment nginx --image=$image --port=80 -n $namespace
-kubectl expose deployment nginx --port=80 --target-port=80 --type=NodePort -n $namespace
-
-kubectl get all -n $namespace
-scripts/wrapper.sh run port_forward "web-frontend" "nginx" "8080:80"
-http http://localhost:8080
-scripts/wrapper.sh run stop_port_forward "nginx"
-http http://localhost:8080
-
-
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
-
-kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
-
-kubectl create ingress nginx-ingress --class=nginx --rule="$host$service_path=$service_port_mapping" -n "$namespace"
-http  http://nginx.local.gd
-
-
-
+1. Create ingress
+    ```bash
+    export ingress_name="nginx-app-ingress"
+    kubectl create ingress $ingress_name --class=nginx --rule="$host$service_path=$service_port_mapping" -n "$namespace"
+    http http://nginx.local.gd 
+    ```
 
