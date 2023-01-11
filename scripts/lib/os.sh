@@ -300,12 +300,16 @@ function port_forward(){
         return 1
     fi
 
-  pretty_print "${YELLOW}Starting Port Forward${NC}\n"
+  cmd="kubectl port-forward --namespace=$namespace service/$service_name $port_mapping &> ./logs/$service_name.log &" 
+  pretty_print "${YELLOW}Starting Port Forward in Background${NC}\n"
+  pretty_print "${BLUE}$cmd${NC}\n"
+
   #kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80 &> "./logs/$service_name.log" &
   kubectl port-forward "--namespace=$namespace" "service/$service_name" "$port_mapping" &> "./logs/$service_name.log" &
   server_pid=$!
   echo "pid=$server_pid" > "./logs/pids/$service_name.pid"
   pretty_print "${GREEN}Port Forward Started with pid=$server_pid${NC}\n"
+  pretty_print "${BLUE}To Stop Execute -> scripts/wrapper.sh run stop_port_forward $service_name${NC}\n"
 }
 
 # stop port forwarding for a service
@@ -320,7 +324,7 @@ function stop_port_forward(){
         return 1
     fi
     source "./logs/pids/$service_name.pid"
-    pretty_print "${YELLOW}Stopping Port Forward${NC}\n"
+    pretty_print "${YELLOW}Stopping Port Forward for service=$service_name with pid=$pid ${NC}\n"
     kill -9 $pid
     rm -fr "./logs/pids/$service_name.pid"
     rm -fr "./logs/$service_name.log"

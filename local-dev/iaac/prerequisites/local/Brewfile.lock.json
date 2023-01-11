@@ -550,7 +550,7 @@
         }
       },
       "fluxcd/tap/flux": {
-        "version": "0.38.2",
+        "version": "0.38.3",
         "bottle": false
       },
       "k6": {
@@ -842,7 +842,7 @@
     },
     "tap": {
       "fluxcd/tap": {
-        "revision": "1435fd93f8c2a72e48e51faf4681f5ded825f413"
+        "revision": "57e25435699adb10efae8faa13196e0f85107515"
       },
       "fairwindsops/tap": {
         "revision": "6931e8b4c7d7ee7a8580ee8e45b6419c005832be"
@@ -857,7 +857,7 @@
       "ventura": {
         "HOMEBREW_VERSION": "3.6.18",
         "HOMEBREW_PREFIX": "/opt/homebrew",
-        "Homebrew/homebrew-core": "75e0c047f50f2b478ac7e82239daa7150029f32b",
+        "Homebrew/homebrew-core": "4aa2c979897f6e5ae2d6dd99003a44adb80eae51",
         "CLT": "14.2.0.0.1.1668646533",
         "Xcode": "14.1",
         "macOS": "13.1"
