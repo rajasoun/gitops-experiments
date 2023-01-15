@@ -6,21 +6,6 @@ IFS=$'\n\t'
 GIT_BASE_PATH=$(git rev-parse --show-toplevel)
 SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
-# execute kubectl command 
-# Parameters
-# $1 - kubectl command
-function execute_kubectl_command(){
-  local command=$1
-  pretty_print "\t\t${BLUE}Executing: $command${NC}\n"
-  $command
-  # check if command is successful
-  if [ $? -eq 0 ]; then
-    pass "\t\tCommand executed successfully\n"
-  else
-    fail "\t\tCommand failed\n"
-  fi
-}
-
 # print pass or fail based on command exit code
 # Parameters
 # $1 - message  to print
@@ -44,8 +29,8 @@ function deploy_nginx_ingress_controller(){
         warn "Nginx Ingress Controller already deployed.Skipping\n"
     else
         pretty_print "${BLUE}Deploying Nginx Ingress Controller${NC}\n"
-        execute_kubectl_command "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml"
-        execute_kubectl_command "kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s"
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml
+        kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
         print_command_status "Nginx Ingress Controller deployed" "$?"
     fi
 }
@@ -55,7 +40,7 @@ function teardown_nginx_ingress_controller(){
     # check if nginx ingress controller is already deployed
     if kubectl get namespace ingress-nginx > /dev/null 2>&1; then
         warn "Deleting Nginx Ingress Controller\n"
-        execute_kubectl_command "kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml"
+        kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml
         print_command_status "Nginx Ingress Controller deleted\n" "$?"
     else
         warn "${YELLOW}Nginx Ingress Controller is not deployed. Skipping${NC}\n"
@@ -72,9 +57,9 @@ function create_patch_with_labels(){
   pretty_print "${BLUE}Creating patch for $type ${NC}\n"
   if [ $type == "pods" ]; then
     pod_name=$(kubectl get pods -n $namespace -l app=$app -o jsonpath="{.items[0].metadata.name}")
-    execute_kubectl_command "kubectl patch pod $pod_name -p $lables -n $namespace"
+    kubectl patch pod $pod_name -p $lables -n $namespace
   else
-    execute_kubectl_command "kubectl patch $type $app -p $lables  -n $namespace"
+    kubectl patch $type $app -p $lables  -n $namespace
   fi
   pass "Labels added to $type\n"
 }
@@ -132,12 +117,12 @@ function create_ingress(){
   else
     pretty_print "${BLUE}Ingress controller is running${NC}\n"
     # create ingress with host and path
-    pretty_print "${BLUE}Creating ingress $app${NC}\n"
+    pretty_print "${BLUE}Creating ingress for $app in namespace $namespace ${NC}\n"
     # create ingress with label app=$app
-    echo "kubectl create ingress $ingress_name --class=nginx --rule="$host$service_path=$service_port_mapping" -n $namespace"
-    kubectl create ingress $ingress_name --class=nginx --rule="$host$path=$service_port_mapping" -n $namespace
+    echo "kubectl create ingress $ingress_name --class=nginx --rule=\"$host$service_path=$service_port_mapping\" -n $namespace"
+    kubectl create ingress $ingress_name --class=nginx --rule=\"$host$service_path=$service_port_mapping\" -n $namespace
     create_patch_with_labels "ingress"
-    pass "Ingress $app created\n"
+    pass "Ingress $app created in namespace $namespace \n"
     # wait till ingress is ready
     kubectl wait --for=condition=ready --timeout=30s ingress/$ingress_name -n $namespace
   fi

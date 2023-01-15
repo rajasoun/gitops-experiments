@@ -17,7 +17,7 @@ namespace="apps"
 label="app=$app,tier=$tier"
 image="$app:latest"
 host="$app.local.gd"
-service_path="/*"
+service_path="/"
 service_port_mapping="$app:80" 
 ingress_name="$app-app-ingress"
 env_path="$GIT_BASE_PATH/devops/v0/$app.env"
@@ -48,7 +48,7 @@ function teardown_state_file(){
 # setup
 function setup(){
   create_state_file 
-  #deploy_nginx_ingress_controller
+  deploy_nginx_ingress_controller
   create_namespace
   create_deployment
   create_service
@@ -62,7 +62,7 @@ function teardown(){
   delete_service
   delete_ingress
   delete_namespace
-  #teardown_nginx_ingress_controller
+  teardown_nginx_ingress_controller
   teardown_state_file
 }
 
