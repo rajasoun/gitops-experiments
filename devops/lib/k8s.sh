@@ -72,10 +72,9 @@ function create_patch_with_labels(){
   pretty_print "${BLUE}Creating patch for $type ${NC}\n"
   if [ $type == "pods" ]; then
     pod_name=$(kubectl get pods -n $namespace -l app=$app -o jsonpath="{.items[0].metadata.name}")
-    kubectl patch pod $pod_name -p $lables -n $namespace
+    execute_kubectl_command "kubectl patch pod $pod_name -p $lables -n $namespace"
   else
-    echo "kubectl patch $type $app -p $lables  -n $namespace"
-    kubectl patch $type $app -p $lables  -n $namespace
+    execute_kubectl_command "kubectl patch $type $app -p $lables  -n $namespace"
   fi
   pass "Labels added to $type\n"
 }
