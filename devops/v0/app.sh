@@ -52,7 +52,7 @@ nginx_ingress_manifest="https://raw.githubusercontent.com/kubernetes/ingress-ngi
 #   create_state_file 
 function create_state_file(){
   if [ -f $env_path ]; then
-    echo "$env_path already exists, state will be overwritten"
+    warn "State : $env_path exists.Overwritting\n"
   fi
   echo "app=$app" > $env_path
   echo "namespace=$namespace" >> $env_path
@@ -87,17 +87,44 @@ function teardown_state_file(){
   fi
 }
 
+# Function: Deploy Nginx Ingress Controller
+# Parameters:
+#  None
+# Returns:
+#   None
+# Example:
+#   deploy_nginx_ingress_controller
+function deploy_nginx_ingress_controller(){
+  apply_manifest_from_url "$nginx_ingress_manifest" "ingress-nginx-controller" "ingress-nginx"
+  # wait for the deployment to be ready
+  kubectl wait --namespace ingress-nginx --for=condition=ready pod \
+    --selector=app.kubernetes.io/component=controller \
+    --timeout=120s
+}
+
+# Function: Create Ingress
+# Parameters:
+#   None
+# Returns:
+#   None
+# Example:
+#   create_ingress
+function create_ingress(){
+  ingress_rules=\"$host$service_path=$service_port_mapping\"
+  create_ingress "$app" "$namespace" "$labels" "$ingress_rules"
+}
+
 # setup
 function setup(){
-  create_state_file 
-  apply_manifest_from_url "$nginx_ingress_manifest" 
-  
   local lables="{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"frontend\"}}}"
-  create_resource "namespace"  "$namespace" "$namespace"  "$labels"  
-  create_resource "deployment" "$app" "$namespace"  "$labels" "--image=$app:latest"
+
+  create_state_file 
+  deploy_nginx_ingress_controller
+  
+  create_namespace "$namespace" 
+  create_deployment "$app" "$namespace"  "$labels" "--image=$app:latest"
   create_service_with_clusterip "$app" "$namespace"  "$labels" "80:80"
-  ingress_rule=\"$host$service_path=$service_port_mapping\"
-  create_resource "ingress" "$app" "$namespace"  "$labels" "--class=nginx --rule=$ingress_rule"
+  # create_ingress
 }
 
 

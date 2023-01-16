@@ -92,7 +92,75 @@ function get_pod_name_of_deployment() {
   fi
 }
 
-# Function: Create a Kubernetes resource
+# Function : Create a Kubernetes namespace
+# Parameters:
+#   $1 - namespace: The name of the namespace
+# Returns:
+#   0 if the namespace was created successfully, 1 otherwise
+# Example:
+#   create_namespace "my-namespace"
+function create_namespace() {
+  local namespace=$1
+  local exit_code
+
+  local namespace_count=$(kubectl get namespace | grep -c "$namespace")
+  # check if namespace already exists supress output
+  if [ $namespace_count -gt 0 ]; then
+    warn "Namespace $namespace exists. Skipping...\n"
+    return 0
+  fi
+
+  pretty_print "${BLUE}Executing : kubectl create namespace $namespace ${NC}\n"
+  kubectl create namespace "$namespace"
+  exit_code="$?"
+  print_command_status "Status" $exit_code
+  if [ $exit_code -eq 0 ]; then
+    create_patch_with_labels "namespace" "$namespace" "$labels" "$namespace"
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Function: Create a Kubernetes ingress for nginx ingress controller
+# Parameters:
+#   $1 - ingress_name: The name of the ingress
+#   $2 - namespace: The namespace where the ingress should be created.
+#   $3 - labels: A string containing the labels in json format to be added to the ingress
+#   $4 - ingress_rukes: Rules for the ingress creation command
+# Returns:
+#   0 if the ingress was created successfully, 1 otherwise
+# Example:
+#   
+function create_ingress() {
+  local ingress_name=$1
+  local namespace=$2
+  local labels=$3
+  local ingress_rules=$4
+  local exit_code
+
+  # check if resource already exists
+  check_if_resource_exists "ingress" "$ingress_name" "$namespace"
+  if [ $? -eq 0 ]; then
+    warn "Ingress $ingress_name already exists. Skipping...\n"
+    return 0
+  fi
+
+  pretty_print "${BLUE}Executing : kubectl create ingress $ingress_name -n $namespace $ingress_rules ${NC}\n"
+  #kubectl create ingress nginx --class=nginx --rule="nginx.local.gd/*=nginx:80" -n apps
+  kubectl create ingress "$ingress_name" --class=nginx --rule="$ingress_rules" -n "$namespace" 
+  exit_code="$?"
+  print_command_status "Status" $exit_code
+  if [ $exit_code -eq 0 ]; then
+    create_patch_with_labels "ingress" "$ingress_name" "$labels" "$namespace"
+    return 0
+  else
+    return 1
+  fi
+}
+
+
+# Function: Create a Kubernetes deployment
 # Parameters:
 #   $1 - resource_type: The type of the resource (e.g. deployment, service, ingress).
 #   $2 - resource_name: The name of the resource
@@ -104,26 +172,25 @@ function get_pod_name_of_deployment() {
 # Example:
 #   create_resource "deployment" "my-deployment" "my-namespace" "{\"app\":\"my-app\",\"tier\":\"production\"}" "--image=nginx:latest"
 
-function create_resource() {
-  local resource_type=$1
-  local resource_name=$2
-  local namespace=$3
-  local labels=$4
-  local resource_options=$5
+function create_deployment() {
+  local deployment_name=$1
+  local namespace=$2
+  local labels=$2
+  local deployment_options=$4
   local exit_code
 
   # check if resource already exists in namespace supress output
-  if check_if_resource_exists "$resource_type" "$resource_name" "$namespace" > /dev/null; then
-    warn "Resource $resource_name of type $resource_type exists in namespace $namespace.Skipping...\n"
+  if check_if_resource_exists "deployment" "$deployment_name" "$namespace" > /dev/null; then
+    warn "Resource $deployment_name of type deployment exists in namespace $namespace.Skipping...\n"
     return 0
   fi
 
-  pretty_print "${BLUE}Executing :  kubectl create $resource_type $resource_name $resource_options -n $namespace ${NC}\n"
-  kubectl create "$resource_type" "$resource_name" "$resource_options" -n "$namespace"
+  pretty_print "${BLUE}Executing : kubectl create deployment "$deployment_name" "$deployment_options" -n "$namespace" ${NC}\n"
+  kubectl create deployment "$deployment_name" "$deployment_options" -n "$namespace"
   exit_code="$?"
   print_command_status "Status" $exit_code
   if [ $exit_code -eq 0 ]; then
-    create_patch_with_labels "$resource_type" "$resource_name" "$labels" "$namespace"
+    create_patch_with_labels "deployment" "$resource_name" "$labels" "$namespace"
     return 0
   else
     return 1
@@ -203,18 +270,21 @@ function delete_resource() {
 #   apply_manifest_from_url_with_labels "https://example.com/manifest.yaml" "{\"app\":\"my-app\",\"env\":\"production\"}"
 function apply_manifest_from_url() {
   local url=$1
+  local deployment_name=$2
+  local namespace=$3
   local exit_code
-  pod=$(get_pod_name_of_deployment "app.kubernetes.io/component=controller" "ingress-nginx")
-  if check_if_resource_exists "pod" "$resource_name" "$namespace" > /dev/null; then
-    warn "Resource $resource_name of type $resource_type exists in namespace $namespace.Skipping...\n"
+
+  # check if nginx-ingress-controller exists before deleting
+  if ! check_if_resource_exists "deployment" "$deployment_name" "$namespace" > /dev/null; then
+    pretty_print "${BLUE}Executing command: kubectl delete -f $url ${NC}\n"
+    kubectl apply -f $url 
+    exit_code=$?
+    print_command_status "Status" "$exit_code"
+    return "$exit_code"
+  else
+    warn "Resource $deployment_name of type deployment in namespace $namespace already exist. Skipping...\n"
     return 0
   fi
-  pretty_print "${BLUE}Executing command: kubectl apply -f "$url"${NC}\n"
-  # kubectly apply manigfest from url with custom lebels
-  kubectl apply -f "$url"
-  exit_code=$?
-  print_command_status "Status" "$exit_code"
-  return "$exit_code"
 }
 
 
