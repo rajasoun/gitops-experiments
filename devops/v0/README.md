@@ -17,11 +17,9 @@
 
 1. Set Environment Variables
     ```bash
-    export namespace="web-frontend"
+    export namespace="apps"
     export image="nginx:latest"
-    export host="nginx.local.gd"
-    export service_path="/*"
-    export service_port_mapping="nginx:80" 
+    export host="nginx.local.gd" 
     ```
 
 1. Create a namespace
@@ -46,7 +44,7 @@
 
 1. Access service from localhost using port-forward
     ```bash
-    scripts/wrapper.sh run port_forward "web-frontend" "nginx" "8080:80" 
+    scripts/wrapper.sh run port_forward "$namespace" "nginx" "8080:80" 
     http http://localhost:8080
     scripts/wrapper.sh run stop_port_forward "nginx"
     http http://localhost:8080
@@ -60,8 +58,8 @@
 
 1. Create ingress
     ```bash
-    export ingress_name="nginx-app-ingress"
-    kubectl create ingress $ingress_name --class=nginx --rule="$host$service_path=$service_port_mapping" -n "$namespace"
+    export ingress_name="nginx"
+    kubectl create ingress $ingress_name --class=nginx --rule="nginx.local.gd/*=nginx:80" -n "$namespace"
     http http://nginx.local.gd 
     ```
 
