@@ -92,33 +92,22 @@ function setup(){
   create_state_file 
   apply_manifest_from_url "$nginx_ingress_manifest" 
   
-  local lables="{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"frontend\"}}}"
+  local lables="{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"$frontend\"}}}"
   create_resource "namespace"  "$namespace" "$namespace"  "$labels"  
   create_resource "deployment" "$app" "$namespace"  "$labels" "--image=$app:latest"
-  create_service_with_clusterip "$app" "$namespace"  "$labels" "80:80"
-  ingress_rule=\"$host$service_path=$service_port_mapping\"
-  create_resource "ingress" "$app" "$namespace"  "$labels" "--class=nginx --rule=$ingress_rule"
+  create_resource "service" "$app" "$namespace"  "$labels" 
+  create_ingress  "ingress" "$app" "$namespace"  "$labels" 
 }
 
 
 # teardown
 function teardown(){
-  # check if state file exists
-  if [ ! -f $env_path ]; then
-    warn "State file $env_path does not exist.\n"
-  else 
-    teardown_state_file
-  fi
-  # get namespace count - supress output
-  local namespace_count=$(kubectl get namespace | grep -c $namespace )
-  # if namespace count is 1, delete namespace
-  if [ $namespace_count -eq 1 ]; then
-    delete_resource "ingress" "$app" "$namespace" 
-    delete_resource "service" "$app" "$namespace" 
-    delete_resource "deployment" "$app" "$namespace" 
-    delete_resource "namespace"  "$namespace" "$namespace" 
-  fi
-  delete_manifest_from_url "$nginx_ingress_manifest" "ingress-nginx-controller" "ingress-nginx"
+  delete_manifest_from_url "$nginx_ingress_manifest" 
+  # delete_service
+  # delete_ingress
+  # delete_namespace
+  # teardown_nginx_ingress_controller
+  teardown_state_file
 }
 
 # test
