@@ -30,6 +30,12 @@
 | Cert Manager              | [cert-manager] |
 | kubeconfim                | [kubeconfim]   |
 
+### In Spike:
+1. [Argo Rollouts - Progressive Delivery for Kubernetes](https://github.com/argoproj/argo-rollouts)
+   - https://argoproj.github.io/argo-rollouts/
+   - https://github.com/argoproj/argo-rollouts/blob/master/docs/getting-started.md
+   
+
 [homebrew]: https://brew.sh/
 [Zsh]: https://www.zsh.org/
 [iTerm2]: https://iterm2.com/
