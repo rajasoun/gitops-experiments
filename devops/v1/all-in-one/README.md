@@ -24,7 +24,7 @@ Deploy Ngix App using Manifest Files
 
 1. Teardown Nginx App using Manifest Files
     ```bash
-    devops/v1/all-in-one/app.sh setup
+    devops/v1/all-in-one/app.sh teardown
     ```
 
 1. Status of Nginx App 
