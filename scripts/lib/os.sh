@@ -366,16 +366,23 @@ function check_processor(){
     fi
 }
 
-# Function: patch nginx-ingress-controller type NodePort to LoadBalancer
+# Function: patch ingress-nginx-controller type NodePort to LoadBalancer
 function patch_nginx_ingress_controller(){
-    pretty_print "${YELLOW}Patching nginx-ingress-controller type from NodePort to LoadBalancer${NC}\n"
-    # Start by getting the name of the nginx-ingress-controller service
+    pretty_print "${YELLOW}Patching ingress-nginx-controller type from NodePort to LoadBalancer${NC}\n"
+    # Start by getting the name of the ingress-nginx-controller service
     kubectl get services -n ingress-nginx
+    line_separator
     # Patch the service to change the type from NodePort to LoadBalance
-    kubectl patch service nginx-ingress-controller -n ingress-nginx -p '{"spec":{"type":"LoadBalancer"}}'
+    kubectl patch service ingress-nginx-controller -n ingress-nginx -p '{"spec":{"type":"LoadBalancer"}}'
     # Verify that the service type has been updated - Command should return LoadBalancer
-    kubectl get service nginx-ingress-controller -n ingress-nginx -o jsonpath='{.spec.type}'
-    kubectl get service nginx-ingress-controller -n ingress-nginx
+    if [ $(kubectl get service ingress-nginx-controller -n ingress-nginx -o jsonpath='{.spec.type}') == "LoadBalancer" ]; then
+        pass "${GREEN}${BOLD}Patching ingress-nginx-controller type from NodePort to LoadBalancer - Passed${NC}\n"
+    else
+        fail "${RED}${BOLD}Patching ingress-nginx-controller type from NodePort to LoadBalancer - Failed${NC}\n"
+    fi
+    line_separator
+    kubectl get service ingress-nginx-controller -n ingress-nginx
+    line_separator
 }
 
 ############################################################################################################
