@@ -122,44 +122,6 @@ function create_namespace() {
   fi
 }
 
-# Function: Create a Kubernetes ingress for nginx ingress controller
-# Parameters:
-#   $1 - ingress_name: The name of the ingress
-#   $2 - namespace: The namespace where the ingress should be created.
-#   $3 - labels: A string containing the labels in json format to be added to the ingress
-#   $4 - ingress_rukes: Rules for the ingress creation command
-# Returns:
-#   0 if the ingress was created successfully, 1 otherwise
-# Example:
-#   
-function create_ingress() {
-  local ingress_name=$1
-  local namespace=$2
-  local labels=$3
-  local ingress_rules=$4
-  local exit_code
-
-  # check if resource already exists
-  check_if_resource_exists "ingress" "$ingress_name" "$namespace"
-  if [ $? -eq 0 ]; then
-    warn "Ingress $ingress_name already exists. Skipping...\n"
-    return 0
-  fi
-
-  pretty_print "${BLUE}Executing : kubectl create ingress $ingress_name -n $namespace $ingress_rules ${NC}\n"
-  #kubectl create ingress nginx --class=nginx --rule="nginx.local.gd/*=nginx:80" -n apps
-  kubectl create ingress "$ingress_name" --class=nginx --rule="$ingress_rules" -n "$namespace" 
-  exit_code="$?"
-  print_command_status "Status" $exit_code
-  if [ $exit_code -eq 0 ]; then
-    create_patch_with_labels "ingress" "$ingress_name" "$labels" "$namespace"
-    return 0
-  else
-    return 1
-  fi
-}
-
-
 # Function: Create a Kubernetes deployment
 # Parameters:
 #   $1 - resource_type: The type of the resource (e.g. deployment, service, ingress).
@@ -226,6 +188,39 @@ function create_service_with_clusterip() {
   print_command_status "Status" $exit_code
   if [ $exit_code -eq 0 ]; then
     create_patch_with_labels "service" "$service_name" "$labels" "$namespace"
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Function: Create a Kubernetes ingress for nginx ingress controller
+# Parameters:
+#   $1 - ingress_name: The name of the ingress
+#   $2 - namespace: The namespace where the ingress should be created.
+#   $3 - labels: A string containing the labels in json format to be added to the ingress
+# Returns:
+#   0 if the ingress was created successfully, 1 otherwise
+# Example:
+#   
+function create_ingress() {
+  local ingress_name=$1
+  local namespace=$2
+  local labels=$3
+  local exit_code
+
+  # check if ingress  already exists
+  local ingress_count=$(kubectl get ingress -n "$namespace" | grep -c "$ingress_name")
+  if [ $ingress_count -gt 0 ]; then
+    warn "Ingress $ingress_name exists in namespace $namespace. Skipping...\n"
+    return 0
+  fi
+  pretty_print "${BLUE}Executing : kubectl create ingress "$ingress_name" --class=nginx --rule="$ingress_rules" -n "$namespace" ${NC}\n"
+  kubectl create ingress "$ingress_name" --class=nginx --rule="$app.local.gd/*=$app:80" -n "$namespace" 
+  exit_code="$?"
+  print_command_status "Status" $exit_code
+  if [ $exit_code -eq 0 ]; then
+    create_patch_with_labels "ingress" "$ingress_name" "$labels" "$namespace"
     return 0
   else
     return 1

@@ -15,9 +15,6 @@ namespace="apps"
 label="app=$app,tier=$tier"
 image="$app:latest"
 host="$app.local.gd"
-service_path="/*"
-service_port_mapping="$app:80" 
-ingress_name="$app"
 env_path="$GIT_BASE_PATH/devops/v0/$app.env"
 
 nginx_ingress_manifest="https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml"
@@ -58,9 +55,6 @@ function create_state_file(){
   echo "namespace=$namespace" >> $env_path
   echo "image=$image" >> $env_path
   echo "host=$host" >> $env_path
-  echo "service_path=$service_path" >> $env_path
-  echo "service_port_mapping=$service_port_mapping" >> $env_path
-  echo "ingress_name=$ingress_name" >> $env_path
   if [ $? -ne 0 ]; then
     echo "An error occurred while creating $env_path" >&2
     return 1
@@ -102,18 +96,6 @@ function deploy_nginx_ingress_controller(){
     --timeout=120s
 }
 
-# Function: Create Ingress
-# Parameters:
-#   None
-# Returns:
-#   None
-# Example:
-#   create_ingress
-function create_ingress(){
-  ingress_rules=\"$host$service_path=$service_port_mapping\"
-  create_ingress "$app" "$namespace" "$labels" "$ingress_rules"
-}
-
 # setup
 function setup(){
   local lables="{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"frontend\"}}}"
@@ -124,7 +106,7 @@ function setup(){
   create_namespace "$namespace" 
   create_deployment "$app" "$namespace"  "$labels" "--image=$app:latest"
   create_service_with_clusterip "$app" "$namespace"  "$labels" "80:80"
-  # create_ingress
+  create_ingress "$app" "$namespace" "$labels" 
 }
 
 
@@ -136,6 +118,7 @@ function teardown(){
   else 
     teardown_state_file
   fi
+  delete_manifest_from_url "$nginx_ingress_manifest" "ingress-nginx-controller" "ingress-nginx"
   # get namespace count - supress output
   local namespace_count=$(kubectl get namespace | grep -c $namespace )
   # if namespace count is 1, delete namespace
@@ -145,7 +128,6 @@ function teardown(){
     delete_resource "deployment" "$app" "$namespace" 
     delete_resource "namespace"  "$namespace" "$namespace" 
   fi
-  delete_manifest_from_url "$nginx_ingress_manifest" "ingress-nginx-controller" "ingress-nginx"
 }
 
 # test
