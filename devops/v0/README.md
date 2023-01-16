@@ -1,5 +1,7 @@
 # Deploy Nginx App Manually 
 
+Deploy nginx app manually using kubectl commands without using Manifest File.
+
 ## Pre-requisites
 
 1. DevSecOps Tools Setup are Done !!!

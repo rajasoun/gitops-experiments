@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx
+  namespace: apps
+  labels:
+    app: nginx
+    env: dev
+    tier: frontend
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: nginx.local.gd
+    http:
+      paths:
+      - backend:
+          service:
+            name: nginx
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
