@@ -102,14 +102,3 @@ function print_doc_reference(){
     done <<< "$csv_file_content"
 }
 
-# Function: patch nginx-ingress-controller type NodePort to LoadBalancer
-function patch_nginx_ingress_controller(){
-    pretty_print "${YELLOW}Patching nginx-ingress-controller type from NodePort to LoadBalancer${NC}\n"
-    # Start by getting the name of the nginx-ingress-controller service
-    kubectl get services -n ingress-nginx
-    # Patch the service to change the type from NodePort to LoadBalance
-    kubectl patch service nginx-ingress-controller -n ingress-nginx -p '{"spec":{"type":"LoadBalancer"}}'
-    # Verify that the service type has been updated - Command should return LoadBalancer
-    kubectl get service nginx-ingress-controller -n ingress-nginx -o jsonpath='{.spec.type}'
-    kubectl get service nginx-ingress-controller -n ingress-nginx
-}
