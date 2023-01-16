@@ -132,16 +132,27 @@ function teardown(){
 
 # test
 function test(){
-  post_checks
   pretty_print "${YELLOW}Testing app : $app${NC}\n"
   http http://$host
 }
 
 # status
 function status(){    
-  #source $GIT_BASE_PATH/devops/v0/$app.env
-  post_checks
-  print_app_status $app $namespace
+  pretty_print "${BLUE}Namespace : $namespace${NC}\n"
+  kubectl get namespace $namespace
+  line_separator
+  pretty_print "${BLUE}Deployment : $app${NC}\n"
+  kubectl get deployment $app -n $namespace
+  line_separator
+  pretty_print "${BLUE}Service : $app${NC}\n"
+  kubectl get service $app -n $namespace
+  line_separator
+  pretty_print "${BLUE}Pods : $app${NC}\n"
+  kubectl get pods -n $namespace -l app=$app
+  line_separator
+  pretty_print "${BLUE}Ingress : $app${NC}\n"
+  kubectl get ingress $app -n $namespace
+  line_separator
 }
 
 trap "exit" INT TERM ERR
