@@ -385,4 +385,25 @@ function patch_nginx_ingress_controller(){
     line_separator
 }
 
+# Function : brew upgrade using $HOME/workspace/mac-onboard/assist.sh brew-upgrade
+function brew_upgrade(){
+    # exit if not mac 
+    is_mac || fail "${RED}${BOLD}Not a Mac - Brew Upgrade - Failed${NC}\n" && return 1
+    pretty_print "${YELLOW}Brew Upgrade${NC}\n"
+    # check if file $HOME/workspace/mac-onboard/assist.sh exists
+    if [ ! -f $HOME/workspace/mac-onboard/assist.sh ]; then
+        fail "${RED}${BOLD}File $HOME/workspace/mac-onboard/assist.sh does not exist${NC}\n"
+        warn "${BLUE}Do Setup : https://github.com/rajasoun/mac-onboard/blob/main/README.md ${NC}\n"
+        return 1
+    fi
+    $HOME/workspace/mac-onboard/assist.sh brew-upgrade
+    if [ $? -eq 0 ]; then
+        pass "${GREEN}${BOLD}Brew Upgrade - Passed${NC}\n"
+    else
+        fail "${RED}${BOLD}Brew Upgrade - Failed${NC}\n"
+    fi
+    # update audit details
+    $HOME/workspace/mac-onboard/assist.sh update-audit-trail
+    line_separator
+}
 ############################################################################################################
