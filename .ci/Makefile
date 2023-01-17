@@ -1,5 +1,5 @@
 BASE_PATH := $(shell git rev-parse --show-toplevel)
-BUILD_PATH := $(BASE_PATH)/bin
+BUILD_PATH := $(BASE_PATH)/bin/
 
 APP_NAME := $(word 2,$(MAKECMDGOALS)) 
 APP_PATH := $(BASE_PATH)/go-cli/$(APP_NAME)
@@ -17,10 +17,13 @@ help: ## This help.
 
 # Build the Go application, creating a binary in the bin directory in the root of the project
 # The APP variable is set to the second argument passed to the make command 
-# specifies which app to build under go-cli directory
-build:  bin  ## Build Go
+# app to build under go-cli directory
+build:  bin  $(APP_NAME) ## Build Go 
+
+# if APP_NAME is emptydisplay error message and exit
+$(APP_NAME): 
 	@echo "Building $(APP_NAME)..."
-	@go build -v -installsuffix 'static' -o $(BASE_PATH) $(APP_PATH)
+	@go build -v -installsuffix 'static' -o $(BUILD_PATH) $(APP_PATH)
 	@echo "Build Complete"
 
 # Create the bin directory if it doesn't exist
