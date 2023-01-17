@@ -1,7 +1,9 @@
-APP := "./ask-gpt" # Name of the app
+BASE_PATH=$(shell git rev-parse --show-toplevel)
 VERSION := $(shell git describe --tags --always --dirty) # Version of the app
 TRIMMED_VERSION := $(patsubst %,$(strip %),$(VERSION))
 
+# Get the second args from the command line
+APP := $(word 2,$(MAKECMDGOALS))
 
 # HELP
 # This will output the help for each task
@@ -15,7 +17,7 @@ help: ## This help.
 
 # Go TASKS
 build:  bin ## Build Go
-	go build -v -installsuffix 'static' -o bin/ $(APP) 
+	go build -v -installsuffix 'static' -o "$(BASE_PATH)/bin/" $(BASE_PATH)/$(APP)
 
 all:'"
 

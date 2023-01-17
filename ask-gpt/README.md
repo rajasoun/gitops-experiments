@@ -18,7 +18,7 @@ This is a Go program that uses the GPT-3 language model to answer questions.
 2. Build the program:
 
     ```sh
-    make -f ask-gpt/Makefile build
+    make -f .ci/Makefile build ask-gpt
     ```
 
 3. Run the program:
