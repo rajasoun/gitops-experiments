@@ -387,8 +387,8 @@ function patch_nginx_ingress_controller(){
 
 # Function : brew upgrade using $HOME/workspace/mac-onboard/assist.sh brew-upgrade
 function brew_upgrade(){
-    # exit if not mac 
-    is_mac || fail "${RED}${BOLD}Not a Mac - Brew Upgrade - Failed${NC}\n" && return 1
+    # exit if not mac using is_mac function
+    is_mac || return 1
     pretty_print "${YELLOW}Brew Upgrade${NC}\n"
     # check if file $HOME/workspace/mac-onboard/assist.sh exists
     if [ ! -f $HOME/workspace/mac-onboard/assist.sh ]; then
@@ -402,6 +402,7 @@ function brew_upgrade(){
     else
         fail "${RED}${BOLD}Brew Upgrade - Failed${NC}\n"
     fi
+    audit_trail
     # update audit details
     $HOME/workspace/mac-onboard/assist.sh update-audit-trail
     brew list --versions > ./logs/brew_list_versions.log
