@@ -6,7 +6,7 @@ var rootCmd = &cobra.Command{Use: "app"}
 
 // init adds all child commands to the root command and sets flags appropriately.
 func init() {
-	rootCmd.AddCommand(cmdPrint)
+	rootCmd.AddCommand(cmdCheck)
 }
 
 // This is called by main.main(). It only needs to happen once to the rootCmd.
