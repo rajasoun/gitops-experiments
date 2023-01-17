@@ -404,6 +404,8 @@ function brew_upgrade(){
     fi
     # update audit details
     $HOME/workspace/mac-onboard/assist.sh update-audit-trail
+    brew list --versions > ./logs/brew_list_versions.log
+    brew cleanup
     line_separator
 }
 ############################################################################################################
