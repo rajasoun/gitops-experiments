@@ -3,7 +3,7 @@
 GIT_BASE_PATH=$(git rev-parse --show-toplevel)
 SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
-source "${SCRIPT_LIB_DIR}/os.sh"
+source "${SCRIPT_LIB_DIR}/load.sh"
 
 # Run Prechecks
 function prechecks(){
