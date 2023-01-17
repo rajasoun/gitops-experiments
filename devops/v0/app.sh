@@ -5,7 +5,7 @@ IFS=$'\n\t'
 
 GIT_BASE_PATH=$(git rev-parse --show-toplevel)
 MAIN_SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
-DEVOPS_SCRIPT_LIB_DIR="$GIT_BASE_PATH/devops/lib"
+DEVOPS_SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 
 # Parameters
 # $2 - app name
