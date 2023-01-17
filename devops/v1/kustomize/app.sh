@@ -22,17 +22,13 @@ function wait_till_pods_ready(){
   kubectl wait --namespace "$namespace" --for=condition=ready pod --selector="$label_selector" --timeout=$timeout
 }
 
-
 # Function : setup 
 # Description : Setup the environment
 function setup(){
   pretty_print "${BOLD}${UNDERLINE}Setup${NC}\n"
   pretty_print "${BLUE}Deploying ingress-nginx-controller${NC}\n"
-  kustomize build devops/v1/kustomize/infrastructure | kubectl apply -f-
+  kustomize build devops/v1/kustomize | kubectl apply -f-
   wait_till_pods_ready "ingress-nginx" "app.kubernetes.io/component=controller"
-  line_separator
-  pretty_print "${BLUE}Deploying nginx app${NC}\n"
-  kustomize build devops/v1/kustomize/apps/nginx | kubectl apply -f-
   wait_till_pods_ready "apps" "app=nginx"
   line_separator
 }
@@ -40,7 +36,7 @@ function setup(){
 # Function : teardown
 # Description : Teardown the environment
 function teardown(){
-  pretty_print "${BOLD}${UNDERLINE}Setup${NC}\n"
+  pretty_print "${BOLD}${UNDERLINE}Teardown${NC}\n"
   pretty_print "${BLUE}Deploying ingress-nginx-controller${NC}\n"
   kustomize build devops/v1/kustomize/infrastructure | kubectl delete -f-
   wait_till_pods_ready "ingress-nginx" "app.kubernetes.io/component=controller"
