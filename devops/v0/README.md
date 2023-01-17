@@ -27,16 +27,22 @@ Deploy nginx app manually using kubectl commands without using Manifest File.
 1. Create a namespace
     ```bash
     kubectl create namespace $namespace
+    # Patch with custon Labels
+    kubectl patch namespace apps -p "{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"frontend\"}}}"
     ```
 
 1. Deploy nginx app from cloud
     ```bash
     kubectl create deployment nginx --image=$image --port=80 -n $namespace
+    # Patch with custon Labels
+    kubectl patch deployment nginx -n $namespace -p "{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"frontend\"}}}"
     ```
 
 1. Expose nginx app as service
     ```bash
     kubectl expose deployment nginx --port=80 --target-port=80 --type=NodePort -n $namespace
+    # Patch with custon Labels
+    kubectl patch service nginx -n $namespace -p "{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"frontend\"}}}"
     ```
 
 1. Check status of  nginx app
@@ -62,6 +68,8 @@ Deploy nginx app manually using kubectl commands without using Manifest File.
     ```bash
     export ingress_name="nginx"
     kubectl create ingress $ingress_name --class=nginx --rule="nginx.local.gd/*=nginx:80" -n "$namespace"
+    # Patch with custon Labels
+    kubectl patch ingress $ingress_name -n $namespace -p "{\"metadata\": {\"labels\": {\"app\": \"$app\", \"tier\": \"frontend\"}}}"
     http http://nginx.local.gd 
     ```
 
