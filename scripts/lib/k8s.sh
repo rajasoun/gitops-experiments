@@ -271,7 +271,7 @@ function apply_manifest_from_url() {
 
   # check if nginx-ingress-controller exists before deleting
   if ! check_if_resource_exists "deployment" "$deployment_name" "$namespace" > /dev/null; then
-    pretty_print "${BLUE}Executing command: kubectl delete -f $url ${NC}\n"
+    pretty_print "${BLUE}Executing command: kubectl apply -f $url ${NC}\n"
     kubectl apply -f $url 
     exit_code=$?
     print_command_status "Status" "$exit_code"
