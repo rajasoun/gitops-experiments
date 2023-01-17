@@ -1,4 +1,4 @@
 go 1.19
 
-use ./ask-gpt
-use ./k8s
+use ./go-cli/ask-gpt
+use ./go-cli/k8s

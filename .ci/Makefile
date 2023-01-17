@@ -22,10 +22,10 @@ build:  bin ## Build Go
 all:'"
 
 bin: clean
-	mkdir -p bin
+	mkdir -p "$(BASE_PATH)/bin/"
 
 clean: ## Clean Go
-	rm -rf bin
+	rm -rf "$(BASE_PATH)/bin/"
 
 
 
