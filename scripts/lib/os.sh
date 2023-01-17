@@ -104,6 +104,18 @@ function is_mac(){
     fi
 }
 
+# Query OS Type
+function os_type(){
+    local os
+    case $OSTYPE in
+        darwin*) os="Mac" ;;
+        linux*) os="Linux" ;;
+        msys*) os="Windows" ;;
+        *) die "unknown: $OSTYPE" ;;
+    esac
+    echo "$os"
+}
+
 # Check if Docker Desktop is Running
 function check_for_docker_desktop(){
     if [[ -n "$(docker info --format '{{.OperatingSystem}}' | grep 'Docker Desktop')" ]]; then
