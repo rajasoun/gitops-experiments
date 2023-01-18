@@ -13,5 +13,5 @@ func (o *K8s) GetVersion() (string, error) {
 	if logEnabled {
 		log.Infof("Version of running k8s %v", version)
 	}
-	return fmt.Sprintf("%s", version), nil
+	return fmt.Sprintf("%s.%s", version.Major, version.Minor), nil
 }
