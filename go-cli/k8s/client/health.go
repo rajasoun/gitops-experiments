@@ -5,8 +5,8 @@ import (
 )
 
 // check cluster health
-func (o *K8s) GetHealthStatus() (string, error) {
-	health, err := o.Clientset.Discovery().RESTClient().Get().AbsPath("/healthz").DoRaw(context.Background())
+func (k8s *K8s) GetHealthStatus() (string, error) {
+	health, err := k8s.Clientset.Discovery().RESTClient().Get().AbsPath("/healthz").DoRaw(context.Background())
 	if err != nil {
 		return "", err
 	}
