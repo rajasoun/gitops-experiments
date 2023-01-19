@@ -64,6 +64,15 @@ function print_tabular_output() {
     fi
 }
 
+# Function : Fileter report file by amazon endpoints
+# Description:
+#   This function filters the report file by amazon endpoints
+function filter_amazon_endpoints() {
+    local report_file=".report/env_vars.csv"
+    echo "Namespace,Deployment,Key,Value" > .report/amazon_endpoints.csv
+    cat $report_file | grep -i amazon | grep ".com" >> .report/amazon_endpoints.csv
+}
+
 # Function : Write to file the output
 # Description:
 #   This function calls get_env_in_all_namespaces and writes the output to a file named env_vars.csv
@@ -72,8 +81,11 @@ function write_to_file() {
     if [ ! -d .report ]; then
         mkdir .report
     fi
-    get_env_in_all_namespaces > .report/env_vars.csv
+    #get_env_in_all_namespaces > .report/env_vars.csv
+    filter_amazon_endpoints
+    echo -e "The report has been generated successfully.\nYou can find it in the .report directory"
 }
+
 
 # Function : usage
 # Description:
