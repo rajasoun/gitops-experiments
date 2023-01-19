@@ -68,7 +68,11 @@ function print_tabular_output() {
 # Description:
 #   This function calls get_env_in_all_namespaces and writes the output to a file named env_vars.csv
 function write_to_file() {
-    get_env_in_all_namespaces > env_vars.csv
+    # check if the .report directory exists, if not, create it
+    if [ ! -d .report ]; then
+        mkdir .report
+    fi
+    get_env_in_all_namespaces > .report/env_vars.csv
 }
 
 # Function : usage

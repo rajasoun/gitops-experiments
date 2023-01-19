@@ -99,3 +99,4 @@ bin/
 .env
 .env.bak
 .config
+.report
