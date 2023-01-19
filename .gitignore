@@ -98,3 +98,4 @@ $RECYCLE.BIN/
 bin/
 .env
 .env.bak
+.config
