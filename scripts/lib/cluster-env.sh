@@ -49,6 +49,9 @@ function get_env_in_all_namespaces() {
 }
 
 # Function : stdout option
+# Description:
+#   Invokes get_env_in_all_namespaces and formats the output as tabular format. 
+#   It checks if the column command is available, if yes, it pipes the output to column command, otherwise, it uses sed command to replace commas with tabs.
 function print_tabular_output() {
     local result=$(get_env_in_all_namespaces)
     # if column is available use it
@@ -61,12 +64,16 @@ function print_tabular_output() {
     fi
 }
 
-# Function : file option
+# Function : Write to file the output
+# Description:
+#   This function calls get_env_in_all_namespaces and writes the output to a file named env_vars.csv
 function write_to_file() {
     get_env_in_all_namespaces > env_vars.csv
 }
 
 # Function : usage
+# Description:
+#   Prints usage instructions and a list of valid options to the terminal.
 function usage() {
     echo "${RED}Usage: $0 < stdout | file >${NC}"
     cat <<-EOF
