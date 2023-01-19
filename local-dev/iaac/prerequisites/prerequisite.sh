@@ -7,7 +7,7 @@ SCRIPT_LIB_DIR="$GIT_BASE_PATH/scripts/lib"
 # setup
 function setup(){
     is_mac
-    check_for_docker_desktop
+    check_docker_desktop
     brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile
     shift 1 & do_audit $@
     source "${SCRIPT_LIB_DIR}/tools.sh"
@@ -16,27 +16,36 @@ function setup(){
 
 # test
 function test(){
+    pre_check
+}
+
+# pre-check 
+function pre_check(){
     local result=0
-    pretty_print "${YELLOW}Prerequisites Test\n${NC}"
-    MERGED_FILE_CONTENT="$(cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile)\n$(cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile)"
-    check_result=$(brew bundle --file <(echo $MERGED_FILE_CONTENT) check)
-    # grep result for dependencies are satisfied
-    if [[ $check_result == *"dependencies are satisfied."* ]]; then
-        pass "Pre Requisites for devops-tools"
-    else
-        fail "Pre Requisites for devops-tools"
-        result=1
-    fi
+    check_disk_space || result=1
+    check_processor || result=1
+    check_disk_space || result=1
+    check_docker_desktop || result=1
+    check_devops_tools || result=1
+    check_gh_crendentials || result=1
+    # check_aws_credentials || result=1
     return $result
+}
+
+# list installed devops tools
+function list_installed_devops_tools(){
+    local tools=($(brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile list))
+    pretty_print "\t${BLUE}Installed Tools \n${NC}"
+    # exho tools array
+    for tool in "${tools[@]}"; do
+        echo -e "\t\t${GREEN}${tool}${NC}"
+    done
 }
 
 # status
 function status(){
-    pretty_print "${YELLOW}Prerequisites Status\n${NC}"
-    MERGED_FILE_CONTENT="$(cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile)\n$(cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile)"
-    brew bundle --file <(echo $MERGED_FILE_CONTENT) check && pass "Pre Requisites for devops-tools\n" || fail "Pre Requisites for devops-tools\n"
-    pretty_print "${GREEN}Tool List \n${NC}"
-    brew bundle --file $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile list
+    pre_check
+    list_installed_devops_tools
     line_separator
 }
 

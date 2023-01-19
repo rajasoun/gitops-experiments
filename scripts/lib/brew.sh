@@ -70,3 +70,21 @@ function brew_upgrade(){
     brew cleanup
     line_separator
 }
+
+# Function : Check devops tools are installed
+function check_devops_tools(){
+    # exit if not mac using is_mac function
+    is_mac || return 1
+    # check for devops-tools
+    MERGED_FILE_CONTENT="$(cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/global/Brewfile)\n$(cat $GIT_BASE_PATH/local-dev/iaac/prerequisites/local/Brewfile)"
+    check_result=$(brew bundle --file <(echo $MERGED_FILE_CONTENT) check )
+    # grep result for dependencies are satisfied
+    if [[ $check_result == *"dependencies are satisfied."* ]]; then
+        pass "Pre Requisites for devops-tools\n"
+        result=0
+    else
+        fail "Pre Requisites for devops-tools\n"
+        result=1
+    fi
+    return $result
+}

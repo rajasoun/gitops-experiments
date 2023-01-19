@@ -97,9 +97,9 @@ function install_istioctl(){
 # Check if Mac
 function is_mac(){ 
     if [[ $OSTYPE == "darwin"* ]]; then
-        echo -e "${GREEN}Darwin OS Detected${NC}"
+        pass "Darwin OS Detected\n"
     else
-        echo -e "${RED}Darwin OS is required to Run brew${NC}"
+        fail "Darwin OS is required to Run brew\n"
         exit 1
     fi
 }
@@ -114,18 +114,6 @@ function os_type(){
         *) die "unknown: $OSTYPE" ;;
     esac
     echo "$os"
-}
-
-# Check if Docker Desktop is Running
-function check_for_docker_desktop(){
-    if [[ -n "$(docker info --format '{{.OperatingSystem}}' | grep 'Docker Desktop')" ]]; then
-        echo -e "${GREEN}\nDocker Desktop found....${NC}"
-    else
-        echo -e "${RED}\nWARNING! Docker Desktop not installed:${NC}"
-        echo -e "${YELLOW}  * Install docker desktop from <https://docs.docker.com/docker-for-mac/install/>\n${NC}"
-        exit 1
-    fi
-
 }
 
 # Get IP Address of Mac
@@ -175,12 +163,78 @@ function check_ram(){
 function check_processor(){
     processor=$(sysctl hw.ncpu | awk '{print $2}')
     if [ $processor -lt 4 ]; then
-        fail "${RED}${BOLD}Insufficient Processor${NC}"
-        warn "${BLUE}Minimum Processor required is a Quad-Core${NC}\n"
+        fail "Insufficient Processor\n"
+        warn "Minimum Processor required is a Quad-Core\n"
         return 1
     else 
-        pass "${GREEN}${BOLD}Processor Check (CPU: >= 4 )- Passed${NC}\n"
+        pass "Processor Check (CPU: >= 4 )- Passed$\n"
         return 0
     fi
 }
+
+# Check if the machine has at least 20GB of disk space
+function check_disk_space(){
+    disk_space=$(df -k / | awk '{print $4}' | tail -1)
+    if [ $disk_space -lt 20971520 ]; then
+        fail "Insufficient Disk Space\n"
+        warn "Minimum Disk Space required is 20GB\n"
+        return 1
+    else 
+        pass "Disk Space Check (Disk Space: >= 20 GB) - Passed\n"
+        return 0
+    fi
+}
+
+# Check if the machine has at least 2GB of swap space
+function check_swap_space(){
+    swap_space=$(sysctl vm.swapusage | awk '{print $3}' | tail -1)
+    if [ $swap_space -lt 2147483648 ]; then
+        fail "Insufficient Swap Space\n"
+        warn "Minimum Swap Space required is 2GB\n"
+        return 1
+    else 
+        pass "Swap Space Check (Swap Space: >= 2 GB) - Passed\n"
+        return 0
+    fi
+}
+
+# Check if docker desktop is running
+function check_docker_desktop(){
+    if [[ -n "$(docker info --format '{{.OperatingSystem}}' | grep 'Docker Desktop')" ]]; then
+        pass "Docker Desktop Check - Passed\n"
+        return 0
+    else
+        fail "Docker Desktop Check - Failed\n"
+        warn "Docker Desktop is not running\n"
+        return 1
+    fi
+}
+
+# Check GitHub credentials using gh cli 
+function check_gh_crendentials(){
+    host=${1-github.com}    
+    gh_auth_status=$(gh auth status --hostname $host > /dev/null 2>&1)
+    if [[ $gh_auth_status -eq 0  ]]; then
+        pass "GitHub Authentication Check - Passed\n"
+        return 0
+    else
+        fail "GitHub Check - Failed\n"
+        warn "GitHub credentials are not set\n"
+        return 1
+    fi
+}
+
+# Check AWS credentials using aws cli
+function check_aws_credentials(){
+    if [[ $(aws sts get-caller-identity) == *"arn:aws:iam"* ]]; then
+        pass "AWS Authentication Check - Passed\n"
+        return 0
+    else
+        fail "AWS Check - Failed\n"
+        warn "AWS credentials are not set\n"
+        return 1
+    fi
+}
+
+
 
