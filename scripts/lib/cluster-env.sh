@@ -51,29 +51,53 @@ function get_env_in_all_namespaces() {
     done
 }
 
-# Function : Print in Tabular format
-function print_tabular() {
-    #  check if column is installed
-    if [ command -v column &> /dev/null ];then
+# Function : Main function
+# Description : 
+#   Accepts an option as a command-line argument. 
+#   The option is passed to the script when it is executed, and it is stored in the opt variable and 
+#   converts the option to lowercase using the tr command and stores the result in the choice variable.
+#   Uses a case statement to handle the different options:
+#   1. If the option is "stdout", the script will call the print_tabular function, this function will take the output of get_env_in_all_namespaces and format it in tabular format using one of the alternatives you want (awk, cut, sed.. etc)
+#   2. If the option is "file", the script will call the get_env_in_all_namespaces function and redirect its output to a file named "env_vars.csv"
+#   3. If no option is provided, or an invalid option is provided, the script will print usage instructions and a list of valid options to the terminal.
+
+
+# Function : stdout option
+function print_tabular_output() {
+    # if column is available use it
+    if command -v column &> /dev/null; then
         get_env_in_all_namespaces | column -t -s ','
-    else 
+    else
+        #get_env_in_all_namespaces | awk -F, '{printf "%-20s %-20s %-20s %-20s \n", $1, $2, $3, $4}'
         get_env_in_all_namespaces | sed 's/,/\t/g'
     fi
 }
 
+# Function : file option
+function write_to_file() {
+    get_env_in_all_namespaces > env_vars.csv
+}
 
-opt="$1"
-choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
-case $choice in
-    stdout)print_tabular;;
-    file)get_env_in_all_namespaces > env_vars.csv;;
-    *)
+# Function : usage
+function usage() {
     echo "${RED}Usage: $0 < stdout | file >${NC}"
-cat <<-EOF
+    cat <<-EOF
 Commands:
 ---------
 stdout        -> Prints the output to stdout  
 file          -> Prints the output to a file 
 EOF
-    ;;
-esac
+}
+
+# Function : Main function
+function main(){
+    opt="$1"
+    choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
+    case $choice in
+        stdout)print_tabular_output;;
+        file)write_to_file;;
+        *);;
+    esac
+}
+
+main $@
