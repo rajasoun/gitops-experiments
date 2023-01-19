@@ -157,7 +157,7 @@ function init_lb_env(){
 
 # Function: kubeconfig for a cluster in a aws region
 function kube_config(){
-    EKS_CONFIG_FILE="$GIT_BASE_PATH/.config/.kube/eks.env"
+    EKS_CONFIG_FILE="$GIT_BASE_PATH/.config/eks.env"
     AWS_PROFILE=${1:-"lcce-development"}
     AWS_REGION=${2:-"us-east-1"}
     CLUSTER=${3:-"Development"}
@@ -167,7 +167,7 @@ function kube_config(){
     echo -e "export CLUSTER=$CLUSTER"          >> $EKS_CONFIG_FILE
     echo -e "export KUBECONFIG=$KUBECONFIG:~/.kube/config" >> $EKS_CONFIG_FILE
 
-    export $(grep -v '^#'$EKS_CONFIG_FILE | xargs)
+    export $(grep -v '^#' $EKS_CONFIG_FILE | xargs)
     aws eks update-kubeconfig --region $AWS_REGION  --name $CLUSTER
 }
 
