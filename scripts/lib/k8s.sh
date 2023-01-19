@@ -171,3 +171,15 @@ function kube_config(){
     aws eks update-kubeconfig --region $AWS_REGION  --name $CLUSTER
 }
 
+# Function: Generate the YAML files for a complete existing cluster
+function genrate_yaml_for_cluster(){
+    local resources_path="$GIT_BASE_PATH/.resources"
+    pretty_print "${YELLOW}Generating YAML files for a complete cluster${NC}\n"
+    # Generate the YAML files for a complete existing cluster
+    for resource in $(kubectl get -o=name pvc,configmap,serviceaccount,secret,ingress,service,deployment,statefulset,hpa,job,cronjob)
+    do
+        mkdir -p "$resources_path/$(dirname $resource)"
+        kubectl get -o=yaml $resource > "$resources_path/$resource.yaml"
+    done
+    line_separator
+}
