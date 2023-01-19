@@ -51,10 +51,21 @@ function get_env_in_all_namespaces() {
     done
 }
 
+# Function : Print in Tabular format
+function print_tabular() {
+    #  check if column is installed
+    if [ command -v column &> /dev/null ];then
+        get_env_in_all_namespaces | column -t -s ','
+    else 
+        get_env_in_all_namespaces | sed 's/,/\t/g'
+    fi
+}
+
+
 opt="$1"
 choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
 case $choice in
-    stdout)get_env_in_all_namespaces | column -t -s ',';;
+    stdout)print_tabular;;
     file)get_env_in_all_namespaces > env_vars.csv;;
     *)
     echo "${RED}Usage: $0 < stdout | file >${NC}"
