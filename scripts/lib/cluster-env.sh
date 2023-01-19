@@ -1,27 +1,14 @@
 #!/usr/bin/env bash
 
-# color formatting
-NC=$'\e[0m' # No Color
-RED=$'\e[31m'
-GREEN=$'\e[32m'
-BLUE=$'\e[34m'
-ORANGE=$'\x1B[33m'
-YELLOW='\033[1;33m'
-BOLD=$'\033[1m'
-UNDERLINE=$'\033[4m'
-
-# Function: Print line separator
-function print_line_separator(){
-    printf "\n${YELLOW}-------------------------------------------------------------------------------------------------------------------${NC}\n"
-}
-
-# Function: Pretty print
-function pretty_print() {
-    local text=$1
-    local color=$2
-    printf "${color}%b${NC}" "$text"
-}
 # Function: Get env variables from a deployment in a specific namespace
+# Description:
+#   Given a namespace and a deployment, this function retrieves the environment variables of the 
+#   containers in that deployment. It uses the kubectl command to get the deployment in JSON format, 
+#   then uses jsonpath to extract the environment variables. 
+#   The jq command is used to format the output as name=value pairs, one per line.
+# Parameters:
+#   $1 -> namespace
+#   $2 -> deployment
 function get_env_vars() {
     local namespace=$1
     local deployment=$2
@@ -29,6 +16,13 @@ function get_env_vars() {
 }
 
 # Function : Get env variables from all deployments in a specific namespace
+# Description:
+#   Given a namespace, this function retrieves the environment variables for all deployments in that namespace. 
+#   It first uses kubectl to get the names of all deployments in the namespace, then loops through them, calling get_env_vars for each deployment. 
+#   For each environment variable, it uses cut command to extract the key and value and prints them as a comma separated string in the format 
+#   "Namespace,Deployment,Key,Value".
+# Parameters:
+#   $1 -> namespace
 function get_env_in_namespace() {
     local namespace=$1
     local deployments=$(kubectl get deploy -n ${namespace} -o jsonpath='{.items[*].metadata.name}')
@@ -43,6 +37,9 @@ function get_env_in_namespace() {
 }
 
 # Function : Get env variables from all deployments in all namespaces
+# Description:
+#    Retrieves the environment variables for all deployments in all namespaces. 
+#   It first uses kubectl to get the names of all namespaces, then loops through them, calling get_env_in_namespace for each namespace.
 function get_env_in_all_namespaces() {
     echo "Namespace,Deployment,Key,Value"
     local namespaces=$(kubectl get ns -o jsonpath='{.items[*].metadata.name}')
@@ -50,17 +47,6 @@ function get_env_in_all_namespaces() {
         get_env_in_namespace ${namespace}
     done
 }
-
-# Function : Main function
-# Description : 
-#   Accepts an option as a command-line argument. 
-#   The option is passed to the script when it is executed, and it is stored in the opt variable and 
-#   converts the option to lowercase using the tr command and stores the result in the choice variable.
-#   Uses a case statement to handle the different options:
-#   1. If the option is "stdout", the script will call the print_tabular function, this function will take the output of get_env_in_all_namespaces and format it in tabular format using one of the alternatives you want (awk, cut, sed.. etc)
-#   2. If the option is "file", the script will call the get_env_in_all_namespaces function and redirect its output to a file named "env_vars.csv"
-#   3. If no option is provided, or an invalid option is provided, the script will print usage instructions and a list of valid options to the terminal.
-
 
 # Function : stdout option
 function print_tabular_output() {
@@ -92,6 +78,16 @@ EOF
 }
 
 # Function : Main function
+# Description : 
+#   Accepts an option as a command-line argument. 
+#   The option is passed to the script when it is executed, and it is stored in the opt variable and 
+#   converts the option to lowercase using the tr command and stores the result in the choice variable.
+#   Uses a case statement to handle the different options:
+#   1. If the option is "stdout", the script will call the print_tabular function, this function will take the output of get_env_in_all_namespaces and format it in tabular format using one of the alternatives you want (awk, cut, sed.. etc)
+#   2. If the option is "file", the script will call the get_env_in_all_namespaces function and redirect its output to a file named "env_vars.csv"
+#   3. If no option is provided, or an invalid option is provided, the script will print usage instructions and a list of valid options to the terminal.
+# Parameters:
+#   $1 -> option
 function main(){
     opt="$1"
     choice=$( tr '[:upper:]' '[:lower:]' <<<"$opt" )
