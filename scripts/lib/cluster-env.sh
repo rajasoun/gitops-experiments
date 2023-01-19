@@ -64,12 +64,14 @@ function get_env_in_all_namespaces() {
 
 # Function : stdout option
 function print_tabular_output() {
+    local result=$(get_env_in_all_namespaces)
     # if column is available use it
     if command -v column &> /dev/null; then
-        get_env_in_all_namespaces | column -t -s ','
+        # echo "$result" | awk '{if (NR==1) {print "\033[32m" $0 "\033[39m"} else {print}}' | column -t -s ','
+        echo "$result" | column -t -s ','
     else
         #get_env_in_all_namespaces | awk -F, '{printf "%-20s %-20s %-20s %-20s \n", $1, $2, $3, $4}'
-        get_env_in_all_namespaces | sed 's/,/\t/g'
+        echo "$result" | sed 's/,/\t/g'
     fi
 }
 
