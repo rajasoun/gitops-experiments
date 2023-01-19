@@ -81,7 +81,7 @@ function write_to_file() {
     if [ ! -d .report ]; then
         mkdir .report
     fi
-    #get_env_in_all_namespaces > .report/env_vars.csv
+    get_env_in_all_namespaces > .report/env_vars.csv
     filter_amazon_endpoints
     echo -e "The report has been generated successfully.\nYou can find it in the .report directory"
 }
