@@ -1,5 +1,54 @@
 #!/usr/bin/env bash
 
+# Function : Log a Info message to stdout 
+# Description:
+#   Logs a message to stdout of type INFO with BLUE color
+# Parameters:
+#   $1 -> message
+function info() {
+    local message=$1
+    local BLUE='\033[34m'
+    local NC='\033[0m'
+    echo -e "$BLUE${message}${NC}"
+}
+
+# Function : Log a Warning message to stdout
+# Description:
+#   Logs a message to stdout of type WARNING with YELLOW color
+# Parameters:
+#   $1 -> message
+function warn() {
+    local message=$1
+    local YELLOW='\033[33m'
+    local NC='\033[0m'
+    echo -e "$YELLOW${message}${NC}"
+}
+
+# Function : Log a Error message to stdout
+# Description:
+#   Logs a message to stdout of type ERROR with RED color
+# Parameters:
+#   $1 -> message
+function error() {
+    local message=$1
+    local RED='\033[31m'
+    local NC='\033[0m'
+    echo -e "$RED${message}${NC}"
+}
+
+# Function : Log a Success message to stdout
+# Description:
+#   Logs a message to stdout of type SUCCESS with GREEN color
+# Parameters:
+#   $1 -> message
+function success() {
+    local message=$1
+    local GREEN='\033[32m'
+    local NC='\033[0m'
+    echo -e "$GREEN${message}${NC}"
+}
+
+
 # Function: Get env variables from a deployment in a specific namespace
 # Description:
 #   Given a namespace and a deployment, this function retrieves the environment variables of the 
@@ -69,21 +118,30 @@ function print_tabular_output() {
 #   This function filters the report file by amazon endpoints
 function filter_amazon_endpoints() {
     local report_file=".report/env_vars.csv"
-    echo "Namespace,Deployment,Key,Value" > .report/amazon_endpoints.csv
-    cat $report_file | grep -i amazon | grep ".com" >> .report/amazon_endpoints.csv
+    local aws_endpoints_report_file=".report/amazon_endpoints.csv"
+    local aws_endpoints_count=$(cat $report_file | grep -i amazon | grep ".com" | wc -l)
+    if [ $aws_endpoints_count -gt 0 ]; then
+        echo "Namespace,Deployment,Key,Value" > $aws_endpoints_report_file
+        cat $report_file | grep -i amazon | grep ".com" >> $aws_endpoints_report_file
+    else 
+        warn "AWS Endpoints : $aws_endpoints_count Found."
+        error "Check kubetx if multiple clusters are configured and the current context is set to the correct cluster."
+    fi
+
 }
 
 # Function : Write to file the output
 # Description:
 #   This function calls get_env_in_all_namespaces and writes the output to a file named env_vars.csv
 function write_to_file() {
+    local report_file=".report/env_vars.csv"
     # check if the .report directory exists, if not, create it
     if [ ! -d .report ]; then
         mkdir .report
     fi
-    get_env_in_all_namespaces > .report/env_vars.csv
+    get_env_in_all_namespaces > $report_file
+    info "Report Generation Done. Check .report directory for the report files"
     filter_amazon_endpoints
-    echo -e "The report has been generated successfully.\nYou can find it in the .report directory"
 }
 
 
