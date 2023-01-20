@@ -100,5 +100,7 @@ bin/
 .env.bak
 .config
 .report
-.resources
+.resources/*.txt
+.resources/helm
+
 

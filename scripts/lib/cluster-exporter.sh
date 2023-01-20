@@ -277,11 +277,11 @@ function extract_manifest_content() {
   local resources_path=$2
   local template=$3
   local manifest_file=$(basename $template)
-  local start_line_number=$(grep -n "$template" "$resources_path/$release/all.yaml" | awk -F: '{print $1}')
-  local end_line_number=$(grep -n "templates/" "$resources_path/$release/all.yaml" | awk -F: '{print $1}' | grep -A1 $start_line_number | tail -1)
+  local start_line_number=$(grep -n "$template" "$resources_path/$release/manifest.yaml" | awk -F: '{print $1}')
+  local end_line_number=$(grep -n "templates/" "$resources_path/$release/manifest.yaml" | awk -F: '{print $1}' | grep -A1 $start_line_number | tail -1)
   # subtrcat 1 from the end_line_number to exclude the line with the next template
   end_line_number=$(($end_line_number - 1))
-  sed -n "$start_line_number,$end_line_number p" "$resources_path/$release/all.yaml" > "$resources_path/$release/manifests/$manifest_file"
+  sed -n "$start_line_number,$end_line_number p" "$resources_path/$release/manifest.yaml" > "$resources_path/$release/manifests/$manifest_file"
 }
 
 # Function: Split helm manifest by resource type
@@ -318,14 +318,22 @@ function export_helm_chart_for_release() {
     local resources_path="$GIT_BASE_PATH/.resources/helm"
     local release=$1
     mkdir -p "$resources_path/$release"
-    info "\nExporting Helm manifest for release : $release"
-    # download the entire helm chart for each release
-    helm get all $release > "$resources_path/$release/all.yaml"
-    # download the values.yaml file
-     info "Exporting Helm manifest values for release : $release"
+    # check when realease was last updated and 
+    # compare it to the time the file $resources_path/$release/all.yaml was last updated
+    # if the file is older than the release, then delete the file and create a new one
+    
+    # info "\nExporting Helm all for release : $release"
+    # helm get all $release > "$resources_path/$release/all.yaml"
+    info "Exporting Helm manifest for release : $release"
+    helm get manifest $release > "$resources_path/$release/manifest.yaml"
+    info "Exporting Helm manifest values for release : $release"
     helm get values $release > "$resources_path/$release/values.yaml"
-    info "Spliting manifest for release : $release"
-    split_helm_manifest_by_resource_type $release $resources_path
+
+    # info "Spliting manifest for release : $release"
+    # split_helm_manifest_by_resource_type $release $resources_path
+
+    info "Building kustomization.yaml for release : $release"
+    cp $GIT_BASE_PATH/.resources/templates/kustomization.yaml $resources_path/$release/kustomization.yaml
 }
 
 # Function : Export the Helm charts from a cluster
