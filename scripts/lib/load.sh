@@ -7,4 +7,5 @@ source "${SCRIPT_LIB_DIR}/brew.sh"
 source "${SCRIPT_LIB_DIR}/k8s.sh"
 source "${SCRIPT_LIB_DIR}/flux.sh"
 source "${SCRIPT_LIB_DIR}/spike.sh"
+source "${SCRIPT_LIB_DIR}/log.sh"
 
