@@ -1,51 +1,87 @@
 #!/usr/bin/env bash
 
-# Function : Log a Info message to stdout 
+# Function: log
 # Description:
-#   Logs a message to stdout of type INFO with BLUE color
+#   Logs a message to stdout with a specified color
+# Parameters:
+#   $1 -> message
+#   $2 -> color code (e.g. \033[31m for red)
+function log() {
+    local message=$1
+    local color=$2
+    local NC='\033[0m'
+    echo -e "${color}${message}${NC}"
+}
+
+# Function: info
+# Description:
+#   Logs an info message to stdout in blue
 # Parameters:
 #   $1 -> message
 function info() {
-    local message=$1
-    local BLUE='\033[34m'
-    local NC='\033[0m'
-    echo -e "$BLUE${message}${NC}"
+    local BLUE="\033[34m"
+    log "$1" "${BLUE}"
 }
 
-# Function : Log a Warning message to stdout
+# Function: warn
 # Description:
-#   Logs a message to stdout of type WARNING with YELLOW color
+#   Logs a warning message to stdout in yellow
 # Parameters:
 #   $1 -> message
 function warn() {
-    local message=$1
-    local YELLOW='\033[33m'
-    local NC='\033[0m'
-    echo -e "$YELLOW${message}${NC}"
+    local YELLOW="\033[33m"
+    log "$1" "${YELLOW}"
 }
 
-# Function : Log a Error message to stdout
+# Function: error
 # Description:
-#   Logs a message to stdout of type ERROR with RED color
+#   Logs an error message to stderr in red
 # Parameters:
 #   $1 -> message
 function error() {
-    local message=$1
-    local RED='\033[31m'
-    local NC='\033[0m'
-    echo -e "$RED${message}${NC}"
+    local RED="\033[31m"
+    log "$1" "${RED}" >&2
 }
 
-# Function : Log a Success message to stdout
+# Function: success
 # Description:
-#   Logs a message to stdout of type SUCCESS with GREEN color
+#   Logs a success message to stdout in green
 # Parameters:
 #   $1 -> message
 function success() {
-    local message=$1
-    local GREEN='\033[32m'
-    local NC='\033[0m'
-    echo -e "$GREEN${message}${NC}"
+    local GREEN="\033[32m"
+    log "$1" "${GREEN}"
+}
+
+
+### Exception Handling ###
+
+# Function: Prints Error Message to stderr
+# Description:
+#   Given a message, this function prints it to stderr.
+# Parameters:
+#   $1 -> message
+function print_error() {
+    echo "$0: $*" >&2
+}
+
+# Function: Returns 1 with an error message
+# Description:
+#   Given a command, this function returns 1 with an error message.
+# Parameters:
+#   $1 -> command
+function return_on_error() {
+    error "Command: [$1] Failed."
+    return 1
+}
+
+# Function: Execute command and return 1 with an error message if it fails
+# Description:
+#   Given a command, this function executes it and return 1 with an error message if it fails.
+# Parameters:
+#   $@ -> command
+function try() {
+    "$@" || return_on_error "$*" 
 }
 
 
