@@ -10,4 +10,5 @@ source "${SCRIPT_LIB_DIR}/pod.sh"
 source "${SCRIPT_LIB_DIR}/flux.sh"
 source "${SCRIPT_LIB_DIR}/spike.sh"
 source "${SCRIPT_LIB_DIR}/log.sh"
+source "${SCRIPT_LIB_DIR}/table.sh"
 
