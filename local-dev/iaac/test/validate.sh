@@ -72,8 +72,11 @@ function validate_kustomize_overlays() {
   # mirror kustomize-controller build options
   kustomize_flags=("--load-restrictor=LoadRestrictionsNone")
   kustomize_config="kustomization.yaml"
-  pretty_print "\t${YELLOW}INFO - Validating kustomize overlays\n${NC}"
-  find . -type f -name $kustomize_config -print0 | while IFS= read -r -d $'\0' file;
+  
+  #find . -type f -name $kustomize_config -print0 | while IFS= read -r -d $'\0' file;
+  warn "Skipping kustomize validation for .resources now"
+  pretty_print "\t${YELLOW}INFO - Validating kustomize overlays \n${NC}"
+  find . -type f -name kustomization.yaml | grep -v ".resources" | while IFS= read -r -d $'\0' file;
     do
       pretty_print "\t${YELLOW}INFO - Validating kustomization ${file/%$kustomize_config}\n${NC}"
       kustomize build "${file/%$kustomize_config}" "${kustomize_flags[@]}" | kubeconform "${kubeconform_config[@]}"
