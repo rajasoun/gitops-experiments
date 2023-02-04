@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
-# Function Print Line in yellow color
+
+# Define constants for formatting
+DELIMITER="|"
+BOLD="\033[1m"
+YELLOW="\033[33m"
+RESET="\033[0m"
+
+# Define function to print a line
 function print_line() {
-local max_len=$1
+  local max_len=$1
   local line=$(printf -- "-%.0s" $(seq 1 $max_len))
-  printf "\033[1m\033[33m%s\n\033[0m" "$line"
+  printf "$BOLD$YELLOW%s\n$RESET" "$line"
 }
 
 # Function print header
