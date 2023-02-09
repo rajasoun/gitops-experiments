@@ -11,4 +11,5 @@ source "${SCRIPT_LIB_DIR}/flux.sh"
 source "${SCRIPT_LIB_DIR}/spike.sh"
 source "${SCRIPT_LIB_DIR}/log.sh"
 source "${SCRIPT_LIB_DIR}/table.sh"
-
+source "${SCRIPT_LIB_DIR}/helm.sh"
+source "${SCRIPT_LIB_DIR}/yaml.sh"
