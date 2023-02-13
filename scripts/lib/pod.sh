@@ -30,7 +30,7 @@ function get_pod_started_time() {
   local pod_name="$1"
   local namespace="$2"
   
-  kubectl describe pods -n "$namespace" "$pod_name" | grep "Started" | awk '{$1=""; print substr($0,2)}'
+  kubectl describe pods -n "$namespace" "$pod_name" | grep "Started" | head -1 | awk '{$1=""; print substr($0,2)}'
 }
 
 # Function to calculate the time it took for a pod to reach the "Running" state
